@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="valentinbreiz.ps4payloadsender.Connection">
+    android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fillViewport="false"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="2dp"
-        android:id="@+id/scrollView2">
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="top"
             android:orientation="vertical"
+            android:weightSum="1"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp"
-            android:weightSum="1">
+            tools:layout_editor_absoluteY="0dp">
 
             <TextView
                 android:id="@+id/txtLabel"
@@ -38,7 +38,7 @@
                 android:id="@+id/txtIpLabel"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:text="@string/ip_address"
+                android:text="IP Address"
                 android:textSize="18sp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="16dp" />
@@ -51,17 +51,6 @@
                 android:inputType="textPersonName"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="60dp" />
-
-            <Button
-                android:id="@+id/ConnectBtn"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:onClick="Connect"
-                android:text="@string/connect"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="163dp"
-                android:textColor="#FFF"
-                android:background="@color/colorPrimaryDark"/>
 
             <TextView
                 android:id="@+id/textView11"
@@ -100,6 +89,22 @@
                 android:textSize="14sp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="43dp" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/ic_menu_help" />
+
+            <TextView
+                android:id="@+id/txtPKGInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title : "
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="337dp" />
+
 
             <TextView
                 android:id="@+id/textView7"
@@ -144,18 +149,7 @@
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="395dp" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

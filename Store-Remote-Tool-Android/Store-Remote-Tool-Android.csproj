@@ -46,11 +46,26 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>Full</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AndroidLinkSkip>UnityEngine;UnityEditor</AndroidLinkSkip>
+    <MandroidI18n>West</MandroidI18n>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BigInteger, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\BigInteger.dll</HintPath>
+    </Reference>
     <Reference Include="Java.Interop" />
+    <Reference Include="PARAM.SFO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL's\PARAM.SFO.dll</HintPath>
+    </Reference>
+    <Reference Include="PS4_Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL's\PS4_Tools.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Common, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <HintPath>..\packages\Rebex.Common.5.0.7119\lib\monoandroid40\Rebex.Common.dll</HintPath>
       <Private>True</Private>
@@ -64,6 +79,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\..\Program Files (x86)\Mono\lib\mono\2.0-api\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
@@ -220,6 +238,9 @@
     <AndroidResource Include="Resources\drawable\splash_screen_background.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ps4.png" />
+    <Content Include="DLL%27s\PARAM.SFO.dll" />
+    <Content Include="DLL%27s\PS4_Tools.dll" />
     <Content Include="Resources\layout\activity_connection.xml" />
   </ItemGroup>
   <ItemGroup>

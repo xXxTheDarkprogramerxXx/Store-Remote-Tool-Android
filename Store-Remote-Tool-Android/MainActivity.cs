@@ -33,7 +33,7 @@ using Plugin.FilePicker;
 
 namespace Store_Remote_Tool_Android
 {
-    [Activity(Label = "Store_Remote_Tool_Android", Theme = "@style/AppTheme", MainLauncher = true)]
+    [Activity(Label = "PS4 PKG Installer", Theme = "@style/AppTheme", MainLauncher = true , Icon = "@drawable/ps4")]
 
     public class MainActivity : AppCompatActivity
     {
@@ -62,9 +62,11 @@ namespace Store_Remote_Tool_Android
         private DateTime _transferTime;             // transfer launch-time
         private bool _cccMode = false;
 
+        public static Context _context;
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
-
+            _context = this;
             //first check if there are permsions to access files ext
             bool checks = true;
             #region << Check For Permisions >>
@@ -87,18 +89,12 @@ namespace Store_Remote_Tool_Android
             RequestWindowFeature(WindowFeatures.NoTitle);
             this.Window.ClearFlags(Android.Views.WindowManagerFlags.Fullscreen); //to hide
 
-
+            Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
             // Set our view from the "main" layout resource
 
             SetContentView(Resource.Layout.Main);
             this.Title = "PS4 Package Installer";//set the title
-
-            Button ConnectBtn = FindViewById<Button>(Resource.Id.ConnectBtn);
-            ConnectBtn.Enabled  = false;
-            ConnectBtn.Click += delegate
-            {
-                //no need for this doing it the same as what the pkg installer is on windows
-            };
+            
 
             Button LoadPkg = FindViewById<Button>(Resource.Id.BrowsePayloadBtn);
             LoadPkg.Click += async delegate
@@ -112,6 +108,14 @@ namespace Store_Remote_Tool_Android
                     string fileName = fileData.FileName;
                     //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
                     PKGLocation = fileData.FilePath;
+                    
+                    var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
+                    ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                    pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
+                    TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                    lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                          pkgfile.Param.TitleID; //display whatever info youd like here
+
 
                     System.Console.WriteLine("File name chosen: " + fileName);
                     //System.Console.WriteLine("File data: " + contents);
@@ -127,11 +131,14 @@ namespace Store_Remote_Tool_Android
             {
                 using (Ftp client = new Ftp())
                 {
-
+                    Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
                     try
                     {
                         TextView IPAddressTextBox = FindViewById<TextView>(Resource.Id.IPAddressTextBox);
-                         
+                         if(IPAddressTextBox.Text == "")
+                        {
+                            return;
+                        }
 
                         // connect and login to the FTP
                         client.Connect(IPAddressTextBox.Text);
@@ -158,12 +165,40 @@ namespace Store_Remote_Tool_Android
                     }
                     catch (Exception ex)
                     {
-                        //MessageBox.Show(ex.Message);
+                        MessageBox.Show(ex.Message);
                     }
 
                     client.Disconnect();
                 }
             };
+        }
+
+        public class MessageBox
+
+        {
+            public static void Show(string Message)
+            {
+                new Android.Support.V7.App.AlertDialog.Builder(MainActivity._context)
+                .SetMessage(Message)
+                .SetNegativeButton("No", (senderAlert, args) =>
+                {
+                    // SetResult(Result.Canceled);
+                })
+                .SetPositiveButton("Yes", (senderAlert, args) =>
+                {
+                    // SetResult(Result.Canceled);
+                })
+                .Show();
+            }
+        }
+
+        /// Loads a Bitmap from a byte array
+        public static Bitmap BytesToBitmap(byte[] imageBytes)
+        {
+
+            Bitmap bitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
+
+            return bitmap;
         }
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
@@ -318,7 +353,7 @@ namespace Store_Remote_Tool_Android
 
         private void ProblemDetected(object sender, FtpProblemDetectedEventArgs e)
         {
-            // MessageBox.Show("Problem Detected " + e);
+             MessageBox.Show("Problem Detected " + e);
         }
 
         void Traversing(object sender, FtpTraversingEventArgs e)
