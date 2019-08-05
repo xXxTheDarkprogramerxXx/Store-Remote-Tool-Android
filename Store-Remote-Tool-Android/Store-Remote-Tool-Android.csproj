@@ -16,7 +16,6 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
@@ -25,19 +24,25 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
+    <MandroidI18n>
+    </MandroidI18n>
+    <DocumentationFile>bin\Debug\Store-Remote-Tool-Android.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
     <DebugType>PdbOnly</DebugType>
     <Optimize>True</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -45,17 +50,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
-    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <AndroidLinkMode>Full</AndroidLinkMode>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AndroidLinkSkip>UnityEngine;UnityEditor</AndroidLinkSkip>
     <MandroidI18n>West</MandroidI18n>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BigInteger, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Users\3deEchelon\Documents\Visual Studio 2015\Projects\PS4_Tools\PS4_Tools\bin\Debug\BigInteger.dll</HintPath>
+      <HintPath>..\..\..\dll\BigInteger.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentFTP, Version=27.0.1.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentFTP.27.0.1\lib\netstandard1.6\FluentFTP.dll</HintPath>
+    </Reference>
+    <Reference Include="GameArchives">
+      <HintPath>..\..\..\dll\GameArchives.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.10.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\dll\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.5.0, Culture=neutral, PublicKeyToken=9dea7c6e17aa31ff, processorArchitecture=MSIL">
+      <HintPath>..\packages\ICSharpCode.SharpZipLib.Patched.0.86.5.1\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="PARAM.SFO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -66,22 +87,35 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL's\PS4_Tools.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Common, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Common.5.0.7119\lib\monoandroid40\Rebex.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Common, Version=2.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Ftp, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Ftp.5.0.7119\lib\monoandroid40\Rebex.Ftp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Ftp, Version=4.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Networking, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Networking.5.0.7119\lib\monoandroid40\Rebex.Networking.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Http">
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Networking, Version=3.5.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Security, Version=1.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Zip, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\darksoftware.xyz\tmp\cracked rebex\xamarin.android\Rebex.Zip.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing">
-      <HintPath>..\..\..\..\Program Files (x86)\Mono\lib\mono\2.0-api\System.Drawing.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Drawing.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
@@ -164,6 +198,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
