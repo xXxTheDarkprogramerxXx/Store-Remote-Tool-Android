@@ -244,7 +244,17 @@ namespace Store_Remote_Tool_Android
 
                             // connect and login to the FTP
                             client.Connect(IPAddressTextBox.Text);
-                            client.Login("anonymous", "DONT-LOOK@MYCODE");
+                            TextView FTPPassword = FindViewById<TextView>(Resource.Id.FTPPassword);
+                            TextView FTPUsername = FindViewById<TextView>(Resource.Id.FTPUsername);
+                            if (FTPPassword.Text == "" && FTPUsername.Text == "")
+                            {
+                                client.Login("anonymous", "DONT-LOOK@MYCODE");
+                            }
+                            else
+                            {
+                                client.Login(FTPUsername.Text, FTPPassword.Text);
+                            }
+
 
                             client.Traversing += Traversing;
                             client.TransferProgressChanged += TransferProgressChanged;
