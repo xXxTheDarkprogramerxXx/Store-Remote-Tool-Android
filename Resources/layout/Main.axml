@@ -48,6 +48,45 @@
 				android:inputType="textPersonName"
 				tools:layout_editor_absoluteX="8dp"
 				tools:layout_editor_absoluteY="60dp" />
+				<TextView
+				android:text="FTP Login (if not Default)"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/textView14" />
+			<TextView
+				android:id="@+id/txtLabel"
+				android:layout_width="match_parent"
+				android:layout_height="18.5dp"
+				android:text="Username"
+				android:textSize="14sp"
+				tools:layout_editor_absoluteX="16dp"
+				tools:layout_editor_absoluteY="43dp" />
+			<EditText
+				android:id="@+id/FTPUsername"
+				android:layout_width="match_parent"
+				android:layout_height="37.0dp"
+				android:ems="10"
+				android:inputType="textPersonName"
+				tools:layout_editor_absoluteX="8dp"
+				tools:layout_editor_absoluteY="60dp" />
+						<TextView
+				android:id="@+id/txtLabel"
+				android:layout_width="match_parent"
+				android:layout_height="33dp"
+				android:text="Password"
+				android:textSize="14sp"
+				tools:layout_editor_absoluteX="16dp"
+				tools:layout_editor_absoluteY="43dp" />
+			<EditText
+				android:id="@+id/FTPPassword"
+				android:layout_width="match_parent"
+				android:layout_height="36.0dp"
+				android:ems="10"
+				android:inputType="textPersonName"
+				tools:layout_editor_absoluteX="8dp"
+				tools:layout_editor_absoluteY="60dp" />
+			<TextView
 			<TextView
 				android:id="@+id/textView11"
 				android:layout_width="match_parent"
