@@ -37,7 +37,7 @@ using Android.Provider;
 
 namespace Store_Remote_Tool_Android
 {
-    [Activity(Label = "PS4 PKG Installer", Theme = "@style/AppTheme", MainLauncher = true, Icon = "@drawable/ps4")]
+    [Activity(Label = "PKG Installer", Theme = "@style/AppTheme", MainLauncher = true, Icon = "@drawable/ps4")]
 
     public class MainActivity : AppCompatActivity
     {
@@ -164,7 +164,7 @@ namespace Store_Remote_Tool_Android
             Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-            this.Title = "PS4 Package Installer"; //set the title
+            this.Title = "Package Installer"; //set the title
 
             retrieveset();
 
@@ -244,7 +244,18 @@ namespace Store_Remote_Tool_Android
 
                             // connect and login to the FTP
                             client.Connect(IPAddressTextBox.Text);
-                            client.Login("anonymous", "DONT-LOOK@MYCODE");
+                           
+                           TextView FTPPassword = FindViewById<TextView>(Resource.Id.FTPPassword);
+                            TextView FTPUsername = FindViewById<TextView>(Resource.Id.FTPUsername);
+                            if (FTPPassword.Text == "" && FTPUsername.Text == "")
+                            {
+                                client.Login("anonymous", "DONT-LOOK@MYCODE");
+                            }
+                            else
+                            {
+                                client.Login(FTPUsername.Text, FTPPassword.Text);
+                            }
+
 
                             client.Traversing += Traversing;
                             client.TransferProgressChanged += TransferProgressChanged;
