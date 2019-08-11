@@ -16,7 +16,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -59,6 +59,7 @@
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
+    <AndroidSupportedAbis>armeabi;armeabi-v7a;arm64-v8a</AndroidSupportedAbis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BigInteger, Version=1.0.7.0, Culture=neutral, processorArchitecture=MSIL">
@@ -82,6 +83,12 @@
     <Reference Include="PARAM.SFO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL's\PARAM.SFO.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.DownloadManager, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugins.DownloadManager.1.4.0\lib\MonoAndroid10\Plugin.DownloadManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.DownloadManager.Abstractions, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugins.DownloadManager.1.4.0\lib\MonoAndroid10\Plugin.DownloadManager.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="PS4_Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -116,6 +123,8 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
@@ -159,9 +168,8 @@
       <HintPath>..\packages\Xamarin.Android.Support.Core.Utils.28.0.0.1\lib\monoandroid81\Xamarin.Android.Support.Core.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xamarin.Android.Support.Design, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xamarin.Android.Support.Design.28.0.0.1\lib\monoandroid81\Xamarin.Android.Support.Design.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Xamarin.Android.Support.CustomTabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Android.Support.CustomTabs.28.0.0.1\lib\monoandroid81\Xamarin.Android.Support.CustomTabs.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Android.Support.Fragment, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Android.Support.Fragment.28.0.0.1\lib\monoandroid81\Xamarin.Android.Support.Fragment.dll</HintPath>
@@ -191,9 +199,14 @@
       <HintPath>..\packages\Xamarin.Android.Support.Vector.Drawable.28.0.0.1\lib\monoandroid81\Xamarin.Android.Support.Vector.Drawable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Essentials, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xamarin.Essentials.1.2.0\lib\monoandroid81\Xamarin.Essentials.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="installer.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="plugin.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -206,7 +219,7 @@
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Main.axml">
+    <AndroidResource Include="Resources\layout\installer.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\Strings.xml" />
@@ -277,6 +290,12 @@
     <Content Include="DLL%27s\PARAM.SFO.dll" />
     <Content Include="DLL%27s\PS4_Tools.dll" />
     <Content Include="Resources\layout\activity_connection.xml" />
+    <AndroidResource Include="Resources\layout\plugin.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\selectui.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\seringue.png" />
@@ -308,7 +327,7 @@
     <Error Condition="!Exists('..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.AppCompat.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.AppCompat.targets'))" />
     <Error Condition="!Exists('..\packages\Xamarin.Android.Support.Transition.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Transition.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Android.Support.Transition.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Transition.targets'))" />
     <Error Condition="!Exists('..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.RecyclerView.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.RecyclerView.targets'))" />
-    <Error Condition="!Exists('..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Design.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Design.targets'))" />
+    <Error Condition="!Exists('..\packages\Xamarin.Android.Support.CustomTabs.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.CustomTabs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xamarin.Android.Support.CustomTabs.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.CustomTabs.targets'))" />
   </Target>
   <Import Project="..\packages\Xamarin.Android.Arch.Core.Common.1.1.1.1\build\monoandroid81\Xamarin.Android.Arch.Core.Common.targets" Condition="Exists('..\packages\Xamarin.Android.Arch.Core.Common.1.1.1.1\build\monoandroid81\Xamarin.Android.Arch.Core.Common.targets')" />
   <Import Project="..\packages\Xamarin.Android.Arch.Lifecycle.Common.1.1.1.1\build\monoandroid81\Xamarin.Android.Arch.Lifecycle.Common.targets" Condition="Exists('..\packages\Xamarin.Android.Arch.Lifecycle.Common.1.1.1.1\build\monoandroid81\Xamarin.Android.Arch.Lifecycle.Common.targets')" />
@@ -324,7 +343,7 @@
   <Import Project="..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.AppCompat.targets" Condition="Exists('..\packages\Xamarin.Android.Support.v7.AppCompat.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.AppCompat.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.Transition.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Transition.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Transition.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Transition.targets')" />
   <Import Project="..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.RecyclerView.targets" Condition="Exists('..\packages\Xamarin.Android.Support.v7.RecyclerView.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.v7.RecyclerView.targets')" />
-  <Import Project="..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Design.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Design.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.Design.targets')" />
+  <Import Project="..\packages\Xamarin.Android.Support.CustomTabs.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.CustomTabs.targets" Condition="Exists('..\packages\Xamarin.Android.Support.CustomTabs.28.0.0.1\build\monoandroid81\Xamarin.Android.Support.CustomTabs.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 		Other similar extension points exist, see Microsoft.Common.targets.
 		<Target Name="BeforeBuild">

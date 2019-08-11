@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.DownloadManager.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.DownloadManager.Abstractions.DownloadFileStatus">
+            <summary>
+            The status of the download file.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.INITIALIZED">
+            <summary>
+            The download is intitalized. It may is already registered in the native download manager.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.PENDING">
+            <summary>
+            The download is pending (Android only)
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.RUNNING">
+            <summary>
+            The download is still running.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.PAUSED">
+            <summary>
+            The download was paused.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.COMPLETED">
+            <summary>
+            The download has completed.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.CANCELED">
+            <summary>
+            The download was canceled.
+            </summary>
+        </member>
+        <member name="F:Plugin.DownloadManager.Abstractions.DownloadFileStatus.FAILED">
+            <summary>
+            The download has failed. You'll find detailed information in the property StatusDetails.
+            </summary>
+        </member>
+        <member name="T:Plugin.DownloadManager.Abstractions.IDownloadFile">
+            <summary>
+            Download file.
+            </summary>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.Url">
+            <summary>
+            Gets the URL of the file to download.
+            </summary>
+            <value>The URL.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.DestinationPathName">
+            <summary>
+            Gets the destination path name of the file to download.
+            </summary>
+            <value>The destination path.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.Headers">
+            <summary>
+            The headers that are send along when requesting the URL.
+            </summary>
+            <value>The headers.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.Status">
+            <summary>
+            Gets the status.
+            </summary>
+            <value>The status.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.StatusDetails">
+            <summary>
+            Gets the status details. F.e. to get the reason why the download failed.
+            On iOS it's a localized string.
+            On Android it's the name of the Enum values (Android.App.DownloadError or Android.App.DownloadPausedReason)
+            as string, prefixed by either `Error` or `Paused` e.g. `Error.HttpDataError` or `Paused.QueuedForWifi`.
+            If (in any case) you encounter the property `Unregistered:` followed by an integer, please report it.
+            These are new values for either enumeration. You can find the reason in the official documentation:
+            https://developer.android.com/reference/android/app/DownloadManager.html
+            Every error-response (status-code gte 400 and lt 600) is prefixed by `Error.HttpCode: `. Be aware that
+            some custom codes, may have unexpected results. E.g the number 497 is reserved for the error message
+            `Error.TooManyRedirects` and 488 would result in the error `Error.FileAlreadyExists`.
+            </summary>
+            <value>The status details.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.TotalBytesExpected">
+            <summary>
+            Gets the amount of bytes expected.
+            </summary>
+            <value>The total bytes expected.</value>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadFile.TotalBytesWritten">
+            <summary>
+            Gets the amount of bytes written.
+            </summary>
+            <value>The total bytes written.</value>
+        </member>
+        <member name="T:Plugin.DownloadManager.Abstractions.IDownloadManager">
+            <summary>
+            Download manager.
+            </summary>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadManager.Queue">
+            <summary>
+            Gets the queue holding all the pending and downloading files.
+            </summary>
+            <value>The queue.</value>
+        </member>
+        <member name="E:Plugin.DownloadManager.Abstractions.IDownloadManager.CollectionChanged">
+            <summary>
+            Occurs when the queue changed.
+            </summary>
+        </member>
+        <member name="P:Plugin.DownloadManager.Abstractions.IDownloadManager.PathNameForDownloadedFile">
+            <summary>
+            A function, returning the name of the path, where the download-file, given as argument, should be saved.
+            </summary>
+            <value>The path name for downloaded file.</value>
+        </member>
+        <member name="M:Plugin.DownloadManager.Abstractions.IDownloadManager.CreateDownloadFile(System.String)">
+            <summary>
+            Creates a download file.
+            </summary>
+            <returns>The download file.</returns>
+            <param name="url">URL to download.</param>
+        </member>
+        <member name="M:Plugin.DownloadManager.Abstractions.IDownloadManager.CreateDownloadFile(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Creates a download file.
+            </summary>
+            <returns>The download file.</returns>
+            <param name="url">URL to download.</param>
+            <param name="headers">Headers to send along when requesting the URL.</param>
+        </member>
+        <member name="M:Plugin.DownloadManager.Abstractions.IDownloadManager.Start(Plugin.DownloadManager.Abstractions.IDownloadFile,System.Boolean)">
+            <summary>
+            Start downloading the file. Most of the systems will put this file into a queue first.
+            </summary>
+            <param name="file">File.</param>
+            <param name="mobileNetworkAllowed">If mobile network is allowed.</param>
+        </member>
+        <member name="M:Plugin.DownloadManager.Abstractions.IDownloadManager.Abort(Plugin.DownloadManager.Abstractions.IDownloadFile)">
+            <summary>
+            Abort downloading the file.
+            </summary>
+            <param name="file">File.</param>
+        </member>
+        <member name="M:Plugin.DownloadManager.Abstractions.IDownloadManager.AbortAll">
+            <summary>
+            Abort all.
+            </summary>
+            <returns>void</returns>
+        </member>
+    </members>
+</doc>
