@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Store-Remote-Tool-Android</name>
+    </assembly>
+    <members>
+        <member name="M:Store_Remote_Tool_Android.installer.BytesToBitmap(System.Byte[])">
+            Loads a Bitmap from a byte array
+        </member>
+        <member name="M:Store_Remote_Tool_Android.installer.ShowTransferStatus(System.Int64,System.Int32)">
+            <summary>
+            show transfer status: files, bytes, time, speed
+            </summary>
+        </member>
+        <member name="F:Store_Remote_Tool_Android.installer.prre">
+             <summary>
+             handles the transfer progress changed event
+             </summary>
+            
+            
+            
+        </member>
+        <member name="M:Store_Remote_Tool_Android.installer.RequestReadWirtePermission">
+            <summary>
+            Request Permissions to android OS
+            </summary>
+        </member>
+        <member name="M:Store_Remote_Tool_Android.MainActivity.RequestReadWirtePermission">
+            <summary>
+            Request Permissions to android OS
+            </summary>
+        </member>
+        <member name="M:Store_Remote_Tool_Android.plugin.BytesToBitmap(System.Byte[])">
+            Loads a Bitmap from a byte array
+        </member>
+        <member name="M:Store_Remote_Tool_Android.plugin.ShowTransferStatus(System.Int64,System.Int32)">
+            <summary>
+            show transfer status: files, bytes, time, speed
+            </summary>
+        </member>
+        <member name="F:Store_Remote_Tool_Android.plugin.prre">
+             <summary>
+             handles the transfer progress changed event
+             </summary>
+            
+            
+            
+        </member>
+        <member name="M:Store_Remote_Tool_Android.plugin.RequestReadWirtePermission">
+            <summary>
+            Request Permissions to android OS
+            </summary>
+        </member>
+    </members>
+</doc>

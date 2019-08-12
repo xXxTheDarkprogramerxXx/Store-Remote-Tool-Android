@@ -1,0 +1,3466 @@
+<doc>
+  <assembly>
+    <name>Rebex.Ftp</name>
+  </assembly>
+  <members>
+    <member name="T:Rebex.Net.Ftp">
+      <summary>
+            Provides methods for communication with FTP servers.
+            </summary>
+      <remarks>All members of this class are thread-safe.</remarks>
+    </member>
+    <member name="F:Rebex.Net.Ftp.DefaultPort">
+      <summary>
+            Default FTP port (21).
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.Ftp.DefaultImplicitSslPort">
+      <summary>
+            Default FTP/Implicit SSL port (990).
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ftp.OnResponseRead(Rebex.Net.FtpResponseReadEventArgs)">
+      <summary>
+            Raises the <see cref="E:Rebex.Net.Ftp.ResponseRead" /> event.
+            </summary>
+      <param name="e">A <see cref="T:Rebex.Net.FtpResponseReadEventArgs" /> that contains the event data.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.OnCommandSent(Rebex.Net.FtpCommandSentEventArgs)">
+      <summary>
+            Raises the <see cref="E:Rebex.Net.Ftp.CommandSent" /> event.
+            </summary>
+      <param name="e">A <see cref="T:Rebex.Net.FtpCommandSentEventArgs" /> that contains the event data.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.#ctor">
+      <summary>
+            Initializes a new instance of the Ftp class.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Dispose">
+      <summary>
+            Disposes the <see cref="T:Rebex.Net.Ftp" /> object and all the socket objects.
+            </summary>
+      <remarks>
+            Calling this method ensures that all resources are freed.
+            It is not necessary to call this method if the FTP session is
+            successfully closed using <see cref="M:Rebex.Net.Ftp.Disconnect">Disconnect</see> method.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Dispose(System.Boolean)">
+      <summary>
+            Releases the unmanaged resources used by the <see cref="T:Rebex.Net.Ftp" />
+            and optionally releases the managed resources.
+            </summary>
+      <param name="disposing">
+        <b>true</b> to release both managed and unmanaged resources; <b>false</b> to release only unmanaged resources.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Finalize">
+      <summary>
+            Finalizer. Called by garbage collector during object destruction.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Abort">
+      <summary>
+            Aborts the current operation.
+            </summary>
+      <remarks>
+        <p>
+            The operation need not end immediately, it will finish within the interval
+            specified by <see cref="P:Rebex.Net.Ftp.AbortTimeout">AbortTimeout</see>.
+            Aborting data transferring operations (including <see cref="M:Rebex.Net.Ftp.GetList" />,
+            <see cref="M:Rebex.Net.Ftp.GetRawList" />, <see cref="M:Rebex.Net.Ftp.GetNameList" /> and <see cref="O:Rebex.Net.Ftp.GetItems">GetItems</see>) may take twice
+            the amount of time specified by <see cref="P:Rebex.Net.Ftp.AbortTimeout" />.
+            </p>
+        <p>
+            The aborted operation will end either successfully, or with
+            <see cref="T:Rebex.Net.FtpException" /> of status <see cref="T:Rebex.Net.FtpExceptionStatus">OperationAborted</see>
+            or <see cref="T:Rebex.Net.FtpExceptionStatus">Timeout</see>.
+            The <see cref="T:Rebex.Net.Ftp" /> object may remain in <see cref="T:Rebex.Net.FtpState">Reading</see>,
+            <see cref="T:Rebex.Net.FtpState">Sending</see> or <see cref="T:Rebex.Net.FtpState">Processing</see>
+            state. In this case, call <see cref="M:Rebex.Net.Ftp.Flush(System.Int32)" /> to get back to
+            the <see cref="T:Rebex.Net.FtpState">Ready</see> state.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetDownloadStream(System.String,System.IO.SeekOrigin,System.Int64)">
+      <summary>
+            Returns a Stream for reading data from the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="origin">Position indicator that is used to obtain new position within the stream.</param>
+      <param name="offset">A byte offset relative to the origin parameter.</param>
+      <returns>A Stream for reading data from the remote file.</returns>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetUploadStream(System.String,System.IO.SeekOrigin,System.Int64)">
+      <summary>
+            Returns a Stream for writing data to the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <returns>A Stream for writing data to the remote file.</returns>
+      <param name="origin">Position indicator that is used to obtain new position within the stream.</param>
+      <param name="offset">A byte offset relative to the origin parameter.</param>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Connect(System.String)">
+      <summary>
+            Connects to the FTP server.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+      <returns>Welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Connect(System.String,System.Int32)">
+      <summary>
+            Connects to the FTP server.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+      <param name="serverPort">The server port (e.g. 21).</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Connect(System.String,System.Int32,Rebex.Net.SslMode)">
+      <summary>
+            Connects to the FTP server with the specified security.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+      <param name="serverPort">The server port (e.g. 21).</param>
+      <param name="security">Connection security.</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Connect(System.String,Rebex.Net.SslMode)">
+      <summary>
+            Connects to the FTP server with the specified security. Use a port corresponding to the specified security mode.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+      <param name="security">Connection security.</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Disconnect">
+      <summary>
+            Informs the server that the connection is about to close and
+            terminates the connection.
+            </summary>
+      <returns>The exit message returned by the server.</returns>
+      <remarks>Represents FTP QUIT command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Secure(Rebex.Net.TlsParameters,Rebex.Net.FtpSecureUpgradeType)">
+      <summary>
+            Secures the connection with TLS/SSL using the specified upgrade request type and security parameters.
+            </summary>
+      <param name="type">Upgrade request type.</param>
+      <param name="parameters">Security parameters.</param>
+      <remarks>This method can only be called on connections that have not been secured yet.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Secure(Rebex.Net.TlsParameters)">
+      <summary>
+            Secures the connection with TLS/SSL using the specified security parameters.
+            </summary>
+      <param name="parameters">Security parameters.</param>
+      <remarks>This method can only be called on connections that have not been secured yet.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Secure">
+      <summary>
+            Secures the connection with TLS/SSL.
+            </summary>
+      <remarks>This method can only be called on connections that have not been secured yet.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CopyToAnotherServer(Rebex.Net.Ftp,System.String,System.String)">
+      <summary>
+            Copies a file on this FTP server to another server using direct server-to-server transfer, also known as FXP.
+            </summary>
+      <param name="destinationServer">An <see cref="T:Rebex.Net.Ftp" /> object representing the destination server. Must be already initialized.</param>
+      <param name="sourcePath">Path to the source file to be copied.</param>
+      <param name="destinationPath">Path to the destination file.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ClearCommandChannel">
+      <summary>
+            Reverts the protected control connection back to plaintext connection.
+            </summary>
+      <remarks>
+        <p>
+            Implements the FTP CCC (Clear Command Channel) command.
+            </p>
+        <p>
+            This command is used in circumstances where it is desirable
+            to protect the control connection only during authentication,
+            when user credentials are being sent by the client.
+            </p>
+        <p>
+            When the control connection is reverted to plaintext,
+            subsequent data transfers will be protected with the current
+            <see cref="P:Rebex.Net.Ftp.SecureTransfers" /> settings.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Rename(System.String,System.String)">
+      <summary>
+            Renames or moves a file or directory on the server.
+            </summary>
+      <param name="fromPath">The pathname of the remote file or directory to be renamed.</param>
+      <param name="toPath">The pathname to rename the file or directory to.</param>
+      <remarks>Represents FTP RNFR/RNTO command pair.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawList(System.String,Rebex.Net.FtpListingType)">
+      <summary>
+            Retrieves the raw list of files and directories as received from the server.
+            </summary>
+      <param name="arguments">Arguments for the list command.</param>
+      <param name="listingType">The listing command to use.</param>
+      <returns>The array of response lines.</returns>
+      <remarks>
+        <p>
+            This method supports retrieving the raw listings using either the LIST command
+            or MLSD command. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases, because it returns the parsed list, unlike <see cref="M:Rebex.Net.Ftp.GetRawList(System.String,Rebex.Net.FtpListingType)" />.
+            </p>
+        <p>
+            Please note that requesting a <see cref="T:Rebex.Net.FtpListingType">FtpListingType.MachineProcessingList</see>
+            list will only work on servers that support this extension - this can be determined using the
+            <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> property.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetList(System.String)">
+      <summary>
+            Returns parsed list of files and directories.
+            </summary>
+      <param name="arguments">Arguments for the LIST or MLSD command.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+      <remarks>
+        <p>
+            This method will use the MLSD command if the server supports it and it is enabled
+            (see <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> and <see cref="P:Rebex.Net.Ftp.EnabledExtensions" /> properties).
+            It will use the LIST command if MLSD is not supported or disabled.
+            </p>
+        <p>
+            See <see cref="E:Rebex.Net.FtpItem.ItemParse" /> for information on using custom list parsers.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetList">
+      <summary>
+            Returns parsed list of files and directories in the current server directory.
+            </summary>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+      <remarks>
+        <p>
+            This method will use the MLSD command if the server supports it and it is enabled
+            (see <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> and <see cref="P:Rebex.Net.Ftp.EnabledExtensions" /> properties).
+            It will use the LIST command if MLSD is not supported or disabled.
+            </p>
+        <p>
+            See <see cref="E:Rebex.Net.FtpItem.ItemParse" /> for information on using custom list parsers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetItems(System.String)">
+      <summary>
+            Returns parsed list of files and directories. Matching directories are searched recursively.
+            </summary>
+      <param name="remotePath">The path (with or without a mask) to a remote file or directory.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetItems(System.String,Rebex.IO.TraversalMode)">
+      <summary>
+            Returns parsed list of files and directories.
+            </summary>
+      <param name="remotePath">The path (with or without a mask) to a remote file or directory.</param>
+      <param name="traversalMode">Specifies how to traverse hierarchy of directories.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetItems(Rebex.IO.FileSet)">
+      <summary>
+            Returns parsed list of files and directories specified by the <paramref name="set" />.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be retrieved.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFile(System.String,System.IO.Stream,System.Int64)">
+      <summary>
+            Downloads the remote file to the data stream.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="outputStream">The output stream.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>
+        <p>Represents FTP RETR command.</p>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            Use <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see> to obtain the current working directory.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFile(System.String,System.String,System.Int64,System.Int64)">
+      <summary>
+            Downloads the remote file to the local file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="localPath">The path of the local file. This cannot be a directory.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>
+        <p>Represents FTP RETR command.</p>
+        <p>If the specified local file does not exist, it is created; if it does exist and the local offset is greater than 0, the contents after the offset are overwritten.</p>
+        <p>If the localOffset is less than or equal to zero and the file exists, it will be truncated to zero length before the transfer starts.</p>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            Use <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see> to obtain the current working directory.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Upload(System.String,System.String)">
+      <summary>
+            Uploads the specified local file or directory hierarchy to the directory to the FTP server. Accepts wildcards.
+            </summary>
+      <param name="localPath">The path (with or without wildcards) of the local file or directory.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This must be a directory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Upload(System.String,System.String,Rebex.IO.TraversalMode)">
+      <summary>
+            Uploads the specified local file or directory hierarchy to the directory to the FTP server. Accepts wildcards.
+            </summary>
+      <param name="localPath">The path (with or without wildcards) of the local file or directory.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This must be a directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Upload(System.String,System.String,Rebex.IO.TraversalMode,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles)">
+      <summary>
+            Uploads the specified local file or directory hierarchy to the directory on the FTP server. Accept wildcards.
+            </summary>
+      <param name="localPath">The path (with or without wildcards) of the local file or directory.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This cannot be a file.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Upload(Rebex.IO.FileSet,System.String)">
+      <summary>
+            Uploads the specified local files and/or directories to the directory on the FTP server.
+            </summary>
+      <param name="set">A filtering set which specifies local files and directories to be uploaded.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This cannot be a file.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Upload(Rebex.IO.FileSet,System.String,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles)">
+      <summary>
+            Uploads the specified local files and/or directories to the directory on the FTP server.
+            </summary>
+      <param name="set">A filtering set which specifies local files and directories to be uploaded.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This cannot be a file.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Download(System.String,System.String)">
+      <summary>
+            Downloads the specified file or directory hierarchy from the FTP server to the local directory. Accepts wildcards.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Download(System.String,System.String,Rebex.IO.TraversalMode)">
+      <summary>
+            Downloads the specified file or directory hierarchy from the FTP server to the local directory. Accepts wildcards.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Download(System.String,System.String,Rebex.IO.TraversalMode,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles)">
+      <summary>
+            Downloads the specified file or directory hierarchy from the FTP server to the local directory. Accepts wildcards.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the local directory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Download(Rebex.IO.FileSet,System.String)">
+      <summary>
+            Downloads the specified files and/or directories from the FTP server to the local directory.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be downloaded.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Download(Rebex.IO.FileSet,System.String,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles)">
+      <summary>
+            Downloads the specified files and/or directories from the FTP server to the local directory.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be downloaded.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the local directory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CreateDirectory(System.String)">
+      <summary>
+            Creates a directory on the server.
+            </summary>
+      <param name="remotePath">Pathname of the new remote directory.</param>
+      <returns>A string containing the absolute path of the newly created remote directory if the server complies to RFC 959; otherwise, <b>null</b> reference is returned.</returns>
+      <remarks>
+        <p>
+            Represents FTP MKD command.
+            </p>
+        <p>
+          <b>CAUTION:</b> RFC states that successful reply to the MKD command
+            must always contain the absolute path of the created directory.
+            However, many FTP servers do not comply to this requirement, for example
+            wu-ftpd 2.4.2, (which is still widely used, although newer releases
+            fixed this bug). Therefore, when the response is unparsable, this method
+            returns a <b>null</b> reference instead of throwing an exception.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Login(System.String,System.String,System.String)">
+      <summary>
+            Authenticates the user to the FTP server.
+            </summary>
+      <param name="userName">The username.</param>
+      <param name="password">Password for the given username.</param>
+      <param name="account">Account for the given username.</param>
+      <returns>The logon message returned by the remote server.</returns>
+      <remarks>
+        <p>Represents FTP USER/PASS/ACCT command triplet.</p>
+        <p>For anonymous logins, use "anonymous" as a username and an email as a password (and no account).</p>
+        <p>If userName is a <b>null</b> reference, "anonymous" is used. If password is a <b>null</b> reference, "guest" is used.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SetFileDateTime(System.String,System.DateTime)">
+      <summary>
+            Sets the modification date and time of the specified remote file. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="newDateTime">The date and time to set.</param>
+      <remarks>
+        <p>
+            Support for setting modification date and time, either using MFMT or MDTM command, is not as widespread
+            as retrieving it. This method will fail on servers that support neither of these commands.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileLength(System.String)">
+      <summary>
+            Returns the size of the specified remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>The size of the specified file in bytes.</returns>
+      <remarks>
+        <p>Represents FTP SIZE command.</p>
+        <p>The SIZE command was not defined by the original RFC, but it has been widely supported for a number of years.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.FileExists(System.String)">
+      <summary>
+            Detects whether the specified file exists on the server. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote file to check.</param>
+      <returns>True if the file exists, false otherwise.</returns>
+      <remarks>
+        <p>
+            The standard FTP protocol does not have a dedicated command that could be used to detect
+            whether a file exists. There is the MLST command that is quite reliable, but not all server support
+            it and we have to rely on SIZE or even PWD, CWD commands for these servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DirectoryExists(System.String)">
+      <summary>
+            Detects whether the specified directory exists on the server. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote directory to check.</param>
+      <returns>True if the directory exists, false otherwise.</returns>
+      <remarks>
+        <p>
+            The standard FTP protocol does not have a dedicated command that could be used to detect
+            whether a directory exists. There is the MLST command that is quite reliable, but not all server support
+            it and we have to rely on MDTM, SIZE or even PWD, CWD commands for these servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SendCommand(System.String)">
+      <summary>
+            Executes a command on the FTP server.
+            </summary>
+      <param name="command">Command (e.g. "HELP").</param>
+      <remarks>
+        <p>Must be followed by a call to <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see> method.</p>
+        <p>Use <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see> and SendCommand to implement various custom commands.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ReadResponse">
+      <summary>
+            Returns the response of the FTP server to the command.
+            </summary>
+      <returns>Response of the FTP server.</returns>
+      <remarks>
+        <p>Must be preceded by a successful call to <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see> method.</p>
+        <p>Use ReadResponse and <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see> to implement various custom commands.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Flush(System.Int32)">
+      <summary>
+            Reads and returns control connection data, if available.
+            </summary>
+      <param name="timeLimit">The length of time (in milliseconds) to wait for data to be received.</param>
+      <returns>
+        <see cref="T:Rebex.Net.FtpResponse">FtpResponse</see> if data was read or <b>null</b> reference if no data was read.</returns>
+      <remarks>
+        <p>
+            Reads and returns any control connection data that might have remained
+            unread after an asynchronous operation aborted by a call to <see cref="M:Rebex.Net.Ftp.Abort">Abort</see> method.
+            </p>
+        <p>
+            It can also be used to read FTP server messages that are not responses
+            to any commands.
+            </p>
+        <p>
+            If the state of the <see cref="T:Rebex.Net.Ftp" /> object is <see cref="T:Rebex.Net.FtpState">Ready</see> and no data is available,
+            this method returns immediately with a <b>null</b> reference.
+            If the state of the Ftp object is <see cref="T:Rebex.Net.FtpState">Reading</see>,
+            <see cref="T:Rebex.Net.FtpState">Sending</see> or
+            <see cref="T:Rebex.Net.FtpState">Processing</see> and no data
+            is available within the specified time limit, it returns
+            with a <b>null</b> reference. If data is available, it is read
+            and returned. If the object is in any other state, an exception is thrown.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ToString">
+      <summary>
+            Returns a string representation of this object.
+            </summary>
+      <returns>A string representing this object</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Login(System.String,System.String)">
+      <summary>
+            Authenticates the user to the FTP server.
+            </summary>
+      <param name="userName">The username.</param>
+      <param name="password">Password for the given username.</param>
+      <returns>The logon message returned by the remote server.</returns>
+      <remarks>
+        <p>Represents FTP USER/PASS command pair.</p>
+        <p>For anonymous logins, use "anonymous" as a username and an email as a password.</p>
+        <p>If userName is a <b>null</b> reference, "anonymous" is used. If password is a <b>null</b> reference, "guest" is used.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetDownloadStream(System.String)">
+      <summary>
+            Returns a Stream for reading data from the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <returns>A Stream for reading data from the remote file.</returns>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetUploadStream(System.String)">
+      <summary>
+            Returns a Stream for writing data to the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <returns>A Stream for writing data to the remote file.</returns>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.KeepAlive">
+      <summary>
+            Sends the NOOP command to the server to keep the connection alive.
+            </summary>
+      <remarks>
+        <p>Represents FTP NOOP command.</p>
+        <p>Call this if you do not want the connection to the server to time out.</p>
+        <p>Some servers ignore NOOP command.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawList">
+      <summary>
+            Retrieves the raw list of files and directories in the current server directory as received from the server.
+            </summary>
+      <returns>The array of response lines.</returns>
+      <remarks>
+        <p>Represents FTP LIST command.</p>
+        <p>
+            Because the RFC does not define the format of the file list, this method
+            is often useless. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawList(System.String)">
+      <summary>
+            Retrieves the raw list of files and directories as received from the server.
+            </summary>
+      <param name="arguments">Arguments for the LIST command.</param>
+      <returns>The array of response lines.</returns>
+      <remarks>
+        <p>Represents FTP LIST command.</p>
+        <p>
+            Because the RFC does not define the format of the file list, this method
+            is often useless. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetNameList(System.String)">
+      <summary>
+            Retrieves the list of names.
+            </summary>
+      <param name="arguments">Arguments for the NLST command.</param>
+      <returns>An array of names.</returns>
+      <remarks>
+        <p>Represents FTP NLST command.</p>
+        <p>
+            Actual behavior of NLST command varies from server to server,
+            because the RFC is not clear in explaining what it should do. 
+            Some servers return the names of both files and directories, others
+            return files only or even report error if the current directory
+            is empty. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to ls command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetNameList">
+      <summary>
+            Retrieves the list of names in the current server directory.
+            </summary>
+      <returns>An array of names.</returns>
+      <remarks>
+        <p>Represents FTP NLST command.</p>
+        <p>
+            Actual behaviour of NLST command varies from server to server,
+            because the RFC is not clear in explaining what it should do. 
+            Some servers return the names of both files and directories, others
+            return files only or even report error if the current directory
+            is empty. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetSystemName">
+      <summary>
+            Returns the name of the remote OS.
+            </summary>
+      <returns>The name of the remote OS.</returns>
+      <remarks>
+        <p>Represents FTP SYST command.</p>
+        <p>Some servers do not support SYST command and most servers return very inaccurate responses.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Site(System.String)">
+      <summary>
+            Executes site-specific command and returns the response.
+            </summary>
+      <param name="command">Site-specific command.</param>
+      <returns>Command-specific response.</returns>
+      <remarks>
+        <p>Represents FTP SITE command.</p>
+        <p>Using <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see>
+            and <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see>
+            method might be a better choice in some cases.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DeleteFile(System.String)">
+      <summary>
+            Deletes the file on the server.
+            </summary>
+      <param name="remotePath">The pathname of the file to be deleted. Either an absolute pathname or relative to the current working directory.</param>
+      <remarks>Represents FTP DELE command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Delete(System.String,Rebex.IO.TraversalMode)">
+      <summary>
+            Deletes the specified files and/or directories at the FTP server.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.Delete(Rebex.IO.FileSet)">
+      <summary>
+            Deletes the specified files and/or directories at the FTP server.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be deleted.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ChangeDirectory(System.String)">
+      <summary>
+            Changes the current working directory on the server.
+            </summary>
+      <param name="remotePath">Pathname of the directory to change to.</param>
+      <remarks>
+        <p>Implemented using FTP CWD command for pathnames not equal to ".." and CDUP command for ".." pathnames. "." pathnames are ignored.</p>
+        <p>
+            Caution: some uncommon servers do not use a slash as a directory separator.
+            Do not use slashes in the path to remain compatible with such servers.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.RemoveDirectory(System.String)">
+      <summary>
+            Deletes an empty remote directory with the specified pathname.
+            </summary>
+      <param name="remotePath">Remote directory pathname.</param>
+      <remarks>Represents FTP RMD command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetCurrentDirectory">
+      <summary>
+            Gets the absolute path of the current working directory on the remote server.
+            </summary>
+      <returns>A string containing the absolute path of the current working remote directory.</returns>
+      <remarks>
+        <p>Represents FTP PWD command.</p>
+        <p>
+            Some servers (e.g. TOPS-20) do not support this method.
+            <see cref="T:Rebex.Net.FtpException" /> with status of
+            <see cref="T:Rebex.Net.FtpExceptionStatus">FtpExceptionStatus.ProtocolError</see>
+            and code of 550 is thrown if this is the case.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileDateTime(System.String)">
+      <summary>
+            Returns the modification date and time of the specified remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>A <see cref="T:System.DateTime" /> structure set to date and time that the specified file was modified.</returns>
+      <remarks>
+        <p>Represents FTP MDTM command.</p>
+        <p>The MDTM command was not defined by the original RFC, but it has been widely supported for a number of years.</p>
+        <p>Some servers return times in their local time zones, some use GMT.</p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFile(System.IO.Stream,System.String)">
+      <summary>
+            Uploads the content of the data stream to the file on the server, overriding it if it already exists.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP STOR command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFile(System.String,System.String)">
+      <summary>
+            Uploads the content of the local file to the file on the server, overriding it if it already exists.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP STOR command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFile(System.IO.Stream,System.String,System.Int64,System.Int64)">
+      <summary>
+            Uploads the content of the data stream to the file on the server.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP STOR command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFile(System.String,System.String,System.Int64,System.Int64,System.Int64)">
+      <summary>
+            Uploads the content of the local file to the file on the server.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP STOR command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFile(System.IO.Stream,System.String)">
+      <summary>
+            Appends the content of the data stream to the file on the server.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP APPE command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFile(System.String,System.String)">
+      <summary>
+            Appends the content of the local file to the file on the server.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP APPE command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFile(System.IO.Stream,System.String,System.Int64)">
+      <summary>
+            Appends the content of the data stream to the file on the server.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP APPE command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFile(System.String,System.String,System.Int64,System.Int64)">
+      <summary>
+            Appends the content of the local file to the file on the server.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>Represents FTP APPE command.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFile(System.String,System.IO.Stream)">
+      <summary>
+            Downloads the remote file to the data stream.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="outputStream">The output stream.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>The path parameter can specify either relative or absolute path. Relative path is interpreted as relative to the current working directory. To obtain the current working directory, see <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see>.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFile(System.String,System.String)">
+      <summary>
+            Downloads the remote file to the local file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="localPath">The path of the local file. This cannot be a directory.</param>
+      <returns>Number of bytes transferred.</returns>
+      <remarks>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            To obtain the current working directory, see <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory" />.
+            </p>
+        <p>
+            If the specified file does not exist, it is created; if it does exist,
+            it is truncated and overwritten.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetSupportedChecksumTypes">
+      <summary>
+            Returns checksum types supported by the server.
+            </summary>
+      <returns>Checksum types supported by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetSupportedChecksumAlgorithms">
+      <summary>
+            Returns checksum algorithms supported by the server.
+            </summary>
+      <returns>Checksum algorithms supported by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRemoteChecksum(Rebex.Net.FtpChecksumType,System.String)">
+      <summary>
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="type">Desired checksum type (server must support it).</param>
+      <param name="remotePath">Path of the remote file.</param>
+      <returns>Checksum of the specified remote file.</returns>
+      <remarks>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String)" /> methods.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRemoteChecksum(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64)">
+      <summary>
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="type">Desired checksum type (server must support it - see <see cref="M:Rebex.Net.Ftp.GetSupportedChecksumTypes" /> for details).</param>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="offset">The offset in remote file where reading will start.</param>
+      <param name="count">The maximum number of bytes to read.</param>
+      <returns>Checksum of the specified remote file.</returns>
+      <remarks>
+        <p>
+            Please note that not all FTP server that support checksums will necessarily support this variant as well.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64)" /> methods.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm)">
+      <summary>
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="algorithm">Desired checksum algorithm (server must support it).</param>
+      <returns>Checksum of the specified remote file.</returns>
+      <remarks>
+        <p>
+            Please note that not all FTP servers support checksum calculation, and not all FTP servers support all checksum algorithms.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.IO.LocalItem.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm)" /> methods.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm,System.Int64,System.Int64)">
+      <summary>
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="algorithm">Desired checksum algorithm (server must support it - see <see cref="M:Rebex.Net.Ftp.GetSupportedChecksumAlgorithms" /> for details).</param>
+      <param name="offset">The offset in remote file where reading will start.</param>
+      <param name="count">The maximum number of bytes to read.</param>
+      <returns>Checksum of the specified remote file.</returns>
+      <remarks>
+        <p>
+            Please note that not all FTP servers support checksum calculation, and not all FTP servers support all checksum algorithms.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.IO.LocalItem.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm,System.Int64,System.Int64)" /> methods.
+            </p>
+      </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String)">
+      <summary>
+            Calculates the checksum for the specified local file.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="localPath">Path of the local file.</param>
+      <returns>Checksum of the specified local file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64)">
+      <summary>
+            Calculates the checksum for the specified local file.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="localPath">Path of the local file.</param>
+      <param name="localOffset">The offset in the local file where reading will start.</param>
+      <param name="length">The maximum number of bytes to read.</param>
+      <returns>Checksum of the specified local file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.IO.Stream)">
+      <summary>
+            Calculates the checksum of the data in specified stream.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="sourceStream">The source data stream.</param>
+      <returns>Checksum of the data in the specified stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.IO.Stream,System.Int64)">
+      <summary>
+            Calculates the checksum of the data in specified stream.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="length">The maximum number of bytes to read.</param>
+      <returns>Checksum of the data in the specified stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SetSocketFactory(Rebex.Net.ISocketFactory)">
+      <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+      <param name="factory">Socket factory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetDownloadStreamAsync(System.String,System.IO.SeekOrigin,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetDownloadStream operation.
+            Returns a Stream for reading data from the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="origin">Position indicator that is used to obtain new position within the stream.</param>
+      <param name="offset">A byte offset relative to the origin parameter.</param>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A Stream for reading data from the remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetUploadStreamAsync(System.String,System.IO.SeekOrigin,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetUploadStream operation.
+            Returns a Stream for writing data to the remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="origin">Position indicator that is used to obtain new position within the stream.</param>
+      <param name="offset">A byte offset relative to the origin parameter.</param>
+      <remarks>
+            Because the FTP protocol does not support processing multiple commands or transfers at the same time,
+            the stream has to be closed before any other FTP operation can be used.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A Stream for writing data to the remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ConnectAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to the FTP server.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ConnectAsync(System.String,System.Int32,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to the FTP server.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string address.</param>
+      <param name="serverPort">The server port (e.g. 21).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ConnectAsync(System.String,System.Int32,Rebex.Net.SslMode,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to the FTP server with the specified security.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+      <param name="serverPort">The server port (e.g. 21).</param>
+      <param name="security">Connection security.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ConnectAsync(System.String,Rebex.Net.SslMode,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to the FTP server with the specified security. Use a port corresponding to the specified security mode.
+            </summary>
+      <param name="serverName">The server address - either a hostname or a dotted string IP address.</param>
+      <param name="security">Connection security.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The welcome message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DisconnectAsync(System.Object)">
+      <summary>
+            Begins asynchronous Disconnect operation.
+            Informs the server that the connection is about to close and
+            terminates the connection.
+            </summary>
+      <remarks>Represents FTP QUIT command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The exit message returned by the server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SecureAsync(System.Object)">
+      <summary>
+            Begins asynchronous Secure operation.
+            Secures the connection with TLS/SSL.
+            </summary>
+      <remarks>This method can only be called on connections that have not been secured yet.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CopyToAnotherServerAsync(Rebex.Net.Ftp,System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous CopyToAnotherServer operation.
+            Copies a file on this FTP server to another server using direct server-to-server transfer, also known as FXP.
+            </summary>
+      <param name="destinationServer">An <see cref="T:Rebex.Net.Ftp" /> object representing the destination server. Must be already initialized.</param>
+      <param name="sourcePath">Path to the source file to be copied.</param>
+      <param name="destinationPath">Path to the destination file.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ClearCommandChannelAsync(System.Object)">
+      <summary>
+            Begins asynchronous ClearCommandChannel operation.
+            Reverts the protected control connection back to plaintext connection.
+            </summary>
+      <remarks>
+        <p>
+            Implements the FTP CCC (Clear Command Channel) command.
+            </p>
+        <p>
+            This command is used in circumstances where it is desirable
+            to protect the control connection only during authentication,
+            when user credentials are being sent by the client.
+            </p>
+        <p>
+            When the control connection is reverted to plaintext,
+            subsequent data transfers will be protected with the current
+            <see cref="P:Rebex.Net.Ftp.SecureTransfers" /> settings.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.RenameAsync(System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous Rename operation.
+            Renames or moves a file or directory on the server.
+            </summary>
+      <param name="fromPath">The pathname of the remote file or directory to be renamed.</param>
+      <param name="toPath">The pathname to rename the file or directory to.</param>
+      <remarks>Represents FTP RNFR/RNTO command pair.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawListAsync(System.String,Rebex.Net.FtpListingType,System.Object)">
+      <summary>
+            Begins asynchronous GetRawList operation.
+            Retrieves the raw list of files and directories as received from the server.
+            </summary>
+      <param name="arguments">Arguments for the list command.</param>
+      <param name="listingType">The listing command to use.</param>
+      <remarks>
+        <p>
+            This method supports retrieving the raw listings using either the LIST command
+            or MLSD command. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases, because it returns the parsed list, unlike <see cref="M:Rebex.Net.Ftp.GetRawList(System.String,Rebex.Net.FtpListingType)" />.
+            </p>
+        <p>
+            Please note that requesting a <see cref="T:Rebex.Net.FtpListingType">FtpListingType.MachineProcessingList</see>
+            list will only work on servers that support this extension - this can be determined using the
+            <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> property.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The array of response lines.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawListAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetRawList operation.
+            Retrieves the raw list of files and directories in the current server directory as received from the server.
+            </summary>
+      <remarks>
+        <p>Represents FTP LIST command.</p>
+        <p>
+            Because the RFC does not define the format of the file list, this method
+            is often useless. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The array of response lines.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRawListAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetRawList operation.
+            Retrieves the raw list of files and directories as received from the server.
+            </summary>
+      <param name="arguments">Arguments for the LIST command.</param>
+      <remarks>
+        <p>Represents FTP LIST command.</p>
+        <p>
+            Because the RFC does not define the format of the file list, this method
+            is often useless. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The array of response lines.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetListAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetList operation.
+            Returns parsed list of files and directories.
+            </summary>
+      <param name="arguments">Arguments for the LIST or MLSD command.</param>
+      <remarks>
+        <p>
+            This method will use the MLSD command if the server supports it and it is enabled
+            (see <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> and <see cref="P:Rebex.Net.Ftp.EnabledExtensions" /> properties).
+            It will use the LIST command if MLSD is not supported or disabled.
+            </p>
+        <p>
+            See <see cref="E:Rebex.Net.FtpItem.ItemParse" /> for information on using custom list parsers.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to dir command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetListAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetList operation.
+            Returns parsed list of files and directories in the current server directory.
+            </summary>
+      <remarks>
+        <p>
+            This method will use the MLSD command if the server supports it and it is enabled
+            (see <see cref="P:Rebex.Net.Ftp.SupportedExtensions" /> and <see cref="P:Rebex.Net.Ftp.EnabledExtensions" /> properties).
+            It will use the LIST command if MLSD is not supported or disabled.
+            </p>
+        <p>
+            See <see cref="E:Rebex.Net.FtpItem.ItemParse" /> for information on using custom list parsers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetItemsAsync(System.String,Rebex.IO.TraversalMode,System.Object)">
+      <summary>
+            Begins asynchronous GetItems operation.
+            Returns parsed list of files and directories.
+            </summary>
+      <param name="remotePath">The path (with or without a mask) to a remote file or directory.</param>
+      <param name="traversalMode">Specifies how to traverse hierarchy of directories.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetItemsAsync(Rebex.IO.FileSet,System.Object)">
+      <summary>
+            Begins asynchronous GetItems operation.
+            Returns parsed list of files and directories specified by the <paramref name="set" />.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be retrieved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItemCollection" /> containing the file list.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileAsync(System.String,System.IO.Stream,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetFile operation.
+            Downloads the remote file to the data stream.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="outputStream">The output stream.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <remarks>
+        <p>Represents FTP RETR command.</p>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            Use <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see> to obtain the current working directory.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileAsync(System.String,System.String,System.Int64,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetFile operation.
+            Downloads the remote file to the local file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="localPath">The path of the local file. This cannot be a directory.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <remarks>
+        <p>Represents FTP RETR command.</p>
+        <p>If the specified local file does not exist, it is created; if it does exist and the local offset is greater than 0, the contents after the offset are overwritten.</p>
+        <p>If the localOffset is less than or equal to zero and the file exists, it will be truncated to zero length before the transfer starts.</p>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            Use <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see> to obtain the current working directory.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileAsync(System.String,System.IO.Stream,System.Object)">
+      <summary>
+            Begins asynchronous GetFile operation.
+            Downloads the remote file to the data stream.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="outputStream">The output stream.</param>
+      <remarks>The path parameter can specify either relative or absolute path. Relative path is interpreted as relative to the current working directory. To obtain the current working directory, see <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory">GetCurrentDirectory</see>.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileAsync(System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetFile operation.
+            Downloads the remote file to the local file.
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="localPath">The path of the local file. This cannot be a directory.</param>
+      <remarks>
+        <p>
+            The path parameter can specify either relative or absolute path.
+            Relative path is interpreted as relative to the current working directory.
+            To obtain the current working directory, see <see cref="M:Rebex.Net.Ftp.GetCurrentDirectory" />.
+            </p>
+        <p>
+            If the specified file does not exist, it is created; if it does exist,
+            it is truncated and overwritten.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.UploadAsync(System.String,System.String,Rebex.IO.TraversalMode,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles,System.Object)">
+      <summary>
+            Begins asynchronous Upload operation.
+            Uploads the specified local file or directory hierarchy to the directory on the FTP server. Accept wildcards.
+            </summary>
+      <param name="localPath">The path (with or without wildcards) of the local file or directory.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This cannot be a file.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.UploadAsync(Rebex.IO.FileSet,System.String,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles,System.Object)">
+      <summary>
+            Begins asynchronous Upload operation.
+            Uploads the specified local files and/or directories to the directory on the FTP server.
+            </summary>
+      <param name="set">A filtering set which specifies local files and directories to be uploaded.</param>
+      <param name="remoteDirectoryPath">The path of the remote directory. This cannot be a file.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DownloadAsync(System.String,System.String,Rebex.IO.TraversalMode,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles,System.Object)">
+      <summary>
+            Begins asynchronous Download operation.
+            Downloads the specified file or directory hierarchy from the FTP server to the local directory. Accepts wildcards.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the local directory.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DownloadAsync(Rebex.IO.FileSet,System.String,Rebex.IO.TransferMethod,Rebex.IO.ActionOnExistingFiles,System.Object)">
+      <summary>
+            Begins asynchronous Download operation.
+            Downloads the specified files and/or directories from the FTP server to the local directory.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be downloaded.</param>
+      <param name="localDirectoryPath">The path of the local directory. This must be a directory.</param>
+      <param name="transferMethod">Specifies whether to copy or move source items.</param>
+      <param name="existingFileMode">Specifies the default behavior for files that already exists at the local directory.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CreateDirectoryAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous CreateDirectory operation.
+            Creates a directory on the server.
+            </summary>
+      <param name="remotePath">Pathname of the new remote directory.</param>
+      <remarks>
+        <p>
+            Represents FTP MKD command.
+            </p>
+        <p>
+          <b>CAUTION:</b> RFC states that successful reply to the MKD command
+            must always contain the absolute path of the created directory.
+            However, many FTP servers do not comply to this requirement, for example
+            wu-ftpd 2.4.2, (which is still widely used, although newer releases
+            fixed this bug). Therefore, when the response is unparsable, this method
+            returns a <b>null</b> reference instead of throwing an exception.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A string containing the absolute path of the newly created remote directory if the server complies to RFC 959; otherwise, <b>null</b> reference is returned.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.LoginAsync(System.String,System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the FTP server.
+            </summary>
+      <param name="userName">The username.</param>
+      <param name="password">Password for the given username.</param>
+      <param name="account">Account for the given username.</param>
+      <remarks>
+        <p>Represents FTP USER/PASS/ACCT command triplet.</p>
+        <p>For anonymous logins, use "anonymous" as a username and an email as a password (and no account).</p>
+        <p>If userName is a <b>null</b> reference, "anonymous" is used. If password is a <b>null</b> reference, "guest" is used.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The logon message returned by the remote server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.LoginAsync(System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the FTP server.
+            </summary>
+      <param name="userName">The username.</param>
+      <param name="password">Password for the given username.</param>
+      <remarks>
+        <p>Represents FTP USER/PASS command pair.</p>
+        <p>For anonymous logins, use "anonymous" as a username and an email as a password.</p>
+        <p>If userName is a <b>null</b> reference, "anonymous" is used. If password is a <b>null</b> reference, "guest" is used.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The logon message returned by the remote server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SetFileDateTimeAsync(System.String,System.DateTime,System.Object)">
+      <summary>
+            Begins asynchronous SetFileDateTime operation.
+            Sets the modification date and time of the specified remote file. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote file.</param>
+      <param name="newDateTime">The date and time to set.</param>
+      <remarks>
+        <p>
+            Support for setting modification date and time, either using MFMT or MDTM command, is not as widespread
+            as retrieving it. This method will fail on servers that support neither of these commands.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileLengthAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetFileLength operation.
+            Returns the size of the specified remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <remarks>
+        <p>Represents FTP SIZE command.</p>
+        <p>The SIZE command was not defined by the original RFC, but it has been widely supported for a number of years.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The size of the specified file in bytes.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.FileExistsAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous FileExists operation.
+            Detects whether the specified file exists on the server. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote file to check.</param>
+      <remarks>
+        <p>
+            The standard FTP protocol does not have a dedicated command that could be used to detect
+            whether a file exists. There is the MLST command that is quite reliable, but not all server support
+            it and we have to rely on SIZE or even PWD, CWD commands for these servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>True if the file exists, false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DirectoryExistsAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous DirectoryExists operation.
+            Detects whether the specified directory exists on the server. Not all FTP servers support this!
+            </summary>
+      <param name="remotePath">The path of the remote directory to check.</param>
+      <remarks>
+        <p>
+            The standard FTP protocol does not have a dedicated command that could be used to detect
+            whether a directory exists. There is the MLST command that is quite reliable, but not all server support
+            it and we have to rely on MDTM, SIZE or even PWD, CWD commands for these servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>True if the directory exists, false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SendCommandAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous SendCommand operation.
+            Executes a command on the FTP server.
+            </summary>
+      <param name="command">Command (e.g. "HELP").</param>
+      <remarks>
+        <p>Must be followed by a call to <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see> method.</p>
+        <p>Use <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see> and SendCommand to implement various custom commands.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ReadResponseAsync(System.Object)">
+      <summary>
+            Begins asynchronous ReadResponse operation.
+            Returns the response of the FTP server to the command.
+            </summary>
+      <remarks>
+        <p>Must be preceded by a successful call to <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see> method.</p>
+        <p>Use ReadResponse and <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see> to implement various custom commands.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Response of the FTP server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.KeepAliveAsync(System.Object)">
+      <summary>
+            Begins asynchronous KeepAlive operation.
+            Sends the NOOP command to the server to keep the connection alive.
+            </summary>
+      <remarks>
+        <p>Represents FTP NOOP command.</p>
+        <p>Call this if you do not want the connection to the server to time out.</p>
+        <p>Some servers ignore NOOP command.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetNameListAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetNameList operation.
+            Retrieves the list of names.
+            </summary>
+      <param name="arguments">Arguments for the NLST command.</param>
+      <remarks>
+        <p>Represents FTP NLST command.</p>
+        <p>
+            Actual behavior of NLST command varies from server to server,
+            because the RFC is not clear in explaining what it should do. 
+            Some servers return the names of both files and directories, others
+            return files only or even report error if the current directory
+            is empty. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+        <p>
+          <b>Caution:</b> The meaning of the <i>arguments</i> argument is not defined by RFC
+            and varies from server to server. Some servers interpret it as parameters
+            to ls command, some as a filename, some ignore it and some report an error.
+            Calling this method with <i>arguments</i> other than null is not
+            recommended and will make your code incompatible with many FTP servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An array of names.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetNameListAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetNameList operation.
+            Retrieves the list of names in the current server directory.
+            </summary>
+      <remarks>
+        <p>Represents FTP NLST command.</p>
+        <p>
+            Actual behaviour of NLST command varies from server to server,
+            because the RFC is not clear in explaining what it should do. 
+            Some servers return the names of both files and directories, others
+            return files only or even report error if the current directory
+            is empty. Using <see cref="M:Rebex.Net.Ftp.GetList">GetList</see> is a better
+            choice in most cases.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An array of names.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetSystemNameAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetSystemName operation.
+            Returns the name of the remote OS.
+            </summary>
+      <remarks>
+        <p>Represents FTP SYST command.</p>
+        <p>Some servers do not support SYST command and most servers return very inaccurate responses.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>The name of the remote OS.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.SiteAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous Site operation.
+            Executes site-specific command and returns the response.
+            </summary>
+      <param name="command">Site-specific command.</param>
+      <remarks>
+        <p>Represents FTP SITE command.</p>
+        <p>Using <see cref="M:Rebex.Net.Ftp.SendCommand(System.String)">SendCommand</see>
+            and <see cref="M:Rebex.Net.Ftp.ReadResponse">ReadResponse</see>
+            method might be a better choice in some cases.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Command-specific response.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DeleteFileAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous DeleteFile operation.
+            Deletes the file on the server.
+            </summary>
+      <param name="remotePath">The pathname of the file to be deleted. Either an absolute pathname or relative to the current working directory.</param>
+      <remarks>Represents FTP DELE command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DeleteAsync(System.String,Rebex.IO.TraversalMode,System.Object)">
+      <summary>
+            Begins asynchronous Delete operation.
+            Deletes the specified files and/or directories at the FTP server.
+            </summary>
+      <param name="remotePath">The path (with or without wildcards) of the remote file or directory.</param>
+      <param name="traversalMode">Traversal mode. Specifies whether the whole hierarchy or files only are transferred.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.DeleteAsync(Rebex.IO.FileSet,System.Object)">
+      <summary>
+            Begins asynchronous Delete operation.
+            Deletes the specified files and/or directories at the FTP server.
+            </summary>
+      <param name="set">A filtering set which specifies remote files and directories to be deleted.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.ChangeDirectoryAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous ChangeDirectory operation.
+            Changes the current working directory on the server.
+            </summary>
+      <param name="remotePath">Pathname of the directory to change to.</param>
+      <remarks>
+        <p>Implemented using FTP CWD command for pathnames not equal to ".." and CDUP command for ".." pathnames. "." pathnames are ignored.</p>
+        <p>
+            Caution: some uncommon servers do not use a slash as a directory separator.
+            Do not use slashes in the path to remain compatible with such servers.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.RemoveDirectoryAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous RemoveDirectory operation.
+            Deletes an empty remote directory with the specified pathname.
+            </summary>
+      <param name="remotePath">Remote directory pathname.</param>
+      <remarks>Represents FTP RMD command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetCurrentDirectoryAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetCurrentDirectory operation.
+            Gets the absolute path of the current working directory on the remote server.
+            </summary>
+      <remarks>
+        <p>Represents FTP PWD command.</p>
+        <p>
+            Some servers (e.g. TOPS-20) do not support this method.
+            <see cref="T:Rebex.Net.FtpException" /> with status of
+            <see cref="T:Rebex.Net.FtpExceptionStatus">FtpExceptionStatus.ProtocolError</see>
+            and code of 550 is thrown if this is the case.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A string containing the absolute path of the current working remote directory.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetFileDateTimeAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetFileDateTime operation.
+            Returns the modification date and time of the specified remote file.
+            </summary>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <remarks>
+        <p>Represents FTP MDTM command.</p>
+        <p>The MDTM command was not defined by the original RFC, but it has been widely supported for a number of years.</p>
+        <p>Some servers return times in their local time zones, some use GMT.</p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A <see cref="T:System.DateTime" /> structure set to date and time that the specified file was modified.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFileAsync(System.IO.Stream,System.String,System.Object)">
+      <summary>
+            Begins asynchronous PutFile operation.
+            Uploads the content of the data stream to the file on the server, overriding it if it already exists.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <remarks>Represents FTP STOR command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFileAsync(System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous PutFile operation.
+            Uploads the content of the local file to the file on the server, overriding it if it already exists.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <remarks>Represents FTP STOR command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFileAsync(System.IO.Stream,System.String,System.Int64,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous PutFile operation.
+            Uploads the content of the data stream to the file on the server.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <remarks>Represents FTP STOR command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.PutFileAsync(System.String,System.String,System.Int64,System.Int64,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous PutFile operation.
+            Uploads the content of the local file to the file on the server.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <param name="remoteOffset">The starting offset of the remote file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <remarks>Represents FTP STOR command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFileAsync(System.IO.Stream,System.String,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous AppendFile operation.
+            Appends the content of the data stream to the file on the server.
+            </summary>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <remarks>Represents FTP APPE command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.AppendFileAsync(System.String,System.String,System.Int64,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous AppendFile operation.
+            Appends the content of the local file to the file on the server.
+            </summary>
+      <param name="localPath">The path of the local file.</param>
+      <param name="remotePath">The path of the remote file. This cannot be a directory.</param>
+      <param name="localOffset">The starting offset in the local file.</param>
+      <param name="length">Number of bytes to transfer or -1 to transfer the whole stream.</param>
+      <remarks>Represents FTP APPE command.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Number of bytes transferred.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRemoteChecksumAsync(Rebex.Net.FtpChecksumType,System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetRemoteChecksum operation.
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="type">Desired checksum type (server must support it).</param>
+      <param name="remotePath">Path of the remote file.</param>
+      <remarks>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String)" /> methods.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetRemoteChecksumAsync(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetRemoteChecksum operation.
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="type">Desired checksum type (server must support it - see <see cref="M:Rebex.Net.Ftp.GetSupportedChecksumTypes" /> for details).</param>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="offset">The offset in remote file where reading will start.</param>
+      <param name="count">The maximum number of bytes to read.</param>
+      <remarks>
+        <p>
+            Please note that not all FTP server that support checksums will necessarily support this variant as well.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.Net.Ftp.CalculateLocalChecksum(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64)" /> methods.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetChecksumAsync(System.String,Rebex.IO.ChecksumAlgorithm,System.Object)">
+      <summary>
+            Begins asynchronous GetChecksum operation.
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="algorithm">Desired checksum algorithm (server must support it).</param>
+      <remarks>
+        <p>
+            Please note that not all FTP servers support checksum calculation, and not all FTP servers support all checksum algorithms.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.IO.LocalItem.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm)" /> methods.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.GetChecksumAsync(System.String,Rebex.IO.ChecksumAlgorithm,System.Int64,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous GetChecksum operation.
+            Returns the checksum of the specified file on the server.
+            </summary>
+      <param name="remotePath">Path of the remote file.</param>
+      <param name="algorithm">Desired checksum algorithm (server must support it - see <see cref="M:Rebex.Net.Ftp.GetSupportedChecksumAlgorithms" /> for details).</param>
+      <param name="offset">The offset in remote file where reading will start.</param>
+      <param name="count">The maximum number of bytes to read.</param>
+      <remarks>
+        <p>
+            Please note that not all FTP servers support checksum calculation, and not all FTP servers support all checksum algorithms.
+            </p>
+        <p>
+            To calculate checksums of local files, use one of <see cref="M:Rebex.IO.LocalItem.GetChecksum(System.String,Rebex.IO.ChecksumAlgorithm,System.Int64,System.Int64)" /> methods.
+            </p>
+      </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified remote file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksumAsync(Rebex.Net.FtpChecksumType,System.String,System.Object)">
+      <summary>
+            Begins asynchronous CalculateLocalChecksum operation.
+            Calculates the checksum for the specified local file.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="localPath">Path of the local file.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified local file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksumAsync(Rebex.Net.FtpChecksumType,System.String,System.Int32,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous CalculateLocalChecksum operation.
+            Calculates the checksum for the specified local file.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="localPath">Path of the local file.</param>
+      <param name="localOffset">The offset in the local file where reading will start.</param>
+      <param name="length">The maximum number of bytes to read.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the specified local file.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksumAsync(Rebex.Net.FtpChecksumType,System.IO.Stream,System.Object)">
+      <summary>
+            Begins asynchronous CalculateLocalChecksum operation.
+            Calculates the checksum of the data in specified stream.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the data in the specified stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.CalculateLocalChecksumAsync(Rebex.Net.FtpChecksumType,System.IO.Stream,System.Int64,System.Object)">
+      <summary>
+            Begins asynchronous CalculateLocalChecksum operation.
+            Calculates the checksum of the data in specified stream.
+            </summary>
+      <param name="type">Desired checksum type.</param>
+      <param name="sourceStream">The source data stream.</param>
+      <param name="length">The maximum number of bytes to read.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Checksum of the data in the specified stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ftp.EndCalculateLocalChecksum(System.IAsyncResult)">
+      <summary>
+            Ends an asynchronous BeginCalculateLocalChecksum operation.
+            </summary>
+      <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+      <returns>Checksum of the data in the specified stream.</returns>
+      <remarks>
+        <p>In builds for .NET 4.0 and higher, this method is available as an extension method. Add 'using Rebex.Legacy' (C#) or 'Import Rebex.Legacy' (VB.NET) to your code in order to use it.</p>
+      </remarks>
+    </member>
+    <member name="E:Rebex.Net.Ftp.ResponseRead">
+      <summary>
+            Occurs when a response is received from the server.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.CommandSent">
+      <summary>
+            Occurs when a command is send to the server.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.ListItemReceived">
+      <summary>
+            Occurs when a file and directory listing item is received by the <see cref="M:Rebex.Net.Ftp.GetList" />, <see cref="M:Rebex.Net.Ftp.GetRawList" /> or <see cref="M:Rebex.Net.Ftp.GetNameList" /> or <see cref="O:Rebex.Net.Ftp.GetItems">GetItems</see> methods.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.ProblemDetected">
+      <summary>
+            Occurs when a problem is detected in <see cref="O:Rebex.Net.Ftp.Download">Download</see>, <see cref="O:Rebex.Net.Ftp.Upload">Upload</see>, <see cref="O:Rebex.Net.Ftp.Delete">Delete</see> or <see cref="O:Rebex.Net.Ftp.GetItems">GetItems</see> methods, 
+            making it possible for the handler to choose a desired reaction.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.Traversing">
+      <summary>
+            Occurs when a significant action occurs in <see cref="O:Rebex.Net.Ftp.Download">Download</see>, <see cref="O:Rebex.Net.Ftp.Upload">Upload</see>, <see cref="O:Rebex.Net.Ftp.Delete">Delete</see> or <see cref="O:Rebex.Net.Ftp.GetItems">GetItems</see> methods.
+            Notifies the client about traversing hierarchy structure.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.TransferProgressChanged">
+      <summary>
+            Occurs when a significant action occurs in <see cref="O:Rebex.Net.Ftp.Download">Download</see>, <see cref="O:Rebex.Net.Ftp.Upload">Upload</see> methods.
+            Notifies the client about currently processing directory, currently transferring file and progress of the transfer.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.DeleteProgressChanged">
+      <summary>
+            Occurs when a significant action occurs in <see cref="O:Rebex.Net.Ftp.Delete">Delete</see> method.
+            Notifies the client about currently processing directory, currently deleting file and progress of the delete.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.Ftp.ValidatingCertificate">
+      <summary>
+            Occurs when a server certificate needs to be validated.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Proxy">
+      <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+      <value>The <see cref="T:Rebex.Net.FtpProxy" /> to use to access a remote server.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Encoding">
+      <summary>
+            Gets or sets the <see cref="T:System.Text.Encoding">Encoding</see> to use to encode and decode command parameters and server responses.
+            </summary>
+      <value>The <see cref="T:System.Text.Encoding">Encoding</see> to use to encode and decode command parameters and server responses. Default is <see cref="T:System.Text.Encoding">Encoding.Default</see>.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.TransferType">
+      <summary>
+            Gets or sets the data transfer type.
+            </summary>
+      <value>The file transfer type. Default is <see cref="T:Rebex.Net.FtpTransferType">Binary</see>.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.TransferMode">
+      <summary>
+            Gets or sets the data transfer mode.
+            </summary>
+      <value>The file transfer mode. Default is <see cref="T:Rebex.Net.FtpTransferMode">Stream</see>.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Passive">
+      <summary>
+            Gets or sets a value which specifies the way data transfers are made.
+            </summary>
+      <value>The file transfer type. Default is true (passive).</value>
+      <remarks>
+        <p>Passive mode - data transfer connections are made by the client, which connects to the server.</p>
+        <p>Active mode - data transfer connections are made by the server, which connects to the client.</p>
+        <p>Firewalls and NATs often make it impossible to use active transfers.</p>
+        <p>When the transport layer doesn't support incoming connections, this property is ignored and all transfers are passive 
+            (for example when using HTTP CONNECT proxy).</p>
+      </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Settings">
+      <summary>
+            Gets or sets FTP object settings.
+            </summary>
+      <value>FTP object settings.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.SupportedExtensions">
+      <summary>
+            Gets the bit field specifying the extensions supported by the server.
+            </summary>
+      <value>Extensions supported by the server.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.EnabledExtensions">
+      <summary>
+            Gets or sets the bit field specifying the enabled extensions.
+            </summary>
+      <value>Enabled extensions.</value>
+      <remarks>
+            Enabled extensions will be used when appropriate.
+            By default, all extensions are enabled.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ftp.MaxDownloadSpeed">
+      <summary>
+            Gets or sets the maximum allowed download speed, in kilobytes per second. For unlimited speed, set this to zero.
+            </summary>
+      <value>Maximum allowed download speed (KB/s).</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.MaxUploadSpeed">
+      <summary>
+            Gets or sets the maximum allowed upload speed, in kilobytes per second. For unlimited speed, set this to zero.
+            </summary>
+      <value>Maximum allowed upload speed (KB/s).</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.UploadBufferLength">
+      <summary>
+            Gets or sets the size of the upload buffer. Allowed values are 2KB to 16MB. Default is 16KB (4KB on .NET CF).
+            </summary>
+      <value>Upload buffer size.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.DataPortRange">
+      <summary>
+            Gets or sets the local TCP port range used for data transfers. Please note that is usually only useful for active mode (see <see cref="P:Rebex.Net.Ftp.Passive" />),
+            not in passive mode, where only the port range specified at the server is usually important. In passive mode, only set this property if you know
+            precisely what you are doing, because setting it to a range that is too small or corresponds to the server range might often lead to inability
+            to transfer many files!
+            </summary>
+      <value>The port range.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.DataAddress">
+      <summary>
+            Gets or sets the IP address announced to the FTP server when establishing an active mode data transfer.
+            Don't set this unless needed. By default, the value of this property is IPAddress.None which means that
+            the address of the listening interface is used instead.
+            This has no effect for passive mode transfers.
+            </summary>
+      <value>IP address.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.SecureTransfers">
+      <summary>
+            Gets or sets a value which specifies whether data transfers are secure.
+            </summary>
+      <value>True if data transfers are secure, false if unsecure.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.IsSecured">
+      <summary>
+            Gets the value indicating whether the control connection is secured.
+            </summary>
+      <value>True if secure, false if not secure.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.TlsSocket">
+      <summary>
+            Returns the TLS/SSL socket of secured control connection.
+            </summary>
+      <returns>The TLS/SSL socket of secured control connection, or null if the connection is not secured.</returns>
+      <remarks>
+            This property is intended for advanced users only.
+            <see cref="T:Rebex.Net.Ftp" /> class does not expect the socket to be altered in any way.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Timeout">
+      <summary>
+            Gets or sets the length of time in milliseconds before the operation times out (specify -1 or 0 to indicate that the request does not time out).
+            </summary>
+      <value>
+            The length of time, in milliseconds, until the operation times out,
+            or the value -1 or 0 to indicate that the request does not time out.
+            Default is 60000 (60 seconds).
+            </value>
+      <remarks>
+        <p>
+            The internal timeout counter is reset every time data is sent
+            or received from to server. This also means that data transfers only
+            time out after x milliseconds of inactivity, not after x milliseconds
+            from the start of the transfer.
+            </p>
+        <p>
+            The <see cref="P:Rebex.Net.Ftp.Timeout" /> property only affects synchronous methods. To time out asynchronous methods, use the <see cref="M:Rebex.Net.Ftp.Abort" /> method.
+            </p>
+        <p>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </p>
+      </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ftp.AbortTimeout">
+      <summary>
+            Gets or sets the length of time before the abort operation times out.
+            </summary>
+      <value>The length of time, in milliseconds, until the abort operation times out.
+            Default is 3000, which seems to be a reasonable value.
+            </value>
+      <remarks>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ftp.IsBusy">
+      <summary>
+            Gets a value indicating whether there is any operation (method) in progress.
+            </summary>
+      <returns>True if there is any operation in progress; false otherwise.</returns>
+    </member>
+    <member name="P:Rebex.Net.Ftp.IsConnected">
+      <summary>
+            Gets a value indicating whether the session is connected.
+            </summary>
+      <remarks>
+        <p>
+            This property returns the latest known state of the session. 
+            When it returns false, the session was either never connected, or no longer connected. 
+            When it returns true, the session was connected at the time of the last I/O operation.
+            </p>
+        <p>
+          <b>Note:</b> There is no guarantee that the session is still connected even though
+            <see cref="P:Rebex.Net.Ftp.IsConnected" /> returns true.
+            </p>
+      </remarks>
+      <value>True if connected; false otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.IsAuthenticated">
+      <summary>
+            Gets a value indicating whether the session is authenticated.
+            </summary>
+      <value>True if authenticated; false otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.TransferState">
+      <summary>
+            Gets the current transfer state of the <see cref="T:Rebex.Net.Ftp" /> object.
+            </summary>
+      <value>The current transfer state.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.LocalEndPoint">
+      <summary>
+            Gets the local client <see cref="T:System.Net.EndPoint" />.
+            </summary>
+      <value>The local client <see cref="T:System.Net.EndPoint" />.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.RemoteEndPoint">
+      <summary>
+            Gets the remote server <see cref="T:System.Net.EndPoint" />.
+            </summary>
+      <value>The remote server <see cref="T:System.Net.EndPoint" />.</value>
+    </member>
+    <member name="P:Rebex.Net.Ftp.Version">
+      <summary>
+            Returns the version of the FTP component.
+            </summary>
+      <value>The version of the FTP component.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpResponseReadEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.ResponseRead">ResponseRead</see> event.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpResponseReadEventArgs.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpResponseReadEventArgs" /> class with the specified response string.
+            </summary>
+      <param name="response">The raw response line that was read.</param>
+    </member>
+    <member name="P:Rebex.Net.FtpResponseReadEventArgs.Response">
+      <summary>
+            Gets the raw FTP response.
+            </summary>
+      <value>The raw FTP response.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpCommandSentEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.CommandSent">CommandSent</see> event.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpCommandSentEventArgs.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpCommandSentEventArgs" /> class with the specified command string.
+            </summary>
+      <param name="command">The command that was sent.</param>
+    </member>
+    <member name="P:Rebex.Net.FtpCommandSentEventArgs.Command">
+      <summary>
+            Gets the command string.
+            </summary>
+      <value>The command string.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpItemParseEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.FtpItem.ItemParse">ItemParse</see> event.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItemParseEventArgs.#ctor(System.String,Rebex.Net.FtpItem)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItemParseEventArgs" /> class with the specified raw data and a parsed item.
+            </summary>
+      <param name="rawLine">Raw data of the line parsed.</param>
+      <param name="item">Parsed <see cref="T:Rebex.Net.FtpItem" /> or <b>null</b> reference if unable to parse.</param>
+      <remarks>
+            This provides support for custom list parsing. Custom parser delegate can
+            inspect the rawLine parameter and set <see cref="P:Rebex.Net.FtpItemParseEventArgs.Item" /> property to a new <see cref="T:Rebex.Net.FtpItem" /> instance.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpItemParseEventArgs.RawLine">
+      <summary>
+            Gets the raw data of the line parsed.
+            </summary>
+      <value>The raw data of the line parsed.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItemParseEventArgs.Item">
+      <summary>
+            Gets or sets the parsed <see cref="T:Rebex.Net.FtpItem" />.
+            </summary>
+      <value>The parsed <see cref="T:Rebex.Net.FtpItem" /> or <b>null</b> if unable to parse.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpListItemReceivedEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.ListItemReceived">ListItemReceived</see> event.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpListItemReceivedEventArgs.#ctor(Rebex.Net.FtpListingType,System.String,Rebex.Net.FtpItem)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpListItemReceivedEventArgs" /> class with the specified listing type, raw data and item.
+            </summary>
+      <param name="listingType">FTP listing type.</param>
+      <param name="rawLine">Raw data of the received item line.</param>
+      <param name="item">Received <see cref="T:Rebex.Net.FtpItem" />.</param>
+    </member>
+    <member name="P:Rebex.Net.FtpListItemReceivedEventArgs.ListingType">
+      <summary>
+            Gets the listing type.
+            </summary>
+      <value>Listing type.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpListItemReceivedEventArgs.Item">
+      <summary>
+            Gets the received <see cref="T:Rebex.Net.FtpItem" />.
+            </summary>
+      <value>The received <see cref="T:Rebex.Net.FtpItem" /> or <b>null</b> if not available.</value>
+      <remarks>To remove this item from the list, set this property to null.</remarks>
+    </member>
+    <member name="T:Rebex.Net.FtpProblemDetectedEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.ProblemDetected" /> event.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpTraversingEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.Traversing" /> event.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpTransferProgressChangedEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.TransferProgressChanged" /> event.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpDeleteProgressChangedEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.Ftp.DeleteProgressChanged" /> event.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpExceptionStatus">
+      <summary>
+            Defines status codes for the <see cref="T:Rebex.Net.FtpException" /> class.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ConnectFailure">
+      <summary>
+            The remote service point could not be contacted at the transport level.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ConnectionClosed">
+      <summary>
+            The connection was prematurely closed.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.SocketError">
+      <summary>
+            The error at transport level occurred.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.NameResolutionFailure">
+      <summary>
+            The name resolver service could not resolve the host name.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.Pending">
+      <summary>
+            An operation is pending.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ProtocolError">
+      <summary>
+            The response received from the server was complete but indicated a protocol-level error. For example, an FTP protocol error such as 550 Access Denied would use this status.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ProxyNameResolutionFailure">
+      <summary>
+            The name resolver service could not resolve the proxy host name.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ReceiveFailure">
+      <summary>
+            A complete response was not received from the remote server due to an error at the transport level.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.OperationAborted">
+      <summary>
+            The operation was aborted by a call to the <see cref="M:Rebex.Net.Ftp.Abort" /> method.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.UnclassifiableError">
+      <summary>
+            An unclassifiable error occurred. This is the default value for <see cref="P:Rebex.Net.FtpException.Status" />.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.SendFailure">
+      <summary>
+            A complete request could not be sent to the remote server due to an error at the transport level.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.ServerProtocolViolation">
+      <summary>
+            The server response was not a valid FTP response.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.Timeout">
+      <summary>
+            No response was received during the time-out period for a request.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.AsyncError">
+      <summary>
+            General exception in asynchronous call.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExceptionStatus.OperationFailure">
+      <summary> 
+            The requested operation could not be completed. 
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpException">
+      <summary>
+            The exception that is thrown when an error occurs while using Ftp component.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class.
+            </summary>
+      <remarks>This constructor initializes the <see cref="P:System.Exception.Message">Message</see> property of the new instance to a message that describes the general error.</remarks>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class with the specified error message.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor(System.String,Rebex.Net.FtpExceptionStatus)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class with the specified error message and status.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.FtpExceptionStatus" /> values.</param>
+      <remarks>The status must not be <see cref="T:Rebex.Net.FtpExceptionStatus">ProtocolError</see>. Use <see cref="M:Rebex.Net.FtpException.#ctor(Rebex.Net.FtpResponse)">FtpException (FtpResponse response)</see> constructor for creating protocol error exceptions.</remarks>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor(System.String,System.Exception)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class with the specified error message
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="innerException">The exception that is the cause of the current exception. If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor(System.String,System.Exception,Rebex.Net.FtpExceptionStatus)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class with the specified error message, status,
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="innerException">The exception that is the cause of the current exception. If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.FtpExceptionStatus" /> values.</param>
+      <remarks>The status must not be <see cref="T:Rebex.Net.FtpExceptionStatus">ProtocolError</see>. Use <see cref="M:Rebex.Net.FtpException.#ctor(Rebex.Net.FtpResponse)">FtpException (FtpResponse response)</see> constructor for creating protocol error exceptions.</remarks>
+    </member>
+    <member name="M:Rebex.Net.FtpException.#ctor(Rebex.Net.FtpResponse)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpException" /> class with the specified <see cref="T:Rebex.Net.FtpResponse" />.
+            </summary>
+      <param name="response">The <see cref="T:Rebex.Net.FtpResponse" />.</param>
+    </member>
+    <member name="P:Rebex.Net.FtpException.Status">
+      <summary>
+            Gets the status of the response.
+            </summary>
+      <value>One of the <see cref="T:Rebex.Net.FtpExceptionStatus" /> values.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpException.Response">
+      <summary>
+            Gets the <see cref="T:Rebex.Net.FtpResponse" /> of the exception.
+            </summary>
+      <value>The <see cref="T:Rebex.Net.FtpResponse" /> if <see cref="P:Rebex.Net.FtpException.Status" /> is <see cref="T:Rebex.Net.FtpExceptionStatus">ProtocolError</see>; <b>null</b> reference otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpException.Transferred">
+      <summary>
+            Gets the amount of data transferred before the exception occurred.
+            </summary>
+      <value>The amount of data transferred before the exception occurred.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpException.RemotePath">
+      <summary>
+            Gets the path of the remote file or directory which is currently processed or null (Nothing in Visual Basic) if not available.
+            </summary>
+      <value>Path of the remote file or directory which is currently processed or null (Nothing in Visual Basic) if not available.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpException.LocalPath">
+      <summary>
+            Gets the path of the local file or directory which is currently processed or null (Nothing in Visual Basic) if not available.
+            </summary>
+      <value>Path of the local file or directory which is currently processed or null (Nothing in Visual Basic) if not available.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpException.ProblemType">
+      <summary>
+            Gets the type of the problem which occurred at multi-file operation.
+            </summary>
+      <value>Type of the problem closely describes error at suboperation.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpItemType">
+      <summary>
+            Type of <see cref="T:Rebex.Net.FtpItem" />.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemType.File">
+      <summary>File</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemType.Directory">
+      <summary>Directory</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemType.Symlink">
+      <summary>Symlink</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpItemPermissions">
+      <summary>
+            Unix file permissions.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.None">
+      <summary>No permissions.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OthersExecute">
+      <summary>Others execute.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OthersWrite">
+      <summary>Others write.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OthersRead">
+      <summary>Others read.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.GroupExecute">
+      <summary>Group execute.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.GroupWrite">
+      <summary>Group write.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.GroupRead">
+      <summary>Group read.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OwnerExecute">
+      <summary>Owner execute.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OwnerWrite">
+      <summary>Owner write.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.OwnerRead">
+      <summary>Owner read.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.Sticky">
+      <summary>Sticky.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.SetGid">
+      <summary>Set GID bit.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpItemPermissions.SetUid">
+      <summary>Set UID bit.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpItem">
+      <summary>
+            Contains information about a single file or directory on the FTP server.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.GetLastWriteTime">
+      <summary>
+            Gets the last modification time of the item.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.GetLastAccessTime">
+      <summary>
+            Gets the last access time of the item.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.GetCreationTime">
+      <summary>
+            Gets the creation time of the item.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.Int64,Rebex.Net.FtpItemType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.Int64,Rebex.Net.FtpItemType,System.DateTime,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+      <param name="lastModified">The <see cref="T:System.DateTime" /> of last modification.</param>
+      <param name="symlinkPath">The path this item points to if it is symlink.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.Int64,Rebex.Net.FtpItemType,System.DateTime,System.String,System.Nullable{Rebex.Net.FtpItemPermissions},System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+      <param name="lastModified">The <see cref="T:System.DateTime" /> of last modification.</param>
+      <param name="symlinkPath">The path this item points to if it is symlink.</param>
+      <param name="permissions">The attributes (permissions) of the file. may be null to indicate unknown permissions.</param>
+      <param name="owner">The file owner.</param>
+      <param name="group">The file group.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.String,System.Int64,Rebex.Net.FtpItemType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="path">The path of the file or directory.</param>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.String,System.Int64,Rebex.Net.FtpItemType,System.DateTime,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="path">The path of the file or directory.</param>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+      <param name="lastModified">The <see cref="T:System.DateTime" /> of last modification.</param>
+      <param name="symlinkPath">The path this item points to if it is symlink.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.#ctor(System.String,System.String,System.Int64,Rebex.Net.FtpItemType,System.DateTime,System.String,System.Nullable{Rebex.Net.FtpItemPermissions},System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class.
+            </summary>
+      <param name="path">The path of the file or directory.</param>
+      <param name="filename">The name of the file or directory.</param>
+      <param name="size">The size of the file.</param>
+      <param name="type">The type of item.</param>
+      <param name="lastModified">The <see cref="T:System.DateTime" /> of last modification.</param>
+      <param name="symlinkPath">The path this item points to if it is symlink.</param>
+      <param name="permissions">The attributes (permissions) of the file. may be null to indicate unknown permissions.</param>
+      <param name="owner">The file owner.</param>
+      <param name="group">The file group.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.Parse(System.String)">
+      <summary>
+            Creates a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class and initializes it with file info from a raw FTP list line.
+            </summary>
+      <param name="rawLine">A raw FTP list line.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItem" /> or a null reference if unable to parse.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.Parse(System.String,Rebex.Net.FtpListingType)">
+      <summary>
+            Creates a new instance of the <see cref="T:Rebex.Net.FtpItem" /> class and initializes it with file info from a raw FTP list line.
+            </summary>
+      <param name="rawLine">A raw FTP list line.</param>
+      <param name="listingType">Type of the listing.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.FtpItem" /> or a null reference if unable to parse.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItem.ToString">
+      <summary>
+            Returns the name of the item.
+            </summary>
+      <returns>The name of the item.</returns>
+    </member>
+    <member name="E:Rebex.Net.FtpItem.ItemParse">
+      <summary>
+            Occurs when an item is being parsed.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Name">
+      <summary>
+            Gets the name of the file or directory.
+            </summary>
+      <value>The name of the file or directory.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Path">
+      <summary>
+            Gets the path of the file or directory.
+            It can be relative or absolute path depending on the way of use.
+            </summary>
+      <value>The path of the file or directory.</value>
+      <remarks>It contains a full path if returned by the <see cref="M:Rebex.Net.Ftp.GetItems(System.String)" /> method or a file/directory name only if returned by the <see cref="M:Rebex.Net.Ftp.GetList" /> method.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Type">
+      <summary>
+            Gets the type of the item.
+            </summary>
+      <value>The type of the item.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.SymlinkPath">
+      <summary>
+            Gets the path this item points to if it is symlink, null otherwise.
+            </summary>
+      <value>The path this item points to if it is symlink, null otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Size">
+      <summary>
+            Gets the file length.
+            </summary>
+      <value>File length.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Length">
+      <summary>
+            Gets the file length.
+            </summary>
+      <value>File length.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.IsDirectory">
+      <summary>
+            Gets the flag indicating whether the item might be a directory.
+            </summary>
+      <value>True if the item might be a directory.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.IsFile">
+      <summary>
+            Gets the flag indicating whether the item might be a file.
+            </summary>
+      <value>True if the item might be a file.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.IsSymlink">
+      <summary>
+            Gets the flag indicating whether the item is a symlink.
+            </summary>
+      <value>True if the item is a symlink.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.IsLink">
+      <summary>
+            Gets a value indicating whether the item is a link.
+            </summary>
+      <returns>True if the item is a link; false otherwise.</returns>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Modified">
+      <summary>
+            Returns the <see cref="T:System.DateTime" /> of last modification.
+            </summary>
+      <value>The <see cref="T:System.DateTime" /> of last modification.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.LastWriteTime">
+      <summary>
+            Gets the last modification time of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.LastAccessTime">
+      <summary>
+            Gets the last access time of the item. Not supported for FTP.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.CreationTime">
+      <summary>
+            Gets the creation time of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Permissions">
+      <summary>
+            The attributes (permissions) of the file.
+            If null, the value was never assigned or successfully parsed.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Owner">
+      <summary>
+            The owner of the file.
+            If null, the value was never assigned or successfully parsed.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpItem.Group">
+      <summary>
+            Group identifier (Unix only).
+            If null, the value was never assigned or successfully parsed.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpItemCollection">
+      <summary>
+            Provides a container for a collection of <see cref="T:Rebex.Net.FtpItem" /> objects.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItemCollection" /> class.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.#ctor(System.String[])">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItemCollection" /> class with the specified file list.
+            </summary>
+      <param name="rawList">The unparsed FTP file list.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.#ctor(System.String[],Rebex.Net.FtpListingType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpItemCollection" /> class with the specified file list.
+            </summary>
+      <param name="rawList">The unparsed FTP file list.</param>
+      <param name="listingType">Type of the listing.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.CheckItem(Rebex.IO.FileSystemItem)">
+      <summary>
+            Validates whether the item is correct and can be added.
+            </summary>
+      <param name="item">Item to add.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Clone">
+      <summary>
+            Creates a shallow copy of the collection.
+            </summary>
+      <returns>A shallow copy of the collection.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.GetEnumerator">
+      <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.
+            </summary>
+      <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Add(Rebex.IO.FileSystemItem)">
+      <summary>
+            Adds the specified item to the collection.
+            </summary>
+      <param name="item">The item to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Remove(Rebex.IO.FileSystemItem)">
+      <summary>
+            Removes the specified item from the collection.
+            </summary>
+      <param name="item">The item to remove from the collection.</param>
+      <returns>
+            True if item was successfully removed from the collection; false otherwise.
+            </returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Contains(Rebex.IO.FileSystemItem)">
+      <summary>
+            Determines whether the item is in the collection.
+            </summary>
+      <param name="item">The item to locate in the collection.</param>
+      <returns>True if the item is located in the collection; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.AddRange(System.Collections.Generic.IEnumerable{Rebex.Net.FtpItem})">
+      <summary>
+             Adds the elements of the specified collection to the end of the FtpItemCollection.
+            </summary>
+      <param name="collection">The collection whose elements should be added to the end of the FtpItemCollection.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Add(Rebex.Net.FtpItem)">
+      <summary>
+            Adds the specified item to the collection.
+            </summary>
+      <param name="item">The item to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Remove(Rebex.Net.FtpItem)">
+      <summary>
+            Removes the specified item from the collection. Fails if not found.
+            </summary>
+      <param name="item">The item to remove from the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Remove(System.String)">
+      <summary>
+            Removes the item with the specified path from the collection.
+            </summary>
+      <param path="path">The path of an item to remove from the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.CopyTo(System.Array,System.Int32)">
+      <summary>
+            Copies the range of elements from the collection to a compatible one-dimensional
+            <see cref="T:System.Array" />, starting at the specified index of the target array.
+            </summary>
+      <param name="array">One-dimensional zero-based array that is the destination of the elements copied from the collection.</param>
+      <param name="index">A zero-based index in the destination array at which copying begins.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.CopyTo(Rebex.Net.FtpItem[],System.Int32)">
+      <summary>
+            Copies the range of elements from the collection to a one-dimensional
+            <see cref="T:Rebex.Net.FtpItem" /> array, starting at the specified index of the target array.
+            </summary>
+      <param name="array">One-dimensional zero-based <see cref="T:Rebex.Net.FtpItem" /> array that is the destination of the elements copied from the collection.</param>
+      <param name="index">A zero-based index in the destination array at which copying begins.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpItemCollection.Contains(Rebex.Net.FtpItem)">
+      <summary>
+            Determines whether the item is in the collection.
+            </summary>
+      <param name="item">The item to locate in the collection.</param>
+      <returns>True if the item is located in the collection; false otherwise.</returns>
+    </member>
+    <member name="P:Rebex.Net.FtpItemCollection.Item(System.Int32)">
+      <summary>
+            Gets the item at the specified index.
+            </summary>
+      <param name="index">A zero-based index of the item to get.</param>
+      <value>Item at the specified index.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItemCollection.Item(System.String)">
+      <summary>
+            Gets the item of the specified path.
+            </summary>
+      <param name="path">The path of the item to get.</param>
+      <value>Item with the specified path, or null if not found.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpItemCollection.IsSynchronized">
+      <summary>
+            Gets a value indicating whether access to the colleciton is synchronized (thread-safe).
+            </summary>
+      <value>A value indicating whether access to the colleciton is synchronized.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpTransferType">
+      <summary>
+            Transfer type.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferType.Ascii">
+      <summary>ASCII.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferType.Binary">
+      <summary>Binary.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpTransferMode">
+      <summary>
+            Transfer mode.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferMode.Stream">
+      <summary>Stream mode.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferMode.Zlib">
+      <summary>Compressed stream mode.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferMode.Block">
+      <summary>Block mode.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpSettings">
+      <summary>
+            Specifies various FTP settings.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpSettings.#ctor">
+      <summary>
+            Creates an instance of FtpSettings.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpSettings.Clone">
+      <summary>
+            Creates a new object that is a shallow copy of the current instance.
+            </summary>
+      <returns>A new object that is a shallow copy of the current instance.</returns>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DoNotSendSignals">
+      <summary>
+            Do not send abort signals when aborting download.
+            </summary>
+      <remarks>
+        <p>
+            RFC 959 and RFC 1123 recommend sending IP and Synch signals before
+            the ABOR command. Many FTP servers even ignore an ABOR command without
+            the preceding IP and Synch signals. The default behavior of Rebex FTP
+            for .NET is to send IP and Synch, unless a proxy is in use.
+            </p>
+        <p>
+            However, there are some bad FTP servers that react in an inappropriate way
+            to IP and Synch signals. Problems with some network setups were also
+            experienced.
+            </p>
+        <p>
+            Setting this flag will disable sending of IP and Synch signals even through
+            non-proxied FTP sessions. You might want to try disabling it if you
+            experience problems while aborting data transfers.
+            </p>
+      </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DoNotSendAbort">
+      <summary>
+            Do not send the ABOR command when aborting download.
+            </summary>
+      <remarks>
+        <p>
+            This flag will cause the component not to send ABOR command while
+            aborting a download. The download will be aborted by closing the
+            receiving socket.
+            </p>
+        <p>
+          <b>Caution:</b> Only use this if you know what you are doing and why
+            you need this. Please note that some servers might react by closing
+            the control connection.
+            </p>
+      </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.KeepAliveDuringTransfer">
+      <summary>
+            Send NOOP command during file transfers every 10 minutes.
+            </summary>
+      <remarks>
+            This is only needed if the FTP control connection is otherwise being dropped by a buggy router
+            or firewall while a very long data transfer is in progress.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceSilentCcc">
+      <summary>
+            This option is deprecated and should no longer be used.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceActiveCcc">
+      <summary>
+            Forces the CCC command behavior that was used by older Rebex FTP/SSL releases.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.SendDataAsynchronously">
+      <summary>
+            Deprecated. Doesn't have any effect now.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.TimeoutAsynchronousMethods">
+      <summary>
+            Makes <see cref="P:Rebex.Net.Ftp.Timeout" /> property affect asynchronous methods as well.
+            By default, it only affects the synchronous methods.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DoNotDetectFeatures">
+      <summary>
+            Disables feature detection using FEAT and other commands.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.IgnorePassiveModeAddress">
+      <summary>
+            Overrides an IP address announced by the server in response to PASV command
+            with an IP used by the control connection.
+            </summary>
+      <remarks>
+            This option is only active when not connected through a proxy.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.EnableMultipleBlockingCalls">
+      <summary>
+            Makes it possible to call multiple methods from different threads at once.
+            The calls will block until the operation is completed.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.PauseBeforeUploadClose">
+      <summary>
+            Performs a small pause before closing the encrypted upload connection when the transfer is finished.
+            Used as a workaround for servers that are unable to correctly handle the last block data if it is followed
+            by a TLS CloseNotify message in the same TCP block.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DisableInvalidPassiveModeAddressWorkaround">
+      <summary>
+            Disables a workaround for FTP servers that announce private range IP addresses even though
+            a public IP was used to connect to them. By default, when such server is detected,
+            an IP address announced by the server in response to PASV command used is overrode 
+            with an IP used by the control connection.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.EnableControlConnectionFlushing">
+      <summary>
+            Enables reading and throwing out any unexpected incoming responses when sending an FTP command.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ConnectPassiveLater">
+      <summary>
+            Makes the passive mode transfer initialize the connection only after the LIST/NLST/RETR/STOR command has been sent.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.UseLargeBuffers">
+      <summary>
+            Use larger receive buffer for incoming and outgoing data.
+            </summary>
+      <remarks>Not supported on Universal Windows Platform.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ReuseControlConnectionSession">
+      <summary>
+            Re-use control connection session ID for data connections.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceListHiddenFiles">
+      <summary>
+            Use "LIST -la" instead of "LIST" in <see cref="M:Rebex.Net.Ftp.GetList" />/<see cref="M:Rebex.Net.Ftp.GetRawList" /> methods.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DisableProgressPercentage">
+      <summary>
+            Disables progress percentage reporting through <see cref="E:Rebex.Net.Ftp.TransferProgressChanged" /> event.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.MultiFileLinkMode">
+      <summary>
+            Gets or sets the default processing mode of detected links in multi-file operations.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.MultiFileMoveMode">
+      <summary>
+            Gets or sets the default move behavior in multi-file transfers.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.RestoreDateTime">
+      <summary>
+            Gets or sets a value that indicates which date/time is restored after successful transfer if possible.
+            Please note that FTP protocol supports LastWriteTime only (CreationTime and LastAccessTime are not supported).
+            </summary>
+      <remarks>Not supported on Universal Windows Platform.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.TimeComparisonGranularity">
+      <summary>
+            Gets or sets a value which specifies granularity for time comparisons.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.RecheckItemExistence">
+      <summary>
+            In multi-file operations it forces checking, whether currently processing item still exists. 
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.PreferredChecksumType">
+      <summary>
+            Gets or sets a checksum type to be preferred in multi-file operations when FTP server supports several checksum types.<br />
+            Default value: SHA1. 
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.KeepAliveDuringTransferInterval">
+      <summary>
+            Gets or sets the length of interval (in seconds) between NOOP commands sent during transfer when
+            the <see cref="F:Rebex.Net.FtpOptions.KeepAliveDuringTransfer" /> option is enabled.
+            </summary>
+      <value>The length of interval, in seconds, between successive NOOP commands.
+            Default is 600.
+            </value>
+      <remarks>
+        <p>
+            Minimal value is 30. Setting this to a value lower than 30 will set it to 30.
+            </p>
+        <p>
+            The <see cref="F:Rebex.Net.FtpOptions.KeepAliveDuringTransfer" /> option is only needed
+            if the FTP control connection is otherwise being dropped by a buggy router
+            or firewall while a very long data transfer is in progress.
+            </p>
+      </remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceMdtmForGetFileDateTime">
+      <summary>
+            Forces MDTM command to be always used by <see cref="M:Rebex.Net.Ftp.GetFileDateTime(System.String)" /> instead of MLST (which is used when available by default).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.UploadCommand">
+      <summary>
+            Specifies FTP command for uploading files. STOR is used by default.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.UseLegacyPaths">
+      <summary>
+            Specifies whether to use old API style paths (relative) or new API style paths (absolute) in multi-file transfers.
+            </summary>
+      <value>False (default) to use absolute paths; true to use relative paths.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceSimpleDirectoryExists">
+      <summary>
+            Specifies whether to just use a combination of PWD and CWD commands when determining remote directory existence.
+            </summary>
+      <value>False (default) to use additional commands (such as MLSD and MLST) as well; true to only use PWD and CWD commands.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.RaiseEventsFromCurrentThread">
+      <summary>
+            Specifies whether to raise asynchronous events from the current working thread or 
+            whether to raise them using a <see cref="T:System.Threading.SynchronizationContext" /> available when an asynchronous operation was started.
+            </summary>
+      <value>False (default) raise events using <see cref="T:System.Threading.SynchronizationContext" />; true to raise them directly from the current working thread.</value>
+      <remarks>Events of synchronous methods are always raised from the current working thread.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.As400ListingDateFormat">
+      <summary>
+            Forces listing date format on AS/400 like systems.
+            Format is 'DMY' for day,month,year; 'MDY' for month, day, year; and so on.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.DisableImplicitAs400NameFormat">
+      <summary>
+            Gets or sets a value indicating whether to automatically issue `SITE NAMEFMT 1` command when AS/400 system is detected
+            in a batch operation such as <see cref="M:Rebex.Net.Ftp.Download(System.String,System.String,Rebex.IO.TraversalMode)" /> or <see cref="M:Rebex.Net.Ftp.Upload(System.String,System.String,Rebex.IO.TraversalMode)" />.
+            Default is false, which means the `SITE NAMEFMT 1` is issued.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.SslUpgradeType">
+      <summary>
+            Gets or sets the type of TLS/SSL initialization for explicit TLS/SSL mode.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.SslReuseSessions">
+      <summary>
+            Gets or sets a value indicating whether to reuse TLS/SSL sessions for data transfers. Default value is true.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.ForceExtendedDataChannelCommand">
+      <summary>
+            Gets or sets a value indicating whether to use EPSV/EPRT commands to initiate a data channel.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.AlwaysResolveServerName">
+      <summary>
+            Always resolves the server hostname by performing a DNS query.
+            This means a DNS query will be done when using any proxy as well.
+            </summary>
+      <remarks>Not supported on Universal Windows Platform.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.EnableFactsNegotiation">
+      <summary>
+            Gets or sets a value indicating whether to attempt to negotiate extended MLST/MLSD facts using OPTS MLST command.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.CompressionLevel">
+      <summary>
+            Gets or sets the compression level used when uploading in mode Z (Zlib). 
+            Possible values are 0-9, where 0 means no compression (fastest) and 9 means best compression (slowest). 
+            Default value is 6 (medium compression and speed).
+            </summary>
+      <value>Compression level.</value>
+      <remarks>Applies to upload operations only. For download operations, the compression level is determined by the FTP server itself.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.SkipDuplicateItems">
+      <summary>
+            Gets or sets a value that indicates whether to skip duplicate items in directory listings or whether to fail.
+            </summary>
+      <value>True to skip duplicate items; false to throw an exception.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.BackslashIsRemoteDirectorySeparator">
+      <summary>
+            Gets or sets a value that indicates whether the backslash '\' is remote directory separator when working with paths
+            (in addition to slash '/').
+            </summary>
+      <value>
+            True to use slash '/' and backslash '\' as remote directory separator;
+            false to use only slash '/' as remote directory separator.
+            </value>
+    </member>
+    <member name="P:Rebex.Net.FtpSettings.EnableDummyRenameForFileExists">
+      <summary>
+            Gets or sets a value that indicates whether to use RNFR/RNTO commands to determine remote file existence.
+            Only supported for Windows CE FTP server.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpSecureUpgradeType">
+      <summary>
+            Type of TLS/SSL initialization.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpSecureUpgradeType.TLS">
+      <summary>
+            Use "AUTH TLS" command to secure the connection.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpSecureUpgradeType.SSL">
+      <summary>
+            Use "AUTH SSL" command to secure the connection.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpSecureUpgradeType.Any">
+      <summary>
+            Try "AUTH TLS" first and try "AUTH SSL" if it fails.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpSecureUpgradeType.TumbleweedTunnel">
+      <summary>
+            Tumbleweed custom 'SSL tunnel' mode.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpTransferState">
+      <summary>
+            State of the FTP transfer.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferState.None">
+      <summary>No transfer pending.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferState.Uploading">
+      <summary>Uploading data.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpTransferState.Downloading">
+      <summary>Downloading data.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpExtensions">
+      <summary>
+            FTP extensions.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.MachineProcessingList">
+      <summary>
+            MLST extension (MLST and MLSD commands) - directory and file listings for machine processing.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.ModifyFileModificationTime">
+      <summary>
+            MFMT extension - modify the last modification time of a file.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.PreTransferCommand">
+      <summary>
+            PRET extension - PRE Transfer Command for Distributed PASV Transfers.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.SetSecuredClientNegotiation">
+      <summary>
+            SSCN extension - set secured client negotiation.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.CrcChecksum">
+      <summary>
+            XCRC extension - get CRC checksum of a file.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.MD5Hash">
+      <summary>
+            XMD5 extension - get MD5 hash of a file.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.SHA1Hash">
+      <summary>
+            XSHA extension - get SHA1 hash of a file.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.ModeZlib">
+      <summary>
+            MODE Z transfer compression.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.Host">
+      <summary>
+            HOST command.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.UTF8">
+      <summary>
+            UTF-8 name encoding.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpExtensions.All">
+      <summary>
+            All extensions.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpListingType">
+      <summary>
+            Type of file and directory listing.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpListingType.List">
+      <summary>Classic method - the LIST command.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpListingType.MachineProcessingList">
+      <summary>New method - the MLSD command.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpListingType.NameList">
+      <summary>Name list only - the NLST command. Beware, behavior is not consistent across different FTP servers. See <see cref="M:Rebex.Net.Ftp.GetNameList" /> remarks for more information.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpChecksumType">
+      <summary>
+            Type of checksum.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpChecksumType.Crc">
+      <summary>Cyclic Redundancy Check (CRC-32).</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpChecksumType.MD5">
+      <summary>Message-Digest algorithm 5.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpChecksumType.SHA1">
+      <summary>Secure Hash Algorithm.</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpResponse">
+      <summary>
+            Contains the response of the FTP server.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpResponse.#ctor(System.Int32,System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpResponse" /> class with the specified code, description and raw response string.
+            </summary>
+      <param name="code">The FTP response code. Must be in range of 100 to 599.</param>
+      <param name="description">The description of the response code.</param>
+      <param name="raw">Raw FTP response.</param>
+    </member>
+    <member name="P:Rebex.Net.FtpResponse.Raw">
+      <summary>
+            Gets the full unparsed response of the FTP server.
+            </summary>
+      <value>The full unparsed response of the FTP server.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpResponse.Description">
+      <summary>
+            Gets the description of the FTP response.
+            </summary>
+      <value>The description of the FTP response.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpResponse.Code">
+      <summary>
+            Gets the FTP response code.
+            </summary>
+      <value>FTP response code.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpResponse.Group">
+      <summary>
+            Gets the group of the FTP response code.
+            </summary>
+      <value>The group of the FTP response code.</value>
+    </member>
+    <member name="T:Rebex.Net.FtpProxyType">
+      <summary>
+            Type of proxy to use to connect to the network.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.None">
+      <summary>Direct connection.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.Socks4">
+      <summary>Connection through Socks4 proxy.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.Socks4a">
+      <summary>Connection through Socks4A proxy (capable of resolving domain names).</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.Socks5">
+      <summary>Connection through Socks5 proxy.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.HttpConnect">
+      <summary>Connection through HTTP proxy using CONNECT method.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.FtpSite">
+      <summary>Connection through FTP proxy using SITE command.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.FtpUser">
+      <summary>Connection through FTP proxy using a single USER/PASS command.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.FtpOpen">
+      <summary>Connection through FTP proxy using OPEN command.</summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyType.FtpDoubleLogin">
+      <summary>Connection through FTP proxy using two separate USER/PASS commands
+            (one USER command for logging in the proxy and the second USER command for logging in the FTP server).</summary>
+    </member>
+    <member name="T:Rebex.Net.FtpProxyAuthentication">
+      <summary>
+            Type of proxy server authentication.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyAuthentication.Basic">
+      <summary>
+            Basic authentication.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyAuthentication.Ntlm">
+      <summary>
+            NTLM authentication.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.FtpProxyAuthentication.Digest">
+      <summary>
+            Digest authentication.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.FtpProxy">
+      <summary>
+            Proxy settings for <see cref="T:Rebex.Net.Ftp" /> class.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.ToString">
+      <summary>
+            Returns a string representation of this proxy.
+            </summary>
+      <returns>String representation of this proxy.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.Clone">
+      <summary>
+            Creates a copy of the <see cref="T:Rebex.Net.FtpProxy" /> instance.
+            </summary>
+      <returns>A new <see cref="T:Rebex.Net.FtpProxy" /> instance.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.CreateClone">
+      <summary>
+            Creates the true type of the clone.
+            </summary>
+      <returns>If overridden in derived class, return the derived class instance.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.GetProxyAddress">
+      <summary>
+            Gets the proxy address.
+            </summary>
+      <returns>Returns the proxy address with the correct schema applied.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.IsBypassed(System.String,System.Int32)">
+      <summary>
+            Indicates whether to use the proxy server for the specified FTP server.
+            </summary>
+      <param name="hostName">The address of the FTP server to check for proxy use.</param>
+      <param name="port">The port port.</param>
+      <returns>
+        <b>true</b> if the proxy server should not be used for <i>host</i>; otherwise, <b>false</b>.</returns>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor">
+      <summary>
+            Initializes an empty instance of the <see cref="T:Rebex.Net.FtpProxy" /> class.
+            </summary>
+      <remarks>
+            The default constructor initializes an empty instance of the <see cref="T:Rebex.Net.FtpProxy" />
+            class with the <see cref="P:Rebex.Net.FtpProxy.ProxyType" /> property set to <see cref="T:Rebex.Net.FtpProxyType">FtpProxyType.None</see>.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,System.String,System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, and port.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,System.String,System.Int32,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, port, and username.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+      <param name="username">A user name to submit to the proxy server for authentication.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,System.String,System.Int32,System.Net.NetworkCredential)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, port, and credentials.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+      <param name="credentials">A <see cref="T:System.Net.NetworkCredential" /> to submit to the proxy server for authentication.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,System.String,System.Int32,System.Boolean,System.Net.NetworkCredential)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, port, bypass setting, list of URIs to bypass, and credentials.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+      <param name="bypassOnLocal">
+        <b>true</b> to bypass the proxy for local addresses; otherwise, <b>false</b>.</param>
+      <param name="credentials">A <see cref="T:System.Net.NetworkCredential" /> to submit to the proxy server for authentication.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,Rebex.Net.FtpProxyAuthentication,System.String,System.Int32,System.Boolean,System.Net.NetworkCredential)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, port, bypass setting, list of URIs to bypass, and credentials.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="authenticationMethod">Authentication method.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+      <param name="bypassOnLocal">
+        <b>true</b> to bypass the proxy for local addresses; otherwise, <b>false</b>.</param>
+      <param name="credentials">A <see cref="T:System.Net.NetworkCredential" /> to submit to the proxy server for authentication.</param>
+    </member>
+    <member name="M:Rebex.Net.FtpProxy.#ctor(Rebex.Net.FtpProxyType,System.String,System.Int32,System.Boolean,System.String[],System.Net.NetworkCredential)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.FtpProxy" /> class with the specified type, hostname, port, bypass setting, list of URIs to bypass, and credentials.
+            </summary>
+      <param name="proxyType">The type of the proxy.</param>
+      <param name="host">The hostname of the proxy server.</param>
+      <param name="port">The port of the proxy server.</param>
+      <param name="bypassOnLocal">
+        <b>true</b> to bypass the proxy for local addresses; otherwise, <b>false</b>.</param>
+      <param name="bypassList">An array of regular expression strings containing the URIs of the servers to bypass.</param>
+      <param name="credentials">A <see cref="T:System.Net.NetworkCredential" /> to submit to the proxy server for authentication.</param>
+      <remarks>Not supported by Rebex FTP for .NET Compact Framework.</remarks>
+    </member>
+    <member name="P:Rebex.Net.FtpProxy.ProxyType">
+      <summary>
+            Gets or sets the type of the proxy server.
+            </summary>
+      <value>The type of the proxy server.</value>
+    </member>
+    <member name="P:Rebex.Net.FtpProxy.AuthenticationMethod">
+      <summary>
+            Gets or sets the proxy server authentication method.
+            </summary>
+      <value>The type of the proxy server authentication method.</value>
+    </member>
+  </members>
+</doc>

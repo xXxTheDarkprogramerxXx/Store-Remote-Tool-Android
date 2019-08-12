@@ -1,0 +1,3550 @@
+<doc>
+  <assembly>
+    <name>Rebex.Ews</name>
+  </assembly>
+  <members>
+    <member name="T:Rebex.Net.Ews">
+      <summary>
+            Provides methods for communication with Exchange Web Service.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ews.SetSocketFactory(Rebex.Net.ISocketFactory)">
+      <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+      <param name="factory">Socket factory.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.#ctor">
+      <summary>
+            Initializes Exchange Web Service client.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ews.Connect(System.String)">
+      <summary>
+            Connects to an Exchange Server using HTTPS.
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.Connect(System.String,Rebex.Net.SslMode)">
+      <summary>
+            Connects to an Exchange server using the specified TLS/SSL mode (<see cref="F:Rebex.Net.SslMode.None" /> for HTTP, <see cref="F:Rebex.Net.SslMode.Implicit" /> for HTTPS).
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+      <param name="mode">TLS/SSL mode to use. Valid values are <see cref="F:Rebex.Net.SslMode.None" /> (HTTP) and <see cref="F:Rebex.Net.SslMode.Implicit" /> (HTTPS).</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.Connect(System.String,System.Int32,Rebex.Net.SslMode)">
+      <summary>
+            Connects to an Exchange server using specified port and TLS/SSL mode.
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+      <param name="serverPort">The server port (e.g. 80 or 443).</param>
+      <param name="mode">TLS/SSL mode to use. Valid values are <see cref="F:Rebex.Net.SslMode.None" /> (HTTP) and <see cref="F:Rebex.Net.SslMode.Implicit" /> (HTTPS).</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.Disconnect">
+      <summary>
+            Disconnects from the Exchange server.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ews.Login(System.String,Rebex.Net.EwsAuthentication)">
+      <summary>
+            Authenticates the user to the Exchange server using an OAuth access token.
+            </summary>
+      <param name="token">Access token.</param>
+      <param name="method">Authentication method (only OAuth 2.0 is supported at the moment).</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.Login(System.String,System.String)">
+      <summary>
+            Authenticates the user to the Exchange server.
+            </summary>
+      <param name="userName">User's login name.</param>
+      <param name="password">User's password.</param>
+      <remarks>
+            This method tries to authenticate using the following methods,
+            in this order of preference: NTLM, Kerberos, Negotiate, Basic.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.Login(System.String,System.String,Rebex.Net.EwsAuthentication)">
+      <summary>
+            Authenticates the user to the Exchange server.
+            </summary>
+      <param name="userName">User's login name.</param>
+      <param name="password">User's password.</param>
+      <param name="method">Authentication method.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetSupportedAuthenticationMethods">
+      <summary>
+            Gets the list of supported authentication methods.
+            </summary>
+      <returns>The list of supported authentication methods.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ItemExists(Rebex.Net.EwsItemId)">
+      <summary>
+            Detects whether an item with specified ID still exists.
+            </summary>
+      <param name="itemId">ID of an item.</param>
+      <returns>True if item exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId)">
+      <summary>
+            Gets the information about an item with default set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of an item to get info about.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing default set of information about the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId,Rebex.Net.EwsItemFields)">
+      <summary>
+            Gets the information about an item with specified set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of an item to get info about.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing specified set of information about the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId)">
+      <summary>
+            Gets the information about a message with default set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of a message to get info about.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsMessageInfo" /> object containing specified set of information about the message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId,Rebex.Net.EwsItemFields)">
+      <summary>
+            Gets the information about a message with specified set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of a message to get info about.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing specified set of information about the message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetUpdatedItems(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,System.Int32,System.String)">
+      <summary>
+            Receives changes that occured since the last checkpoint.
+            </summary>
+      <param name="folderId">Folder to get items from.</param>
+      <param name="fields">Fields to return. Supported values are IdOnly, Default and All.</param>
+      <param name="maxChangesCount">How many changes will be returned. Maximum value supported by the server is usually 512.</param>
+      <param name="checkpoint">Checkpoint received in previous response. Use null (Nothing in VB) for the first request.</param>
+      <returns>Returns information about updated items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItem(Rebex.Net.EwsItemId,System.String,Rebex.Net.EwsItemFormat)">
+      <summary>
+            Downloads and saves an item to specified path in specified format.
+            </summary>
+      <param name="itemId">ID of an item to save.</param>
+      <param name="filePath">Path to a file where to save the item.</param>
+      <param name="format">Format in which the item will be saved.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItem(Rebex.Net.EwsItemId,System.IO.Stream,Rebex.Net.EwsItemFormat)">
+      <summary>
+            Downloads and saves an item to specified stream in specified format.
+            </summary>
+      <param name="itemId">ID of an item to save.</param>
+      <param name="output">Stream to which to save the item.</param>
+      <param name="format">Format in which the item will be saved.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessage(Rebex.Net.EwsItemId,System.String)">
+      <summary>
+            Downloads and saves a message to specified path in MIME format.
+            </summary>
+      <param name="itemId">ID of a message to save.</param>
+      <param name="filePath">Path to a file where to save the message.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessage(Rebex.Net.EwsItemId,System.IO.Stream)">
+      <summary>
+            Downloads and saves a message to specified stream in MIME format.
+            </summary>
+      <param name="itemId">ID of a message to save.</param>
+      <param name="output">Stream to which to save the item.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMailMessage(Rebex.Net.EwsItemId)">
+      <summary>
+            Gets a <see cref="T:Rebex.Mail.MailMessage" /> from the Exchange server.
+            </summary>
+      <param name="itemId">ID of a message to retrieve.</param>
+      <returns>A <see cref="T:Rebex.Mail.MailMessage" /> composed of MIME representation of the message stored in Exchange server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMimeMessage(Rebex.Net.EwsItemId)">
+      <summary>
+            Gets a <see cref="T:Rebex.Mime.MimeMessage" /> from the Exchange server.
+            </summary>
+      <param name="itemId">ID of a message to retrieve.</param>
+      <returns>A <see cref="T:Rebex.Mime.MimeMessage" /> composed of MIME representation of the message stored in Exchange server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemList(Rebex.Net.EwsFolderId)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemList(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemList(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemList(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageList(Rebex.Net.EwsFolderId)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageList(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of message properties to be retrieved.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageList(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageList(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView)">
+      <summary>
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of message properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItems(Rebex.Net.EwsFolderId,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <returns>List of found items.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItems(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of found items.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItems(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <returns>List of found items.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItems(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of found items.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.Search(Rebex.Net.EwsFolderId,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <returns>List of found messages.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.Search(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of found messages.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.Search(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <returns>List of found messages.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.Search(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <returns>List of found messages.</returns>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.FolderExists(Rebex.Net.EwsFolderId,System.String)">
+      <summary>
+            Detects whether a folder with specified name exists under a parent folder.
+            </summary>
+      <param name="parentId">ID of a folder where to find requested folder name.</param>
+      <param name="name">Name of the folder to be found.</param>
+      <returns>True if folder exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.FolderExists(Rebex.Net.EwsFolderId)">
+      <summary>
+            Detects whether a folder with specified ID still exists.
+            </summary>
+      <param name="id">ID of a folder.</param>
+      <returns>True if folder exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.FindFolder(Rebex.Net.EwsFolderId,System.String)">
+      <summary>
+            Finds a folder with given name in a parent folder.
+            </summary>
+      <param name="parentId">ID of a folder where to find requested folder name.</param>
+      <param name="name">Name of the folder to be found.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderInfo" /> object if the folder was found; null (Nothing in VB.NET) otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderInfo(Rebex.Net.EwsFolderId)">
+      <summary>
+            Gets information about an exchange folder identified by its ID.
+            </summary>
+      <param name="folderId">ID of a folder to get the information about.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderInfo" /> of an exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetUpdatedFolders(Rebex.Net.EwsFolderId,System.String)">
+      <summary>
+            Receives changes that occured since the last checkpoint.
+            </summary>
+      <param name="folderId">Base folder of changes.</param>
+      <param name="checkpoint">Checkpoint received in previous response. Use null (Nothing in VB) for the first request.</param>
+      <returns>Returns information about updated folders.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderList">
+      <summary>
+            Gets a list of subfolders of the folder root.
+            </summary>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderList(Rebex.Net.EwsFolderId)">
+      <summary>
+            Gets a list of subfolders of the specified folder.
+            Operation is shallow, which means that only first level of subfolders is returned.
+            </summary>
+      <param name="folderId">ID of a folder to get folders from.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderList(Rebex.Net.EwsFolderId,Rebex.Net.EwsTraversalScope)">
+      <summary>
+            Gets a list of subfolders of the specified folder.
+            </summary>
+      <param name="folderId">ID of a folder to get folders from.</param>
+      <param name="traversingMode">Mode of traversing.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderId(Rebex.Net.EwsSpecialFolder)">
+      <summary>
+            Gets full ID (native Exchange ID and Change key) of a special exchange folder.
+            </summary>
+      <param name="folder">Distinguished folder name.</param>
+      <returns>ID of an distinguished exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderId(Rebex.Net.EwsFolderId)">
+      <summary>
+            Gets full ID (native Exchange ID and Change key) of an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to get full ID from.</param>
+      <returns>Full ID of the specified folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreItem(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemInfo)">
+      <summary>
+            Stores an item to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="item">Ews item to store.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreMessage(Rebex.Net.EwsFolderId,Rebex.Mail.MailMessage)">
+      <summary>
+            Stores a mail message to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="message">Message to store.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreMessage(Rebex.Net.EwsFolderId,Rebex.Mime.MimeMessage)">
+      <summary>
+            Stores a MIME message to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="message">Message to store.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ProvisionHeaders(System.String[])">
+      <summary>
+            Provision custom X-Headers on an Exchange server.
+            </summary>
+      <param name="headers">Custom X-Headers to provision.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Mail.MailMessage)">
+      <summary>
+            Sends a mail message and saves it to the 'Sent Items' folder.
+            </summary>
+      <param name="message">Message to send.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Mail.MailMessage,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a mail message.
+            </summary>
+      <param name="message">Message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it at the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Mime.MimeMessage)">
+      <summary>
+            Sends a MIME message and saves it to the 'Sent Items' folder.
+            </summary>
+      <param name="message">Mime message to send.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Mime.MimeMessage,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a MIME message.
+            </summary>
+      <param name="message">Mime message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String)">
+      <summary>
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,Rebex.Net.EwsMessageBody)">
+      <summary>
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The body of the message.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it in the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,Rebex.Net.EwsMessageBody,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it in the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String,System.String)">
+      <summary>
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String,Rebex.Net.EwsMessageBody)">
+      <summary>
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String,System.String,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(System.String,System.String,System.String,Rebex.Net.EwsMessageBody,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Net.EwsItemId)">
+      <summary>
+            Sends a message stored in exchange server and moves it to the 'Sent Items' folder.
+            </summary>
+      <param name="itemId">ID of a message to send.</param>
+      <remarks>This operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessage(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId)">
+      <summary>
+            Sends a message stored in exchange server.
+            </summary>
+      <param name="itemId">ID of a message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to move the sent message.
+            Specify null (Nothing in VB.NET) to discard (permanently delete) the message.</param>
+      <remarks>
+            This operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.
+            This operation doesn't work on some Exchange versions (e.g. Exchange 2010) if the message was already sent.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteItem(Rebex.Net.EwsItemId)">
+      <summary>
+            Deletes an item specified by its ID. Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether to delete item permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="itemId">ID of an item to delete.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteItem(Rebex.Net.EwsItemId,Rebex.Net.EwsDeleteMode)">
+      <summary>
+            Deletes an item specified by its ID.
+            </summary>
+      <param name="itemId">ID of an item to delete.</param>
+      <param name="deleteMode">Specify whether to delete item permanently or move it to Deleted Items folder.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.CopyItem(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId)">
+      <summary>
+            Copies an item to specified exchange folder.
+            </summary>
+      <param name="itemId">ID of an item to copy.</param>
+      <param name="folderId">ID of a folder to which to copy the item.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> of the copied item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.MoveItem(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId)">
+      <summary>
+            Moves an item to specified exchange folder.
+            </summary>
+      <param name="itemId">Id of an item to move.</param>
+      <param name="folderId">Id of a folder to which to move the item.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsMessageInfo" /> of the moved item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ExportItem(Rebex.Net.EwsItemId)">
+      <summary>
+            Exports message in its exchange format. This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            </summary>
+      <param name="itemId">ID of an item to export.</param>
+      <returns>Raw data of the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ImportItem(Rebex.Net.EwsFolderId,System.Byte[])">
+      <summary>
+            Imports an item in exchange format to specified exchange folder.
+            This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            </summary>
+      <param name="folderId">ID of a folder where to import the item.</param>
+      <param name="itemData">Raw data of an item to import (usually obtained by <seealso cref="M:Rebex.Net.Ews.ExportItem(Rebex.Net.EwsItemId)" /> method).</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.CopyFolder(Rebex.Net.EwsFolderId,Rebex.Net.EwsFolderId)">
+      <summary>
+            Copies an exchange folder with its content into another exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to copy.</param>
+      <param name="targetFolderId">ID of a folder where to copy the folder.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the copied folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.CreateFolder(Rebex.Net.EwsFolderId,System.String)">
+      <summary>
+            Creates new subfolder in an exchange folder.
+            </summary>
+      <param name="parentId">ID of a folder where to create the new subfolder.</param>
+      <param name="folderName">Name of the new folder.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the created folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteFolder(Rebex.Net.EwsFolderId)">
+      <summary>
+            Deletes an exchange folder. Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether delete folder permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="folderId">ID of a folder to delete.</param>
+      <remarks>The folder have not to be empty prior to delete operation.</remarks>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteFolderContent(Rebex.Net.EwsFolderId,Rebex.Net.EwsDeleteScope)">
+      <summary>
+            Deletes content of an exchange folder. Folder itself remains. 
+            To delete the folder as well, see <see cref="M:Rebex.Net.Ews.DeleteFolder(Rebex.Net.EwsFolderId)" /> method.
+            This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether delete folder content permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="folderId">ID of a folder of which content to delete.</param>
+      <param name="deleteSubfolders">Select delete mode wheter to delete items only or delete subfolders as well.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.MoveFolder(Rebex.Net.EwsFolderId,Rebex.Net.EwsFolderId)">
+      <summary>
+            Moves an exchange folder with its content into another exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to move.</param>
+      <param name="targetFolderId">ID of a folder where to move the folder.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the moved exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,System.String)">
+      <summary>
+            Adds a file as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="filePath">Path to a file to read attachment data from.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,System.String,System.String)">
+      <summary>
+            Adds a file as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="filePath">Path to a file to read attachment data from.</param>
+      <param name="contentType">Content type of an attachment. For predefined strings see <see cref="T:Rebex.Mail.MediaTypeNames" /> subclasses's constants.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,System.String,System.IO.Stream)">
+      <summary>
+            Adds a stream as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="input">A stream to read attachment data from.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,System.String,System.IO.Stream,System.String)">
+      <summary>
+            Adds a stream as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="input">A stream to read attachment data from.</param>
+      <param name="contentType">Content type of an attachment. For predefined strings see <see cref="T:Rebex.Mail.MediaTypeNames" /> subclasses's constants.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,Rebex.Mime.MimeMessage)">
+      <summary>
+            Adds a MIME message as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="message">A MIME message to attach.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,Rebex.Mail.MailMessage)">
+      <summary>
+            Add a mail message as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="mail">A Mail message to attach.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachment(Rebex.Net.EwsItemId,System.String,System.Byte[])">
+      <summary>
+            Add a MIME raw data as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="mimeContent">Raw MIME data.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetAttachment(Rebex.Net.EwsAttachmentId)">
+      <summary>
+            Gets an attachment identified by its ID.
+            </summary>
+      <param name="attachmentId">ID of an attachment to get.</param>
+      <returns>
+        <see cref="T:Rebex.Mail.Attachment" /> object if the attachment is found; null reference (Nothing in VB.NET) otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteAttachment(Rebex.Net.EwsAttachmentId)">
+      <summary>
+            Deletes an attachment identified by its ID.
+            </summary>
+      <param name="attachmentId">ID of an attachment to delete.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.ResolveNames(System.String)">
+      <summary>
+            Searches Exchange users and Contacts for the specified name.
+            </summary>
+      <param name="name">Name to be resolved (part of the User or Contact name).</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsResolvedName" /> objects, which contain information about users and contacts found.</returns>
+      <remarks>
+            The method searches in Name field of Exchange users and Contacts only.
+            It doesn't search in Email address field, so requests like ResolveNames("@domain") find nothing typically.
+            </remarks>
+      <example>
+            ResolveNames("test") finds:
+            <ul><li>- users like "Joe Tester"</li><li>- contacts like "Joe Tester 'joe@intranet.org'"</li></ul></example>
+    </member>
+    <member name="M:Rebex.Net.Ews.RenameFolder(Rebex.Net.EwsFolderId,System.String)">
+      <summary>
+            Renames an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to rename.</param>
+      <param name="newName">New folder name.</param>
+      <returns>ID of the renamed folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.UpdateItem(Rebex.Net.EwsItemId,Rebex.Net.EwsItemMetadata)">
+      <summary>
+            Updates existing item with specified metadata.
+            </summary>
+      <param name="itemId">ID of an item to update.</param>
+      <param name="metadata">New metadata of the item.</param>
+      <remarks>Most update operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.</remarks>
+      <returns>New ID of the updated item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.Dispose">
+      <summary>
+            Disposes this <see cref="T:Rebex.Net.Ews" /> object.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.Ews.ToString">
+      <summary>
+            Returns a string representation of this object.
+            </summary>
+      <returns>A string representing this object</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ConnectAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to an Exchange Server using HTTPS.
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.ConnectAsync(System.String,Rebex.Net.SslMode,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to an Exchange server using the specified TLS/SSL mode (<see cref="F:Rebex.Net.SslMode.None" /> for HTTP, <see cref="F:Rebex.Net.SslMode.Implicit" /> for HTTPS).
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+      <param name="mode">TLS/SSL mode to use. Valid values are <see cref="F:Rebex.Net.SslMode.None" /> (HTTP) and <see cref="F:Rebex.Net.SslMode.Implicit" /> (HTTPS).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.ConnectAsync(System.String,System.Int32,Rebex.Net.SslMode,System.Object)">
+      <summary>
+            Begins asynchronous Connect operation.
+            Connects to an Exchange server using specified port and TLS/SSL mode.
+            </summary>
+      <param name="serverName">Name of the Exchange server.</param>
+      <param name="serverPort">The server port (e.g. 80 or 443).</param>
+      <param name="mode">TLS/SSL mode to use. Valid values are <see cref="F:Rebex.Net.SslMode.None" /> (HTTP) and <see cref="F:Rebex.Net.SslMode.Implicit" /> (HTTPS).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.DisconnectAsync(System.Object)">
+      <summary>
+            Begins asynchronous Disconnect operation.
+            Disconnects from the Exchange server.
+            </summary>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.LoginAsync(System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the Exchange server.
+            </summary>
+      <param name="userName">User's login name.</param>
+      <param name="password">User's password.</param>
+      <remarks>
+            This method tries to authenticate using the following methods,
+            in this order of preference: NTLM, Kerberos, Negotiate, Basic.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.LoginAsync(System.String,System.String,Rebex.Net.EwsAuthentication,System.Object)">
+      <summary>
+            Begins asynchronous Login operation.
+            Authenticates the user to the Exchange server.
+            </summary>
+      <param name="userName">User's login name.</param>
+      <param name="password">User's password.</param>
+      <param name="method">Authentication method.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.ItemExistsAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous ItemExists operation.
+            Detects whether an item with specified ID still exists.
+            </summary>
+      <param name="itemId">ID of an item.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>True if item exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemInfoAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous GetItemInfo operation.
+            Gets the information about an item with default set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of an item to get info about.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing default set of information about the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemInfoAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsItemFields,System.Object)">
+      <summary>
+            Begins asynchronous GetItemInfo operation.
+            Gets the information about an item with specified set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of an item to get info about.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing specified set of information about the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageInfoAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageInfo operation.
+            Gets the information about a message with default set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of a message to get info about.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsMessageInfo" /> object containing specified set of information about the message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageInfoAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsItemFields,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageInfo operation.
+            Gets the information about a message with specified set of properties retrieved.
+            </summary>
+      <param name="itemId">ID of a message to get info about.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> object containing specified set of information about the message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetUpdatedItemsAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,System.Int32,System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetUpdatedItems operation.
+            Receives changes that occured since the last checkpoint.
+            </summary>
+      <param name="folderId">Folder to get items from.</param>
+      <param name="fields">Fields to return. Supported values are IdOnly, Default and All.</param>
+      <param name="maxChangesCount">How many changes will be returned. Maximum value supported by the server is usually 512.</param>
+      <param name="checkpoint">Checkpoint received in previous response. Use null (Nothing in VB) for the first request.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Returns information about updated items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemAsync(Rebex.Net.EwsItemId,System.String,Rebex.Net.EwsItemFormat,System.Object)">
+      <summary>
+            Begins asynchronous GetItem operation.
+            Downloads and saves an item to specified path in specified format.
+            </summary>
+      <param name="itemId">ID of an item to save.</param>
+      <param name="filePath">Path to a file where to save the item.</param>
+      <param name="format">Format in which the item will be saved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemAsync(Rebex.Net.EwsItemId,System.IO.Stream,Rebex.Net.EwsItemFormat,System.Object)">
+      <summary>
+            Begins asynchronous GetItem operation.
+            Downloads and saves an item to specified stream in specified format.
+            </summary>
+      <param name="itemId">ID of an item to save.</param>
+      <param name="output">Stream to which to save the item.</param>
+      <param name="format">Format in which the item will be saved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageAsync(Rebex.Net.EwsItemId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetMessage operation.
+            Downloads and saves a message to specified path in MIME format.
+            </summary>
+      <param name="itemId">ID of a message to save.</param>
+      <param name="filePath">Path to a file where to save the message.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageAsync(Rebex.Net.EwsItemId,System.IO.Stream,System.Object)">
+      <summary>
+            Begins asynchronous GetMessage operation.
+            Downloads and saves a message to specified stream in MIME format.
+            </summary>
+      <param name="itemId">ID of a message to save.</param>
+      <param name="output">Stream to which to save the item.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMailMessageAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous GetMailMessage operation.
+            Gets a <see cref="T:Rebex.Mail.MailMessage" /> from the Exchange server.
+            </summary>
+      <param name="itemId">ID of a message to retrieve.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A <see cref="T:Rebex.Mail.MailMessage" /> composed of MIME representation of the message stored in Exchange server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMimeMessageAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous GetMimeMessage operation.
+            Gets a <see cref="T:Rebex.Mime.MimeMessage" /> from the Exchange server.
+            </summary>
+      <param name="itemId">ID of a message to retrieve.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>A <see cref="T:Rebex.Mime.MimeMessage" /> composed of MIME representation of the message stored in Exchange server.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemListAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous GetItemList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,System.Object)">
+      <summary>
+            Begins asynchronous GetItemList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,System.Object)">
+      <summary>
+            Begins asynchronous GetItemList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetItemListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,System.Object)">
+      <summary>
+            Begins asynchronous GetItemList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsItemInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageListAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of message properties to be retrieved.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetMessageListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,System.Object)">
+      <summary>
+            Begins asynchronous GetMessageList operation.
+            Lists specified folder to retrieve collection of containing items.
+            </summary>
+      <param name="folderId">ID of a folder to be listed.</param>
+      <param name="fields">Set of message properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsMessageInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItemsAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous SearchItems operation.
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItemsAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous SearchItems operation.
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItemsAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous SearchItems operation.
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchItemsAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous SearchItems operation.
+            Searches a folder for items that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the items that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found items.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous Search operation.
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found messages.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous Search operation.
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found messages.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous Search operation.
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found messages.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.SearchAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemFields,Rebex.Net.EwsPageView,Rebex.Net.EwsSearchParameter[],System.Object)">
+      <summary>
+            Begins asynchronous Search operation.
+            Searches a folder for messages that match the specified searching criteria.
+            </summary>
+      <param name="folderId">ID of a folder to search in.</param>
+      <param name="condition">Searching criteria.</param>
+      <param name="fields">Set of item properties to be retrieved.</param>
+      <param name="pageView">Paging definition. Can be null (Nothing in VB.NET).</param>
+      <remarks>
+            Searching criteria consist of one or more parameters. When multiple parameters are specified,
+            the results is the intersection (AND) of all the messages that match.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of found messages.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.FolderExistsAsync(Rebex.Net.EwsFolderId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous FolderExists operation.
+            Detects whether a folder with specified name exists under a parent folder.
+            </summary>
+      <param name="parentId">ID of a folder where to find requested folder name.</param>
+      <param name="name">Name of the folder to be found.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>True if folder exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.FolderExistsAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous FolderExists operation.
+            Detects whether a folder with specified ID still exists.
+            </summary>
+      <param name="id">ID of a folder.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>True if folder exists; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.FindFolderAsync(Rebex.Net.EwsFolderId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous FindFolder operation.
+            Finds a folder with given name in a parent folder.
+            </summary>
+      <param name="parentId">ID of a folder where to find requested folder name.</param>
+      <param name="name">Name of the folder to be found.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderInfo" /> object if the folder was found; null (Nothing in VB.NET) otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderInfoAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous GetFolderInfo operation.
+            Gets information about an exchange folder identified by its ID.
+            </summary>
+      <param name="folderId">ID of a folder to get the information about.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderInfo" /> of an exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetUpdatedFoldersAsync(Rebex.Net.EwsFolderId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous GetUpdatedFolders operation.
+            Receives changes that occured since the last checkpoint.
+            </summary>
+      <param name="folderId">Base folder of changes.</param>
+      <param name="checkpoint">Checkpoint received in previous response. Use null (Nothing in VB) for the first request.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Returns information about updated folders.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderListAsync(System.Object)">
+      <summary>
+            Begins asynchronous GetFolderList operation.
+            Gets a list of subfolders of the folder root.
+            </summary>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderListAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous GetFolderList operation.
+            Gets a list of subfolders of the specified folder.
+            Operation is shallow, which means that only first level of subfolders is returned.
+            </summary>
+      <param name="folderId">ID of a folder to get folders from.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderListAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsTraversalScope,System.Object)">
+      <summary>
+            Begins asynchronous GetFolderList operation.
+            Gets a list of subfolders of the specified folder.
+            </summary>
+      <param name="folderId">ID of a folder to get folders from.</param>
+      <param name="traversingMode">Mode of traversing.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsFolderInfo" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderIdAsync(Rebex.Net.EwsSpecialFolder,System.Object)">
+      <summary>
+            Begins asynchronous GetFolderId operation.
+            Gets full ID (native Exchange ID and Change key) of a special exchange folder.
+            </summary>
+      <param name="folder">Distinguished folder name.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>ID of an distinguished exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetFolderIdAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous GetFolderId operation.
+            Gets full ID (native Exchange ID and Change key) of an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to get full ID from.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Full ID of the specified folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreItemAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsItemInfo,System.Object)">
+      <summary>
+            Begins asynchronous StoreItem operation.
+            Stores an item to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="item">Ews item to store.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreMessageAsync(Rebex.Net.EwsFolderId,Rebex.Mail.MailMessage,System.Object)">
+      <summary>
+            Begins asynchronous StoreMessage operation.
+            Stores a mail message to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="message">Message to store.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.StoreMessageAsync(Rebex.Net.EwsFolderId,Rebex.Mime.MimeMessage,System.Object)">
+      <summary>
+            Begins asynchronous StoreMessage operation.
+            Stores a MIME message to an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder where to store the message.</param>
+      <param name="message">Message to store.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemId" /> of the stored message.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ProvisionHeadersAsync(System.String[],System.Object)">
+      <summary>
+            Begins asynchronous ProvisionHeaders operation.
+            Provision custom X-Headers on an Exchange server.
+            </summary>
+      <param name="headers">Custom X-Headers to provision.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Mail.MailMessage,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a mail message and saves it to the 'Sent Items' folder.
+            </summary>
+      <param name="message">Message to send.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Mail.MailMessage,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a mail message.
+            </summary>
+      <param name="message">Message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it at the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Mime.MimeMessage,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a MIME message and saves it to the 'Sent Items' folder.
+            </summary>
+      <param name="message">Mime message to send.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Mime.MimeMessage,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a MIME message.
+            </summary>
+      <param name="message">Mime message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,Rebex.Net.EwsMessageBody,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The body of the message.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it in the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,Rebex.Net.EwsMessageBody,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it in the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,Rebex.Net.EwsMessageBody,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments and stores it to the 'Sent Items' folder.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,System.String,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(System.String,System.String,System.String,Rebex.Net.EwsMessageBody,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message composed from the arguments.
+            </summary>
+      <param name="from">Message sender.</param>
+      <param name="to">Comma-separated list of message recipients.</param>
+      <param name="subject">The subject of the message.</param>
+      <param name="body">The text body of the message.</param>
+      <param name="folderId">ID of a folder to which to save the sent message.
+            Specify null (Nothing in VB.NET) to send the message without saving it an the Exchange server.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message stored in exchange server and moves it to the 'Sent Items' folder.
+            </summary>
+      <param name="itemId">ID of a message to send.</param>
+      <remarks>This operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.SendMessageAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous SendMessage operation.
+            Sends a message stored in exchange server.
+            </summary>
+      <param name="itemId">ID of a message to send.</param>
+      <param name="saveFolderId">ID of a folder to which to move the sent message.
+            Specify null (Nothing in VB.NET) to discard (permanently delete) the message.</param>
+      <remarks>
+            This operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.
+            This operation doesn't work on some Exchange versions (e.g. Exchange 2010) if the message was already sent.
+            </remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteItemAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous DeleteItem operation.
+            Deletes an item specified by its ID. Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether to delete item permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="itemId">ID of an item to delete.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteItemAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsDeleteMode,System.Object)">
+      <summary>
+            Begins asynchronous DeleteItem operation.
+            Deletes an item specified by its ID.
+            </summary>
+      <param name="itemId">ID of an item to delete.</param>
+      <param name="deleteMode">Specify whether to delete item permanently or move it to Deleted Items folder.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.CopyItemAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous CopyItem operation.
+            Copies an item to specified exchange folder.
+            </summary>
+      <param name="itemId">ID of an item to copy.</param>
+      <param name="folderId">ID of a folder to which to copy the item.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> of the copied item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.MoveItemAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous MoveItem operation.
+            Moves an item to specified exchange folder.
+            </summary>
+      <param name="itemId">Id of an item to move.</param>
+      <param name="folderId">Id of a folder to which to move the item.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsMessageInfo" /> of the moved item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ExportItemAsync(Rebex.Net.EwsItemId,System.Object)">
+      <summary>
+            Begins asynchronous ExportItem operation.
+            Exports message in its exchange format. This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            </summary>
+      <param name="itemId">ID of an item to export.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>Raw data of the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.ImportItemAsync(Rebex.Net.EwsFolderId,System.Byte[],System.Object)">
+      <summary>
+            Begins asynchronous ImportItem operation.
+            Imports an item in exchange format to specified exchange folder.
+            This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            </summary>
+      <param name="folderId">ID of a folder where to import the item.</param>
+      <param name="itemData">Raw data of an item to import (usually obtained by <seealso cref="M:Rebex.Net.Ews.ExportItem(Rebex.Net.EwsItemId)" /> method).</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.CopyFolderAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous CopyFolder operation.
+            Copies an exchange folder with its content into another exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to copy.</param>
+      <param name="targetFolderId">ID of a folder where to copy the folder.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the copied folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.CreateFolderAsync(Rebex.Net.EwsFolderId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous CreateFolder operation.
+            Creates new subfolder in an exchange folder.
+            </summary>
+      <param name="parentId">ID of a folder where to create the new subfolder.</param>
+      <param name="folderName">Name of the new folder.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the created folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteFolderAsync(Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous DeleteFolder operation.
+            Deletes an exchange folder. Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether delete folder permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="folderId">ID of a folder to delete.</param>
+      <remarks>The folder have not to be empty prior to delete operation.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteFolderContentAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsDeleteScope,System.Object)">
+      <summary>
+            Begins asynchronous DeleteFolderContent operation.
+            Deletes content of an exchange folder. Folder itself remains. 
+            To delete the folder as well, see <see cref="M:Rebex.Net.Ews.DeleteFolder(Rebex.Net.EwsFolderId)" /> method.
+            This method is supported in Exchange 2010 SP1 (14.1.218.15) and newer.
+            Use <see cref="P:Rebex.Net.Ews.DeleteMode" /> to specify whether delete folder content permanently or move
+            it to Deleted Items folder.
+            </summary>
+      <param name="folderId">ID of a folder of which content to delete.</param>
+      <param name="deleteSubfolders">Select delete mode wheter to delete items only or delete subfolders as well.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.MoveFolderAsync(Rebex.Net.EwsFolderId,Rebex.Net.EwsFolderId,System.Object)">
+      <summary>
+            Begins asynchronous MoveFolder operation.
+            Moves an exchange folder with its content into another exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to move.</param>
+      <param name="targetFolderId">ID of a folder where to move the folder.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsFolderId" /> of the moved exchange folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Adds a file as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="filePath">Path to a file to read attachment data from.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,System.String,System.String,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Adds a file as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="filePath">Path to a file to read attachment data from.</param>
+      <param name="contentType">Content type of an attachment. For predefined strings see <see cref="T:Rebex.Mail.MediaTypeNames" /> subclasses's constants.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,System.String,System.IO.Stream,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Adds a stream as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="input">A stream to read attachment data from.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,System.String,System.IO.Stream,System.String,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Adds a stream as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="input">A stream to read attachment data from.</param>
+      <param name="contentType">Content type of an attachment. For predefined strings see <see cref="T:Rebex.Mail.MediaTypeNames" /> subclasses's constants.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,Rebex.Mime.MimeMessage,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Adds a MIME message as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="message">A MIME message to attach.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,Rebex.Mail.MailMessage,System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Add a mail message as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="mail">A Mail message to attach.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.AddAttachmentAsync(Rebex.Net.EwsItemId,System.String,System.Byte[],System.Object)">
+      <summary>
+            Begins asynchronous AddAttachment operation.
+            Add a MIME raw data as new attachment to an exchange item.
+            </summary>
+      <param name="itemId">ID of an item to which to add the attachment.</param>
+      <param name="name">Display name of new attachment.</param>
+      <param name="mimeContent">Raw MIME data.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsAttachmentId" /> of the new attachment.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.GetAttachmentAsync(Rebex.Net.EwsAttachmentId,System.Object)">
+      <summary>
+            Begins asynchronous GetAttachment operation.
+            Gets an attachment identified by its ID.
+            </summary>
+      <param name="attachmentId">ID of an attachment to get.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>
+        <see cref="T:Rebex.Mail.Attachment" /> object if the attachment is found; null reference (Nothing in VB.NET) otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.DeleteAttachmentAsync(Rebex.Net.EwsAttachmentId,System.Object)">
+      <summary>
+            Begins asynchronous DeleteAttachment operation.
+            Deletes an attachment identified by its ID.
+            </summary>
+      <param name="attachmentId">ID of an attachment to delete.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+    </member>
+    <member name="M:Rebex.Net.Ews.ResolveNamesAsync(System.String,System.Object)">
+      <summary>
+            Begins asynchronous ResolveNames operation.
+            Searches Exchange users and Contacts for the specified name.
+            </summary>
+      <param name="name">Name to be resolved (part of the User or Contact name).</param>
+      <remarks>
+            The method searches in Name field of Exchange users and Contacts only.
+            It doesn't search in Email address field, so requests like ResolveNames("@domain") find nothing typically.
+            </remarks>
+      <example>
+            ResolveNames("test") finds:
+            <ul><li>- users like "Joe Tester"</li><li>- contacts like "Joe Tester 'joe@intranet.org'"</li></ul></example>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>List of <see cref="T:Rebex.Net.EwsResolvedName" /> objects, which contain information about users and contacts found.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.RenameFolderAsync(Rebex.Net.EwsFolderId,System.String,System.Object)">
+      <summary>
+            Begins asynchronous RenameFolder operation.
+            Renames an exchange folder.
+            </summary>
+      <param name="folderId">ID of a folder to rename.</param>
+      <param name="newName">New folder name.</param>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>ID of the renamed folder.</returns>
+    </member>
+    <member name="M:Rebex.Net.Ews.UpdateItemAsync(Rebex.Net.EwsItemId,Rebex.Net.EwsItemMetadata,System.Object)">
+      <summary>
+            Begins asynchronous UpdateItem operation.
+            Updates existing item with specified metadata.
+            </summary>
+      <param name="itemId">ID of an item to update.</param>
+      <param name="metadata">New metadata of the item.</param>
+      <remarks>Most update operation needs <see cref="P:Rebex.Net.EwsItemId.ChangeKey" /> to be set to the latest value.</remarks>
+      <param name="state">An optional user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>New ID of the updated item.</returns>
+    </member>
+    <member name="E:Rebex.Net.Ews.ValidatingCertificate">
+      <summary>
+            Occurs when a server certificate needs to be validated.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.Ews.LogWriter">
+      <summary>
+            Gets or sets the <see cref="T:Rebex.ILogWriter">LogWriter</see> used by this object.
+            </summary>
+      <value>Log writer.</value>
+    </member>
+    <member name="P:Rebex.Net.Ews.IsBusy">
+      <summary>
+            Gets a value indicating whether there is any operation (method) in progress.
+            </summary>
+      <returns>True if there is any operation in progress; false otherwise.</returns>
+    </member>
+    <member name="P:Rebex.Net.Ews.IsAuthenticated">
+      <summary>
+            Gets a value indicating whether the <see cref="T:Rebex.Net.Ews" /> object is authenticated to an Exchange server.
+            </summary>
+      <value>True if authenticated; false otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.Ews.IsConnected">
+      <summary>
+            Gets a value indicating whether the <see cref="T:Rebex.Net.Ews" /> object is connected to an Exchange server.
+            </summary>
+      <remarks>
+        <p>
+            This property returns the latest known state of the session. 
+            When it returns false, the session was either never connected, or no longer connected. 
+            When it returns true, the session was connected at the time of the last I/O operation.
+            </p>
+        <p>
+          <b>Note:</b> There is no guarantee that the session is still connected even though
+            <see cref="P:Rebex.Net.Ews.IsConnected" /> returns true.
+            </p>
+      </remarks>
+      <value>True if connected; false otherwise.</value>
+    </member>
+    <member name="P:Rebex.Net.Ews.Settings">
+      <summary>
+            Gets or sets an <see cref="T:Rebex.Net.EwsSettings" /> object.
+            </summary>
+      <value>
+        <see cref="T:Rebex.Net.EwsSettings" /> object.</value>
+    </member>
+    <member name="P:Rebex.Net.Ews.DeleteMode">
+      <summary>
+            Gets or sets the mode for delete operations whether to delete entities to Deleted Items folder or delete it permanently.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.Ews.Proxy">
+      <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+      <value>The <see cref="P:Rebex.Net.Ews.Proxy" /> to use to access a remote server.</value>
+    </member>
+    <member name="P:Rebex.Net.Ews.TlsSocket">
+      <summary>
+            Returns the TLS/SSL socket of secured connection.
+            </summary>
+      <returns>The TLS/SSL socket of secured connection, or null if the connection is not secured or <see cref="T:Rebex.Net.Ews" /> class is not connected.</returns>
+      <remarks>
+            This property is intended for advanced users only.
+            Once connected, <see cref="T:Rebex.Net.Ews" /> class does not expect the socket to be altered in any way.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.Ews.Server">
+      <summary>
+            Gets information of the Exchange server.
+            The value is available after successful authentication.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.Ews.Timeout">
+      <summary>
+            Gets or sets the length of time in milliseconds before the operation times out.
+            </summary>
+      <value>
+            The length of time, in milliseconds, until the operation times out.
+            Default is 120 000 (120 seconds).
+            </value>
+      <remarks>
+        <p>
+            The internal timeout counter is reset every time a request is sent.
+            </p>
+        <p>
+            Minimal value is 1000. Setting this to a value lower than 1000 will set it to 1000.
+            </p>
+      </remarks>
+    </member>
+    <member name="T:Rebex.Net.EwsAttachmentInfo">
+      <summary>
+            Represents an Exchange attachment.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.Id">
+      <summary>
+            Gets the ID of the attachment.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.Name">
+      <summary>
+            Gets the Name of the attachment.
+            Null reference (Nothing in VB.NET) if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.ContentType">
+      <summary>
+            Gets the Content type of the attachment.
+            Null reference (Nothing in VB.NET) if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.Size">
+      <summary>
+            Gets the Size of the attachment reported by the server.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.IsInline">
+      <summary>
+            Gets a value indicating whether this is inline attachment.
+            Inline attachment is also known as linked or embedded resource,
+            e.g. Image or CSS file referenced from the message body.
+            False if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentInfo.LastModifiedTime">
+      <summary>
+            Gets a date and time of last modification of the attachment.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsCategoryCollection">
+      <summary>
+            Represents collection of categories on an EWS item.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.#ctor">
+      <summary>
+            Initializes new empty instance.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Initializes new collection filled with provided categories.
+            </summary>
+      <param name="categories">Initial categories set.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.#ctor(System.String[])">
+      <summary>
+            Initializes new collection filled with provided categories.
+            </summary>
+      <param name="categories">Initial categories set.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.op_Implicit(System.String)~Rebex.Net.EwsCategoryCollection">
+      <summary>
+            Converts a <see cref="T:System.String" /> to an <see cref="T:Rebex.Net.EwsCategoryCollection" />.
+            </summary>
+      <param name="value">Value of the category.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsCategoryCollection" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.op_Implicit(System.String[])~Rebex.Net.EwsCategoryCollection">
+      <summary>
+            Converts a <see cref="T:System.String" /> array to an <see cref="T:Rebex.Net.EwsCategoryCollection" />.
+            </summary>
+      <param name="values">Values of the category.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsCategoryCollection" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.Add(System.String)">
+      <summary>
+            Adds a category to this collection.
+            </summary>
+      <param name="category">The category to be added to this collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.AddRange(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Adds multiple categories to this collection.
+            </summary>
+      <param name="categories">Categories to be added to this collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.Clear">
+      <summary>
+            Removes all categories from the collection.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.Contains(System.String)">
+      <summary>
+            Determines whether the category is in this collection.
+            </summary>
+      <param name="category" />
+      <returns />
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.CopyTo(System.String[],System.Int32)">
+      <summary>
+            Copies the range of categories from the collection to a one-dimensional
+            string array, starting at the specified index of the target array.
+            </summary>
+      <param name="array">One-dimensional zero-based string array that is the destination of the categories copied from the collection.</param>
+      <param name="arrayIndex">A zero-based index in the destination array at which copying begins.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.Remove(System.String)">
+      <summary>
+            Removes the specified category from this collection.
+            </summary>
+      <param name="category">The category to remove from this collection.</param>
+      <returns>True if the category was successfully removed from this collection; otherwise false.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsCategoryCollection.GetEnumerator">
+      <summary>
+            Gets an IEnumerator&lt;string&gt; for the collection.
+            </summary>
+      <returns>An IEnumerator&lt;string&gt; for the collection.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsCategoryCollection.SyncRoot">
+      <summary>
+            Gets an object that can be used to synchronize access to the collection.
+            </summary>
+      <value>An object that can be used to synchronize access to the collection.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsCategoryCollection.Count">
+      <summary>
+            Gets the number of categories contained in this collection.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsExceptionStatus">
+      <summary>
+            Defines status codes for the <see cref="P:Rebex.Net.EwsException.Status" /> property.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ConnectFailure">
+      <summary>
+            The remote service point could not be contacted at the transport level.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ConnectionClosed">
+      <summary>
+            The connection was prematurely closed.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.SocketError">
+      <summary>
+            The error at transport level occurred.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.NameResolutionFailure">
+      <summary>
+            The name resolver service could not resolve the host name.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.Pending">
+      <summary>
+            An operation is pending.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ProtocolError">
+      <summary>
+            The response received from the server was complete but indicated a protocol-level error.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ProxyNameResolutionFailure">
+      <summary>
+            The name resolver service could not resolve the proxy host name.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.UnclassifiableError">
+      <summary>
+            An unclassifiable error occurred. This is the default value for <see cref="P:Rebex.Net.EwsException.Status" />.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ServerProtocolViolation">
+      <summary>
+            The server response was not a valid EWS response.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.Timeout">
+      <summary>
+            No response was received during the time-out period for a request.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.AsyncError">
+      <summary>
+            General exception in asynchronous call.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.LoginRequired">
+      <summary>
+            The operation cannot be performed before a successful login.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.OperationFailure">
+      <summary>
+            The requested operation could not be completed.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.ParsingError">
+      <summary>
+            Error while parsing the server response.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsExceptionStatus.UnexpectedResponse">
+      <summary>
+            The server response did not contain expected values.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsException">
+      <summary>
+            The exception that is thrown when an error occurs while using Ews component.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String,System.Exception)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="innerException">The exception that is the cause of the current exception. 
+            If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String,Rebex.Net.EwsExceptionStatus)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message and status.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.EwsExceptionStatus" /> values.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String,System.Exception,Rebex.Net.EwsExceptionStatus)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message, status
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="innerException">The exception that is the cause of the current exception. 
+            If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.EwsExceptionStatus" /> values.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String,Rebex.Net.EwsExceptionStatus,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message, status
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.EwsExceptionStatus" /> values.</param>
+      <param name="protocolCode">Error code received through the protocol.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsException.#ctor(System.String,System.Exception,Rebex.Net.EwsExceptionStatus,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsException" /> class with the specified error message, status
+            and a reference to the inner exception that is the cause of this exception.
+            </summary>
+      <param name="message">The message that describes the error.</param>
+      <param name="innerException">The exception that is the cause of the current exception. 
+            If the <i>innerException</i> parameter is not a null reference, the current exception is raised in a <b>catch</b> block that handles the inner exception.</param>
+      <param name="status">One of the <see cref="T:Rebex.Net.EwsExceptionStatus" /> values.</param>
+      <param name="protocolCode">Error code received through the protocol.</param>
+    </member>
+    <member name="P:Rebex.Net.EwsException.Status">
+      <summary>
+            Gets the status of the response.
+            </summary>
+      <value>One of the <see cref="T:Rebex.Net.EwsExceptionStatus" /> values.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsException.Properties">
+      <summary>
+            Gets list of properties related to this error.
+            </summary>
+      <value>List of properties.</value>
+    </member>
+    <member name="T:Rebex.Net.EwsFlagStatus">
+      <summary>
+            Describes status of the flag of an item on Exchange server. 
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsFlagStatus.None">
+      <summary>
+            Item has no flag.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsFlagStatus.Completed">
+      <summary>
+            Item has "Completed" flag.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsFlagStatus.Flagged">
+      <summary>
+            Item is "Flagged".
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsFlag">
+      <summary>
+            Represents an Exchange item flag.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsFlag.#ctor(Rebex.Net.EwsFlagStatus)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsFlag" /> class.
+            </summary>
+      <param name="status">Status of the flag.</param>
+    </member>
+    <member name="P:Rebex.Net.EwsFlag.Status">
+      <summary>
+            Gets the flag status.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsFolderInfo">
+      <summary>
+            Represents an Exchange folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.Id">
+      <summary>
+            Gets the ID of the folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.ParentId">
+      <summary>
+            Gets the parent folder ID (ID of a folder which contains this folder).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.ExchangeClass">
+      <summary>
+            Gets the Exchange class of the folder. 
+            E.g. 'IPF.Note', 'IPF.Contact', 'IPF.Appointment', etc.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.Name">
+      <summary>
+            Gets the Name of the folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.ChildFolderCount">
+      <summary>
+            Gets the Count of subfolders.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderInfo.ItemsTotal">
+      <summary>
+            Gets the total count of items in this folder (subfolders and theirs content don't count).
+            Items are messages, contacts, appointments, etc.
+            Folders are not items.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemId">
+      <summary>
+            Represents an Exchange item ID.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.GetNativeValue">
+      <summary>
+            Gets the ID of an item in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.GetNativeChangeKey">
+      <summary>
+            Gets the Change key of an item in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsItemId" /> class with the specified value. 
+            </summary>
+      <param name="id">ID of the item (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.#ctor(System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsItemId" /> class with the specified ID and Change key.
+            </summary>
+      <param name="id">ID of the item (can be in Exchange native format also).</param>
+      <param name="changeKey">Change key of the item (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.op_Implicit(System.String)~Rebex.Net.EwsItemId">
+      <summary>
+            Converts a <see cref="T:System.String" /> to an <see cref="T:Rebex.Net.EwsItemId" />.
+            </summary>
+      <param name="value">Value of the ID.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsItemId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.op_Implicit(Rebex.Net.EwsItemId)~System.String">
+      <summary>
+            Converts an <see cref="T:Rebex.Net.EwsItemId" /> to a <see cref="T:System.String" />.
+            </summary>
+      <param name="value">Instance of the ID.</param>
+      <returns>
+        <see cref="T:System.String" /> representation of the <see cref="T:Rebex.Net.EwsItemId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsItemId.ToString">
+      <summary>
+            Returns a string that represents this <see cref="T:Rebex.Net.EwsItemId" />.
+            </summary>
+      <returns>String representation of this <see cref="T:Rebex.Net.EwsItemId" />.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsItemId.Value">
+      <summary>
+            Gets the ID of an item (in file name friendly format).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemId.ChangeKey">
+      <summary>
+            Gets the Change key of an item (in file name friendly format).
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsAttachmentId">
+      <summary>
+            Represents an Exchange attachment ID. Attachment is not an item in EWS notation.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.GetNativeValue">
+      <summary>
+            Gets the ID of an attachment in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.GetNativeChangeKey">
+      <summary>
+            Gets the Change key of an attachment in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsAttachmentId" /> class with the specified value. 
+            </summary>
+      <param name="id">ID of the attachment (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.#ctor(System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsAttachmentId" /> class with the specified ID and Change key.
+            </summary>
+      <param name="id">ID of the attachment (can be in Exchange native format also).</param>
+      <param name="changeKey">Change key of the attachment (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.op_Implicit(System.String)~Rebex.Net.EwsAttachmentId">
+      <summary>
+            Converts a <see cref="T:System.String" /> to an <see cref="T:Rebex.Net.EwsAttachmentId" />.
+            </summary>
+      <param name="value">Value of the ID.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsAttachmentId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.op_Implicit(Rebex.Net.EwsAttachmentId)~System.String">
+      <summary>
+            Converts an <see cref="T:Rebex.Net.EwsAttachmentId" /> to a <see cref="T:System.String" />.
+            </summary>
+      <param name="value">Instance of the ID.</param>
+      <returns>
+        <see cref="T:System.String" /> representation of the <see cref="T:Rebex.Net.EwsAttachmentId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsAttachmentId.ToString">
+      <summary>
+            Returns a string that represents this <see cref="T:Rebex.Net.EwsAttachmentId" />.
+            </summary>
+      <returns>String representation of this <see cref="T:Rebex.Net.EwsAttachmentId" />.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentId.Value">
+      <summary>
+            Gets the ID of an attachment (in file name friendly format).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsAttachmentId.ChangeKey">
+      <summary>
+            Gets the Change key of an attachment (in file name friendly format).
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsFolderId">
+      <summary>
+            Represents an Exchange folder ID. Folder is not an item in EWS notation.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.GetNativeValue">
+      <summary>
+            Gets the ID of the folder in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.GetNativeChangeKey">
+      <summary>
+            Gets the Change key of the folder in its Exchange native format. It is not always file name friendly.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsFolderId" /> with the specified value. 
+            </summary>
+      <param name="id">ID of the folder (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.#ctor(System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsFolderId" /> class with the specified ID and Change key.
+            </summary>
+      <param name="id">ID of the folder (can be in Exchange native format also).</param>
+      <param name="changeKey">Change key of the folder (can be in Exchange native format also).</param>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.#ctor(Rebex.Net.EwsSpecialFolder)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsFolderId" /> with the specified Distinguished name.
+            </summary>
+      <param name="specialFolder">Distinguished name of the folder.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.#ctor(Rebex.Net.EwsSpecialFolder,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.EwsFolderId" /> with the specified Distinguished name and mailbox.
+            </summary>
+      <param name="specialFolder">Distinguished name of the folder.</param>
+      <param name="mailbox">Mailbox which contains the folder.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.op_Implicit(System.String)~Rebex.Net.EwsFolderId">
+      <summary>
+            Converts a <see cref="T:System.String" /> to an <see cref="T:Rebex.Net.EwsFolderId" />.
+            </summary>
+      <param name="value">Value of the ID.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsFolderId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.op_Implicit(Rebex.Net.EwsFolderId)~System.String">
+      <summary>
+            Converts an <see cref="T:Rebex.Net.EwsFolderId" /> to a <see cref="T:System.String" />.
+            </summary>
+      <param name="value">Instance of the ID.</param>
+      <returns>
+        <see cref="T:System.String" /> representation of the <see cref="T:Rebex.Net.EwsFolderId" />.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsFolderId.ToString">
+      <summary>
+            Returns a string that represents this <see cref="T:Rebex.Net.EwsFolderId" />.
+            </summary>
+      <returns>String representation of this <see cref="T:Rebex.Net.EwsFolderId" />.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.IsSpecial">
+      <summary>
+            Gets a value indicating whether the folder ID was initialized by a Distinguished name.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Value">
+      <summary>
+            Gets the ID of the folder (in file name friendly format).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.ChangeKey">
+      <summary>
+            Gets the Change key of the folder (in file name friendly format).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.SpecialFolder">
+      <summary>
+            Gets the Distinguished name of the folder.
+            Valid only for instances created with <see cref="M:Rebex.Net.EwsFolderId.#ctor(Rebex.Net.EwsSpecialFolder)" /> constructor and singletons of this class.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Mailbox">
+      <summary>
+            Gets the Mailbox of the folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Inbox">
+      <summary>
+            Exchange user's "Inbox" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Root">
+      <summary>
+            Exchange user's "Root" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Drafts">
+      <summary>
+            Exchange user's "Drafts" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Calendar">
+      <summary>
+            Exchange user's "Calendar" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Tasks">
+      <summary>
+            Exchange user's "Tasks" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Contacts">
+      <summary>
+            Exchange user's "Contacts" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.DeletedItems">
+      <summary>
+            Exchange user's "Deleted Items" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.JunkEmail">
+      <summary>
+            Exchange user's "Junk E-mail" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.Outbox">
+      <summary>
+            Exchange user's "Outbox" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.SentItems">
+      <summary>
+            Exchange user's "Sent Items" folder.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsFolderId.PublicFolders">
+      <summary>
+            Exchange user's "Public Folders" folder.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsImpersonation">
+      <summary>
+            Contains information about impersonated account.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsImpersonation.SmtpAddress">
+      <summary>
+            Gets or sets a SMTP address of an account to impersonate.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemCollection">
+      <summary>
+            Represents a strongly typed collection of <see cref="T:Rebex.Net.EwsItemInfo" /> objects.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.#ctor">
+      <summary>
+            Initializes new empty instance.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.Add(Rebex.Net.EwsItemInfo)">
+      <summary>
+            Adds the specified item to the end of the collection.
+            </summary>
+      <param name="item">The item to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.AddRange(System.Collections.Generic.IEnumerable{Rebex.Net.EwsItemInfo})">
+      <summary>
+            Adds the specified items to the end of the collection.
+            </summary>
+      <param name="collection">The items to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.Clear">
+      <summary>
+            Removes all elements from the collection.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.CopyTo(Rebex.Net.EwsItemInfo[],System.Int32)">
+      <summary>
+            Copies the range of elements from the collection to a one-dimensional
+            <see cref="T:Rebex.Net.EwsItemInfo" /> array, starting at the specified index of the target array.
+            </summary>
+      <param name="array">One-dimensional zero-based <see cref="T:Rebex.Net.EwsItemInfo" /> array that is the destination of the elements copied from the collection.</param>
+      <param name="index">A zero-based index in the destination array at which copying begins.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.Contains(Rebex.Net.EwsItemInfo)">
+      <summary>
+            Determines whether the item is in the collection.
+            </summary>
+      <param name="item">The item to locate in the collection.</param>
+      <returns>True if the item is located in the collection; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.Remove(Rebex.Net.EwsItemInfo)">
+      <summary>
+            Removes the specified item from the collection.
+            </summary>
+      <param name="item">The item to remove from the collection.</param>
+      <returns>
+            True if item was successfully removed from the collection; false otherwise.
+            </returns>
+    </member>
+    <member name="M:Rebex.Net.EwsItemCollection.GetEnumerator">
+      <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.
+            </summary>
+      <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsItemCollection.PageResult">
+      <summary>
+            Gets additional information if paging was used.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemCollection.SyncRoot">
+      <summary>
+            Gets an object that can be used to synchronize access to the collection.
+            </summary>
+      <value>An object that can be used to synchronize access to the collection.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsItemCollection.Count">
+      <summary>
+            Gets the number of elements contained in the collection.
+            </summary>
+      <value>The number of elements contained in the collection.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsItemCollection.Item(System.Int32)">
+      <summary>
+            Gets an <see cref="T:Rebex.Net.EwsItemInfo" /> objects at the specified index.
+            </summary>
+      <param name="index">Zero-based index of the element to get.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsItemInfo" /> objects at the specified index.</returns>
+    </member>
+    <member name="T:Rebex.Net.EwsMessageCollection">
+      <summary>
+            Represents a strongly typed collection of <see cref="T:Rebex.Net.EwsMessageInfo" /> objects.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.#ctor">
+      <summary>
+            Initializes new empty instance.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.Add(Rebex.Net.EwsMessageInfo)">
+      <summary>
+            Adds the specified message to the end of the collection.
+            </summary>
+      <param name="message">The message to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.AddRange(System.Collections.Generic.IEnumerable{Rebex.Net.EwsMessageInfo})">
+      <summary>
+            Adds the specified messages to the end of the collection.
+            </summary>
+      <param name="collection">The messages to be added to the collection.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.Clear">
+      <summary>
+            Removes all elements from the collection.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.CopyTo(Rebex.Net.EwsMessageInfo[],System.Int32)">
+      <summary>
+            Copies the range of elements from the collection to a one-dimensional
+            <see cref="T:Rebex.Net.EwsMessageInfo" /> array, starting at the specified index of the target array.
+            </summary>
+      <param name="array">One-dimensional zero-based <see cref="T:Rebex.Net.EwsMessageInfo" /> array that is the destination of the elements copied from the collection.</param>
+      <param name="index">A zero-based index in the destination array at which copying begins.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.Contains(Rebex.Net.EwsMessageInfo)">
+      <summary>
+            Determines whether the message is in the collection.
+            </summary>
+      <param name="message">The message to locate in the collection.</param>
+      <returns>True if the message is located in the collection; false otherwise.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.Remove(Rebex.Net.EwsMessageInfo)">
+      <summary>
+            Removes the specified message from the collection.
+            </summary>
+      <param name="message">The message to remove from the collection.</param>
+      <returns>
+            True if message was successfully removed from the collection; false otherwise.
+            </returns>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageCollection.GetEnumerator">
+      <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.
+            </summary>
+      <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1" /> for the collection.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageCollection.PageResult">
+      <summary>
+            Gets additional information if paging was used.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageCollection.SyncRoot">
+      <summary>
+            Gets an object that can be used to synchronize access to the collection.
+            </summary>
+      <value>An object that can be used to synchronize access to the collection.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageCollection.Count">
+      <summary>
+            Gets the number of elements contained in the collection.
+            </summary>
+      <value>The number of elements contained in the collection.</value>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageCollection.Item(System.Int32)">
+      <summary>
+            Gets an <see cref="T:Rebex.Net.EwsMessageInfo" /> objects at the specified index.
+            </summary>
+      <param name="index">Zero-based index of the element to get.</param>
+      <returns>
+        <see cref="T:Rebex.Net.EwsMessageInfo" /> objects at the specified index.</returns>
+    </member>
+    <member name="T:Rebex.Net.EwsItemType">
+      <summary>
+            Defines types of Exchange items.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.Unknown">
+      <summary>
+            Item type is unknown.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.Message">
+      <summary>
+            Message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.Contact">
+      <summary>
+            Contact.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.CalendarItem">
+      <summary>
+            Calendar item.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.Task">
+      <summary>
+            Task.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.Post">
+      <summary>
+            Post.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemType.DistributionList">
+      <summary>
+            Distribution list.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemInfo">
+      <summary>
+            Represents an Exchange item.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemInfo.ToXml">
+      <summary>
+            Gets the XML representation of the item.
+            </summary>
+      <returns>Part of the XML response returned by the Exchange server which represents the item.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsItemInfo.FromXml(System.String)">
+      <summary>
+            Parses provided XML into an instance of <see cref="T:Rebex.Net.EwsItemInfo" />.
+            </summary>
+      <param name="xml">XML with item data.</param>
+      <returns>An instance of <see cref="T:Rebex.Net.EwsItemInfo" /> representing the supplied XML.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Id">
+      <summary>
+            Gets the ID of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.ItemType">
+      <summary>
+            Gets the Type of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.ExchangeClass">
+      <summary>
+            Gets the Exchange class of the item. 
+            E.g. 'IPF.Note', 'IPF.Contact', 'IPF.Appointment', etc.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Size">
+      <summary>
+            Gets the Size of the item reported by the server.
+            Zero if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Subject">
+      <summary>
+            Gets the Subject of the item.
+            Null reference (Nothing in VB.NET) if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.SentDate">
+      <summary>
+            Gets the date and time value indicating when the item was sent.
+            DateTime.MinValue if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.ReceivedDate">
+      <summary>
+            Gets the date and time value indicating when the item was received.
+            DateTime.MinValue if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.CreatedDate">
+      <summary>
+            Gets the date and time value indicating when the item was created.
+            DateTime.MinValue if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.IsDraft">
+      <summary>
+            Gets the value indicating whether the item is Draft.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.InReplyTo">
+      <summary>
+            Gets the list of Message-Id headers to which the item is a reply.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Priority">
+      <summary>
+            Gets the Priority level of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Flag">
+      <summary>
+            Gets the Flag of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Categories">
+      <summary>
+            Gets the list of Categories of the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.HasAttachments">
+      <summary>
+            Gets the value indicating whether the item has any attachment.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Attachments">
+      <summary>
+            Gets the list of attachments attached to the item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemInfo.Headers">
+      <summary>
+            Gets the list of headers of this item, if the value is known.
+            </summary>
+      <value>The list of headers.</value>
+    </member>
+    <member name="T:Rebex.Net.EwsMessageBody">
+      <summary>
+            Represents a message body.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageBody.#ctor(System.String,Rebex.Net.EwsBodyFormat)">
+      <summary>
+            Initializes new instance of <see cref="T:Rebex.Net.EwsMessageBody" /> with specified content and format.
+            </summary>
+      <param name="content">Content of the message body.</param>
+      <param name="format">Format of the body content.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageBody.#ctor(System.String)">
+      <summary>
+            Initializes new instance of <see cref="T:Rebex.Net.EwsMessageBody" /> with specified content as a text format.
+            </summary>
+      <param name="content">Content of the message body.</param>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageBody.op_Implicit(System.String)~Rebex.Net.EwsMessageBody">
+      <summary>
+            Converts a <see cref="T:System.String" /> to an <see cref="T:Rebex.Net.EwsMessageBody" />.
+            </summary>
+      <param name="content">Text value of the body.</param>
+      <returns>New instance of the <see cref="T:Rebex.Net.EwsMessageBody" />.</returns>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageBody.Content">
+      <summary>
+            Gets the body content.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageBody.Format">
+      <summary>
+            Gets the body format.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemMetadata">
+      <summary>
+            Represents an item metadata which can be used to update an item using the <see cref="M:Rebex.Net.Ews.UpdateItem(Rebex.Net.EwsItemId,Rebex.Net.EwsItemMetadata)" /> method.
+            See also <seealso cref="T:Rebex.Net.EwsMessageMetadata" /> class.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsItemMetadata.#ctor">
+      <summary>
+            Initializes new instance of <see cref="T:Rebex.Net.EwsItemMetadata" />.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.IsRead">
+      <summary>
+            Gets or sets a value indicating whether an item is read.
+            Valid for message item type only.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.Categories">
+      <summary>
+            Gets or sets the list of categories of an item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.Subject">
+      <summary>
+            Gets or sets the subject of an item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.Body">
+      <summary>
+            Gets or sets the body of an item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.Flag">
+      <summary>
+            Gets or sets the flag of an item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemMetadata.Importance">
+      <summary>
+            Gets or sets the importance value of an item.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsMessageMetadata">
+      <summary>
+            Represents a message metadata which can be used to update a message using the <see cref="M:Rebex.Net.Ews.UpdateItem(Rebex.Net.EwsItemId,Rebex.Net.EwsItemMetadata)" /> method.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsMessageMetadata.#ctor">
+      <summary>
+            Initializes new instance of <see cref="T:Rebex.Net.EwsMessageMetadata" />.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageMetadata.IsRead">
+      <summary>
+            Gets or sets a value indicating whether a message has been read.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsMessageType">
+      <summary>
+            Defines message types.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.Unknown">
+      <summary>
+            Message type is unknown.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.Message">
+      <summary>
+            Ordinary mail message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.MeetingRequest">
+      <summary>
+            Meeting request message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.MeetingResponse">
+      <summary>
+            Meeting response message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.MeetingCancellation">
+      <summary>
+            Meeting cancellation message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsMessageType.Item">
+      <summary>
+            Indicates that the message is pseudo-message which represents an item.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsMessageInfo">
+      <summary>
+            Represents an Exchange message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.MessageType">
+      <summary>
+            Gets the Type of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.MessageId">
+      <summary>
+            Gets the Message-Id MIME header of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.Sender">
+      <summary>
+            Gets the Sender of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.From">
+      <summary>
+            Gets the list of authors of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.To">
+      <summary>
+            Gets the list of addresses of primary recipients of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.CC">
+      <summary>
+            Gets the list of addresses of others who are to receive the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.Bcc">
+      <summary>
+            Gets the list of addresses of recipients that are not to be revealed to other recipients of the message.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.Body">
+      <summary>
+            Gets the Body of the message.
+            Null reference (Nothing in VB.NET) if the value is not known.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.TextBody">
+      <summary>
+            Gets the plain text body of the message.
+            Null reference (Nothing in VB.NET) if the value is not known.
+            </summary>
+      <remarks>
+            If the message contains only plain text body, both <see cref="P:Rebex.Net.EwsMessageInfo.Body" /> and <strong>TextBody</strong> properties are set to the same content.
+            If the message contains both HTML and plain text body, HTML body is set to <see cref="P:Rebex.Net.EwsMessageInfo.Body" /> property and plain text body is set to
+            <strong>TextBody</strong> property.</remarks>
+    </member>
+    <member name="P:Rebex.Net.EwsMessageInfo.IsRead">
+      <summary>
+            Gets a value indicating whether the message is read.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsAuthentication">
+      <summary>
+            Defines EWS authentication methods.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsAuthentication.Auto">
+      <summary>Choose automatically.</summary>
+    </member>
+    <member name="F:Rebex.Net.EwsAuthentication.Basic">
+      <summary>Basic authentication.</summary>
+    </member>
+    <member name="F:Rebex.Net.EwsAuthentication.Ntlm">
+      <summary>NTLM authentication.</summary>
+    </member>
+    <member name="F:Rebex.Net.EwsAuthentication.OAuth20">
+      <summary>OAuth 2.0 authentication.</summary>
+    </member>
+    <member name="T:Rebex.Net.EwsSpecialFolder">
+      <summary>
+            Defines distinguished exchange folder names.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Root">
+      <summary>
+            Exchange user's "Root" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Inbox">
+      <summary>
+            Exchange user's "Inbox" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Drafts">
+      <summary>
+            Exchange user's "Draft" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Calendar">
+      <summary>
+            Exchange user's "Calendar" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Tasks">
+      <summary>
+            Exchange user's "Tasks" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Contacts">
+      <summary>
+            Exchange user's "Contacts" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.DeletedItems">
+      <summary>
+            Exchange user's "Deleted Items" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.JunkEmail">
+      <summary>
+            Exchange user's "Junk E-mail" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.Outbox">
+      <summary>
+            Exchange user's "Outbox" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.SentItems">
+      <summary>
+            Exchange user's "Sent Items" folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsSpecialFolder.PublicFolders">
+      <summary>
+            Exchange user's "Public Folders" folder.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemFields">
+      <summary>
+            Defines sets of EWS item fields which are requested to be retrieved from the Exchange server when getting info about item(s).
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Id">
+      <summary>
+            Request Id field only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Default">
+      <summary>
+            Request default set of fields.
+            Note that the set of fields depends on the operation used (listing fills different fields than getting single info).
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Fast">
+      <summary>
+            Request combination of Id, Size and ReceiveDate.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Envelope">
+      <summary>
+            Request combination of Id, Size, ReceiveDate, From and Subject. 
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Body">
+      <summary>
+            Request combination of Id and Body. If the HTML body is available, it is returned using this value.
+            Valid for <see cref="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId)" /> and <see cref="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId)" /> only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.AttachmentInfo">
+      <summary>
+            Request combination of Id and information about attachments.
+            Valid for <see cref="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId)" /> and <see cref="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId)" /> only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.TextBody">
+      <summary>
+            Request combination of Id and Body in plain text.
+            Valid for <see cref="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId)" /> and <see cref="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId)" /> only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Info">
+      <summary>
+            Request combination of Id, Size, ReceiveDate, SentDate, Sender, From, To, CC, Bcc, Subject, Priority, Flag, Categories,
+            IsRead, IsDraft and attachments. 
+            Valid for <see cref="M:Rebex.Net.Ews.GetItemInfo(Rebex.Net.EwsItemId)" /> and <see cref="M:Rebex.Net.Ews.GetMessageInfo(Rebex.Net.EwsItemId)" /> only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFields.Full">
+      <summary>
+            Request all fields that are available for an item (MIME content is not included).
+            Note that the set of fields depends on the operation used (listing fills different fields than getting single info).
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemFormat">
+      <summary>
+            Defines item export formats.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFormat.Mime">
+      <summary>
+            MIME format. Can be used only for a message.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFormat.Xml">
+      <summary>
+            SOAP XML format (includes namespaces from ews.wsdl).
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemFormat.Native">
+      <summary>
+            Native Exchange binary format.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemImportance">
+      <summary>
+            Defines item importance values.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemImportance.Normal">
+      <summary>
+            Normal importance.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemImportance.Low">
+      <summary>
+            Low importance.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsItemImportance.High">
+      <summary>
+            High importance.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsTraversalScope">
+      <summary>
+            Defines modes for traversing folders.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsTraversalScope.Shallow">
+      <summary>
+            Traverse current folder only.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsTraversalScope.Deep">
+      <summary>
+            Traverse current folder and all subfolders.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsBodyFormat">
+      <summary>
+            Defines message body formats.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsBodyFormat.Text">
+      <summary>
+            Plain text format.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsBodyFormat.Html">
+      <summary>
+            HTML format.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsDeleteMode">
+      <summary>
+            Defines delete operation mode.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsDeleteMode.MoveToDeletedItems">
+      <summary>
+            Delete to Deleted Items folder.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsDeleteMode.Permanent">
+      <summary>
+            Permanent delete.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsDeleteScope">
+      <summary>
+            Defines which content should be deleted by <see cref="M:Rebex.Net.Ews.DeleteFolderContent(Rebex.Net.EwsFolderId,Rebex.Net.EwsDeleteScope)" /> operation.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsDeleteScope.ItemsOnly">
+      <summary>
+            Delete items only, subfolders will remain.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsDeleteScope.ItemsAndSubfolders">
+      <summary>
+            Delete items and subfolders.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsIndexOrigin">
+      <summary>
+            Defines origins for the indexed page view.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsIndexOrigin.Beginning">
+      <summary>
+            Offset is taken from the beginning.
+            </summary>
+    </member>
+    <member name="F:Rebex.Net.EwsIndexOrigin.End">
+      <summary>
+            Offset is taken from the end. So, index 0 represents the last item.
+            Counting the items goes from the specified offset to the smaller positions.
+            <ul><li>Example 1: items {A,B,C,D,E}; page {0,3,Beginning}; result {A,B,C}.</li><li>Example 2: items {A,B,C,D,E}; page {0,3,End}; result {C,D,E}.</li><li>Example 3: items {A,B,C,D,E}; page {2,3,End}; result {A,B,C}.</li></ul></summary>
+    </member>
+    <member name="T:Rebex.Net.EwsPageView">
+      <summary>
+            Provides data for paging functionality.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsPageView.CreateIndexed(System.Int32,System.Int32)">
+      <summary>
+            Creates an indexed page view definition object.
+            </summary>
+      <param name="offset">Zero-based offset of the page.</param>
+      <param name="count">Count of the items within the page.</param>
+      <returns>A page view definition object.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsPageView.CreateIndexed(System.Int32,System.Int32,Rebex.Net.EwsIndexOrigin)">
+      <summary>
+            Creates an indexed page view definition object.
+            </summary>
+      <param name="offset">Zero-based offset of the page.</param>
+      <param name="count">Count of the items within the page.</param>
+      <param name="basePoint">Base point for the offset.</param>
+      <returns>A page view definition object.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsPageView.CreateFractional(System.Int32,System.Int32,System.Int32)">
+      <summary>
+            Creates a fractional page view definition object.
+            Page offset is defined by the fraction. 
+            E.g. 33% (numerator is 33, denominator is 100).
+            </summary>
+      <param name="numerator">Numerator of the fraction of page offset.</param>
+      <param name="denominator">Denominator of the fraction of page offset.</param>
+      <param name="count">Count of the items within the page.</param>
+      <returns>A page view definition object.</returns>
+    </member>
+    <member name="T:Rebex.Net.EwsPageViewResult">
+      <summary>
+            Provides values for paged results.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsPageViewResult.IsLastPage">
+      <summary>
+            Gets a value indicating whether this is the last page.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsPageViewResult.ItemsTotal">
+      <summary>
+            Gets total count of items requested operation would return without paging.
+            <ul><li>For item listing - total count of items in the folder.</li><li>For search result - total count of items found.</li></ul></summary>
+    </member>
+    <member name="P:Rebex.Net.EwsPageViewResult.NextOffset">
+      <summary>
+            Gets an offset of the next page for the indexed page view.
+            Valid when Indexed page view was used.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsPageViewResult.NextNumerator">
+      <summary>
+            Gets a numerator of the next page for the fractional page view.
+            Valid when Fractional page view was used.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsPageViewResult.NextDenominator">
+      <summary>
+            Gets a denominator of the next page for the fractional page view.
+            Valid when Fractional page view was used.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsResolvedName">
+      <summary>
+            Provides values for the result of the <see cref="M:Rebex.Net.Ews.ResolveNames(System.String)" /> method.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsResolvedName.Name">
+      <summary>
+            Gets the Name field of the record.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsResolvedName.EmailAddress">
+      <summary>
+            Gets the Email address field of the record.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsSearchParameter">
+      <summary>
+            Represents a single EWS search criterion.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.And(Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Multiple criteria combined using the AND operator - only messages that match all the criteria are matched.
+            </summary>
+      <param name="parameters">List of search parameters.</param>
+      <returns>An aggregate search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Or(Rebex.Net.EwsSearchParameter[])">
+      <summary>
+            Multiple criteria combined using the OR operator - messages that match any of the criteria are matched.
+            </summary>
+      <param name="parameters">List of search parameters.</param>
+      <returns>An aggregate search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Not(Rebex.Net.EwsSearchParameter)">
+      <summary>
+            Messages that don't match the specified criteria.
+            </summary>
+      <param name="parameter">Parameter not to match.</param>
+      <returns>An aggregate search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Arrived(System.DateTime)">
+      <summary>
+            Messages that arrived on the specified date (disregarding time).
+            </summary>
+      <param name="on">Date. Time and time zone are ignored.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Arrived(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+      <summary>
+            Messages that arrived in the specified date and time interval.
+            </summary>
+      <param name="since">The lower bound of the date and time interval.</param>
+      <param name="before">The upper bound of the date and time interval.</param>
+      <returns>A search parameter.</returns>
+      <remarks>
+            The bounds are also included in the interval.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Sent(System.DateTime)">
+      <summary>
+            Messages that were sent on the specified date (disregarding time).
+            </summary>
+      <param name="on">Date. Time is ignored.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Sent(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+      <summary>
+            Messages that were sent in the specified date and time interval.
+            </summary>
+      <param name="since">The lower bound of the date and time interval.</param>
+      <param name="before">The upper bound of the date and time interval.</param>
+      <returns>A search parameter.</returns>
+      <remarks>
+            The bounds are also included in the interval.
+            </remarks>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Size(System.Nullable{System.Int64},System.Nullable{System.Int64})">
+      <summary>
+            Messages with a size within the specified interval.
+            </summary>
+      <param name="min">The lower bound of interval in bytes.</param>
+      <param name="max">The upper bound of interval in bytes.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Subject(System.String)">
+      <summary>
+            Messages that contain the specified string in its Subject field.
+            </summary>
+      <param name="substring">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.MessageId(System.String)">
+      <summary>
+            Messages with the specified Internet Message ID.
+            </summary>
+      <param name="messageId">Message ID to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.FullText(System.String)">
+      <summary>
+            Messages that contain the specified string in its Body, Subject, From, To, Category, CC, Bcc or Sender.
+            </summary>
+      <param name="substring">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Body(System.String)">
+      <summary>
+            Messages that contain the specified string in its Body.
+            </summary>
+      <param name="substring">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.From(System.String)">
+      <summary>
+            Messages that contain the specified string in its From field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.To(System.String)">
+      <summary>
+            Messages that contain the specified string in its To field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.CC(System.String)">
+      <summary>
+            Messages that contain the specified string in its CC field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Sender(System.String)">
+      <summary>
+            Messages that contain the specified string in its Sender field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Category(System.String)">
+      <summary>
+            Messages that have the specified Category.
+            </summary>
+      <param name="category">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.NotCategory(System.String)">
+      <summary>
+            Messages without the specified category set.
+            </summary>
+      <param name="category">String to exclude in search. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.NotFrom(System.String)">
+      <summary>
+            Messages that do not contain the specified string in its From field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.NotTo(System.String)">
+      <summary>
+            Messages that do not contain the specified string in its To field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.NotCc(System.String)">
+      <summary>
+            Messages that do not contain the specified string in its CC field.
+            </summary>
+      <param name="address">String to search for. Cannot be empty.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.HasFlag(Rebex.Net.EwsFlagStatus)">
+      <summary>
+            Messages that have a flag in the specified state.
+            </summary>
+      <param name="flagStatus">Flag state.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.IsRead(System.Boolean)">
+      <summary>
+            Messages that are read or unread depending on the parameter specified.
+            </summary>
+      <param name="value">Value specifying whether to search for read or unread messages.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.IsDraft(System.Boolean)">
+      <summary>
+            Messages that are (not) draft.
+            </summary>
+      <param name="value">Value specifying whether to search for draft or non-draft messages.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="M:Rebex.Net.EwsSearchParameter.Importance(Rebex.Net.EwsItemImportance)">
+      <summary>
+            Messages that have the specified importance.
+            </summary>
+      <param name="importance">Level of importance.</param>
+      <returns>A search parameter.</returns>
+    </member>
+    <member name="T:Rebex.Net.EwsServerInfo">
+      <summary>
+            Provides version information about connected and authenticated Exchange server.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsServerInfo.Version">
+      <summary>
+            Gets the version of an Exchange server.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsServerInfo.ProductName">
+      <summary>
+            Gets the name of an Exchange software running on the server.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsSettings">
+      <summary>
+            Specifies various EWS settings.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsSettings.Culture">
+      <summary>
+            Gets or sets the culture which is used for text operations ie. <strong>Ews.Search</strong> operation.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsSettings.Impersonation">
+      <summary>
+            Gets or sets impersonation info. Impersonation makes it possible for an impersonating account to performs actions as if it were the primary (impersonated) account.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsSettings.RaiseEventsFromCurrentThread">
+      <summary>
+            Specifies whether to raise asynchronous events from the current working thread or 
+            whether to raise them using a <see cref="T:System.Threading.SynchronizationContext" /> available when an asynchronous operation was started.
+            </summary>
+      <value>False (default) to raise events using <see cref="T:System.Threading.SynchronizationContext" />; true to raise them directly form the current working thread.</value>
+      <remarks>Events of synchronous methods are always raised from the current working thread.</remarks>
+    </member>
+    <member name="T:Rebex.Net.EwsUpdatedFoldersInfo">
+      <summary>
+            Contains result information about updated folders.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsUpdatesInfo`2">
+      <summary>
+            Contains result information about updated entries.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatesInfo`2.Checkpoint">
+      <summary>
+            Gets a checkpoint of update operation.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatesInfo`2.IsLastResult">
+      <summary>
+            Gets a value indicating whether the last entry is in the result set (if it is known).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatesInfo`2.Created">
+      <summary>
+            Gets a collection containing objects created since the last checkpoint.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatesInfo`2.Updated">
+      <summary>
+            Gets a collection containing objects updated since the last checkpoint.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatesInfo`2.Deleted">
+      <summary>
+            Gets a collection containing objects deleted since the last checkpoint.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsUpdatedItemsInfo">
+      <summary>
+            Contains result information about updated items.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsUpdatedItemsInfo.ReadFlagChanged">
+      <summary>
+            Gets a collection of EWS items whose read flag has been changed.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.EwsItemReadFlagInfo">
+      <summary>
+            Contains information about IsRead flag of an EWS item.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemReadFlagInfo.Id">
+      <summary>
+            Gets ID of EWS item whose read flag has been changed.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.EwsItemReadFlagInfo.IsRead">
+      <summary>
+            Gets a value indicating new read flag state.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.EwsImpersonation.#ctor">
+      <summary>Creates an instance of <see cref="T:Rebex.Net.EwsImpersonation" /> class.</summary>
+    </member>
+    <member name="M:Rebex.Net.EwsPageViewResult.#ctor">
+      <summary>Creates an instance of <see cref="T:Rebex.Net.EwsPageViewResult" /> class.</summary>
+    </member>
+    <member name="M:Rebex.Net.EwsSettings.#ctor">
+      <summary>Creates an instance of <see cref="T:Rebex.Net.EwsSettings" /> class.</summary>
+    </member>
+  </members>
+</doc>

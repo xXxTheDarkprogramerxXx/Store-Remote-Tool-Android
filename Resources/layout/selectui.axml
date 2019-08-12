@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<ScrollView
+		android:id="@+id/scrollView2"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:fillViewport="false"
+		android:orientation="vertical"
+		android:padding="10dp"
+		app:layout_constraintBottom_toTopOf="parent"
+		app:layout_constraintEnd_toStartOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:gravity="top"
+			android:orientation="vertical"
+			android:weightSum="1"
+			tools:layout_editor_absoluteX="0dp"
+			tools:layout_editor_absoluteY="0dp">
+			<TextView
+				android:id="@+id/txtLabel"
+				android:layout_width="match_parent"
+				android:layout_height="33dp"
+				android:text="DarkSoftware Package Installer"
+				android:textSize="14sp"
+				tools:layout_editor_absoluteX="16dp"
+				tools:layout_editor_absoluteY="43dp" />
+			<TextView
+				android:id="@+id/txtLabel"
+				android:layout_width="match_parent"
+				android:layout_height="33dp"
+				android:text="Selection Menu"
+				android:textSize="19sp"
+				tools:layout_editor_absoluteX="16dp"
+				tools:layout_editor_absoluteY="43dp" />
+      <TextView
+        android:id="@+id/txtLabel"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:text=""
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="43dp" />
+			<Button
+				android:id="@+id/SelectPackageUI"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/colorPrimaryDark"
+				android:onClick="Browse"
+				android:text="Package Installer"
+				android:textColor="#FFF"/>
+			<TextView
+				android:id="@+id/txtLabel"
+				android:layout_width="match_parent"
+				android:layout_height="33dp"
+				android:text=""
+				android:textSize="14sp"
+				tools:layout_editor_absoluteX="16dp"
+				tools:layout_editor_absoluteY="43dp" />
+				<Button
+				android:id="@+id/SelectPluginUI"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/colorPrimaryDark"
+				android:onClick="Browse"
+				android:text="INSTALL PAYLOAD PLUGIN"
+				android:textColor="#FFF"/>
+		</LinearLayout>
+	</ScrollView>
+		</LinearLayout>
+
+
+
+
