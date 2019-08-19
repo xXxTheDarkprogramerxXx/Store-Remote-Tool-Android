@@ -56,6 +56,7 @@ namespace Store_Remote_Tool_Android
 
 
         private string PKGLocation;
+        private Stream stream;
 
         private bool _isWorking;                    // determines whether any operation is running
         private DateTime _lastTransferProgressTime;      // last TransferProgress event call time
@@ -108,14 +109,30 @@ namespace Store_Remote_Tool_Android
                     string fileName = fileData.FileName;
                     //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
                     PKGLocation = fileData.FilePath;
-                    
-                    var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
-                    ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
-                    pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
-                    TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
-                    lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
-                                          pkgfile.Param.TitleID; //display whatever info youd like here
+                   
+                    //test to make sure file is not URI file 
 
+                    if (PKGLocation.ToUpper().Contains("CONTENT://"))
+                    {
+                        stream = fileData.GetStream();
+                        //path needs to be made from a stream
+                        var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(stream);
+                        ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                        pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
+                        TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                        lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                              pkgfile.Param.TitleID; //display whatever info youd like here
+                    }
+                    else
+                    {
+
+                        var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
+                        ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                        pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Image));
+                        TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                        lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                              pkgfile.Param.TitleID; //display whatever info youd like here
+                    }
 
                     System.Console.WriteLine("File name chosen: " + fileName);
                     //System.Console.WriteLine("File data: " + contents);
@@ -129,46 +146,53 @@ namespace Store_Remote_Tool_Android
             Button SendPayloadBtn = FindViewById<Button>(Resource.Id.SendPayloadBtn);
             SendPayloadBtn.Click += delegate
             {
-                using (Ftp client = new Ftp())
+                try
                 {
-                    Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
-                    try
+                    using (System.Net.WebClient client = new System.Net.WebClient())
                     {
-                        TextView IPAddressTextBox = FindViewById<TextView>(Resource.Id.IPAddressTextBox);
-                         if(IPAddressTextBox.Text == "")
+                        //Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
+                        try
                         {
-                            return;
+                            TextView IPAddressTextBox = FindViewById<TextView>(Resource.Id.IPAddressTextBox);
+                            if (IPAddressTextBox.Text == "")
+                            {
+                                return;
+                            }
+
+                            // connect and login to the FTP
+                            client.Connect(IPAddressTextBox.Text);
+                            client.Login("anonymous", "DONT-LOOK@MYCODE");
+
+                            client.StateChanged += StateChanged;
+                            client.Traversing += Traversing;
+                            client.TransferProgressChanged += TransferProgressChanged;
+                            client.DeleteProgressChanged += DeleteProgressChanged;
+                            client.ProblemDetected += ProblemDetected;
+
+                            client.PutFile(PKGLocation, @"/user/app/temp.pkg");
+
+                            client.SendCommand("installpkg");
+
+                            var response = client.ReadResponse();
+
+                            SetTex(response.Raw);
+
+                            SetTex("Package Sent");
+
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
                         }
 
-                        // connect and login to the FTP
-                        client.Connect(IPAddressTextBox.Text);
-                        client.Login("anonymous", "DONT-LOOK@MYCODE");
-
-                        client.StateChanged += StateChanged;
-                        client.Traversing += Traversing;
-                        client.TransferProgressChanged += TransferProgressChanged;
-                        client.DeleteProgressChanged += DeleteProgressChanged;
-                        client.ProblemDetected += ProblemDetected;
-
-                        client.PutFile(PKGLocation, @"/user/app/temp.pkg");
-
-                        client.SendCommand("installpkg");
-
-                        var response = client.ReadResponse();
-
-                        SetTex(response.Raw);
-
-                        SetTex("Package Sent");
-
-
-
+                        client.Disconnect();
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                }
+                catch(Exception ex)
+                {
 
-                    client.Disconnect();
                 }
             };
         }

@@ -46,10 +46,11 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AndroidLinkSkip>UnityEngine;UnityEditor</AndroidLinkSkip>
+    <AndroidLinkSkip>
+    </AndroidLinkSkip>
     <MandroidI18n>West</MandroidI18n>
   </PropertyGroup>
   <ItemGroup>
@@ -66,17 +67,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLL's\PS4_Tools.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Common, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Common.5.0.7119\lib\monoandroid40\Rebex.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Common, Version=5.0.7077.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL's\Rebex.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Ftp, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Ftp.5.0.7119\lib\monoandroid40\Rebex.Ftp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Ftp, Version=5.0.7077.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL's\Rebex.Ftp.dll</HintPath>
     </Reference>
-    <Reference Include="Rebex.Networking, Version=5.0.7119.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rebex.Networking.5.0.7119\lib\monoandroid40\Rebex.Networking.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Rebex.Networking, Version=5.0.7077.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL's\Rebex.Networking.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing">
@@ -241,6 +242,12 @@
     <AndroidResource Include="Resources\drawable\ps4.png" />
     <Content Include="DLL%27s\PARAM.SFO.dll" />
     <Content Include="DLL%27s\PS4_Tools.dll" />
+    <Content Include="DLL%27s\Rebex.Common.dll" />
+    <Content Include="DLL%27s\Rebex.Common.xml" />
+    <Content Include="DLL%27s\Rebex.Ftp.dll" />
+    <Content Include="DLL%27s\Rebex.Ftp.xml" />
+    <Content Include="DLL%27s\Rebex.Networking.dll" />
+    <Content Include="DLL%27s\Rebex.Networking.xml" />
     <Content Include="Resources\layout\activity_connection.xml" />
   </ItemGroup>
   <ItemGroup>
