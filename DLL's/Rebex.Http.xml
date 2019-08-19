@@ -1,0 +1,704 @@
+<doc>
+  <assembly>
+    <name>Rebex.Http</name>
+  </assembly>
+  <members>
+    <member name="T:Rebex.Net.HttpRequest">
+      <summary>
+            This class represents HTTP and HTTPS requests.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.#ctor(System.Uri,Rebex.Net.HttpRequestCreator)">
+      <summary>
+            Create a HTTP request targeting specific URI.
+            </summary>
+      <param name="uri">URI of the request.</param>
+      <param name="creator">HTTP request creator to use.</param>
+      <returns>Request to target URI.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.BeginGetRequestStream(System.AsyncCallback,System.Object)">
+      <summary>
+            Begins asynchronous GetRequestStream operation.
+            Returns request stream that the request data can be written to as an asynchronous operation. Returns writable stream.
+            </summary>
+      <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+      <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+      <returns>An <see cref="T:System.IAsyncResult" /> that references the asynchronous operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.BeginGetResponse(System.AsyncCallback,System.Object)">
+      <summary>
+            Begins asynchronous GetResponse operation.
+            Returns a response for this request as asynchronous operation. If the response was retrieved once, return that response.
+            </summary>
+      <param name="callback">An optional asynchronous callback to be called when the operation is complete.</param>
+      <param name="state">A user-provided object that identifies this particular asynchronous operation.</param>
+      <returns />
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.EndGetRequestStream(System.IAsyncResult)">
+      <summary>
+            Ends an asynchronous BeginGetRequestStream operation.
+            </summary>
+      <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+      <returns>Returns writable stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.EndGetResponse(System.IAsyncResult)">
+      <summary>
+            Ends an asynchronous BeginGetResponse operation.
+            </summary>
+      <param name="asyncResult">Stores state information for this asynchronous operation as well as any user defined data.</param>
+      <returns>Returns a response for this request.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.Abort">
+      <summary>
+            Aborts the Request. Not supported yet.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.GetRequestStream">
+      <summary>
+            Returns request stream that the request data can be written to.
+            </summary>
+      <returns>Returns writable stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequest.GetResponse">
+      <summary>
+            Returns a response for this request. If the response was retrieved once, return that response.
+            </summary>
+      <returns>Returns a response for this request.</returns>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.AllowAutoRedirect">
+      <summary>
+            Gets or sets a value indicating whether the request should handle redirects, if the response have sufficient information.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.AllowWriteStreamBuffering">
+      <summary>
+            Gets or sets a value indicating whether to buffer the data sent to server.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.MaximumAutomaticRedirections">
+      <summary>
+            Gets or sets maximum redirection attempts to complete the request.
+            </summary>
+      <remarks>Default value is 50.</remarks>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Accept">
+      <summary>
+            Gets or sets HTTP Accept header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Connection">
+      <summary>
+            Gets or sets HTTP Connection header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.ContentType">
+      <summary>
+            Gets or sets HTTP Content-Type header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.ContentLength">
+      <summary>
+            Gets or sets HTTP Content-Length header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.SendChunked">
+      <summary>
+            Gets or sets a value that indicates whether to send request content in 'chunked' mode.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Expect">
+      <summary>
+            Gets or sets HTTP Expect header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.HaveResponse">
+      <summary>
+            Gets a value whether the response was already received for this request.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.IfModifiedSince">
+      <summary>
+            Gets or sets HTTP If-Modified-Since header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.KeepAlive">
+      <summary>
+            Gets or sets HTTP Connection header with proper values associated with keep alive mode.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Method">
+      <summary>
+            Gets or sets HTTP method that this request uses.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Headers">
+      <summary>
+            Get or sets a collection of HTTP headers to send with a request.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Referer">
+      <summary>
+            Gets or sets HTTP Referer header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Address">
+      <summary>
+            Gets target URI final request connects to. When redirected, this is the URI the final response is retrieved.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.RequestUri">
+      <summary>
+            Gets original URI of the request.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Timeout">
+      <summary>
+            Gets or sets a time out value.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.TransferEncoding">
+      <summary>
+            Gets or sets HTTP Transfer-Encoding header. Not supported yet. This property has no effect.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Credentials">
+      <summary>
+            Get or sets network credentials to identify a user.
+            </summary>
+      <remarks>Only object derived from <see cref="T:System.Net.NetworkCredential" /> class is valid value.</remarks>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.ConnectionGroupName">
+      <summary>
+            Gets or sets the name of the connection group for the request.
+            Not supported yet.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.PreAuthenticate">
+      <summary>
+            Indicates whether to pre-authenticate the request.
+            Not supported yet.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.UserAgent">
+      <summary>
+            Gets or sets HTTP User-Agent header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.AutomaticDecompression">
+      <summary>
+            Gets or sets the method(s) that can be used for automatic decompression of the response stream; Both <see cref="F:System.Net.DecompressionMethods.GZip" /> and <see cref="F:System.Net.DecompressionMethods.Deflate" /> by default.
+            </summary>
+      <remarks>
+            This property sets Accept-Encoding header if and only if the header is not set explicitely using <see cref="P:Rebex.Net.HttpRequest.Headers" /> collection before the request is sent.
+            If the response encoding meets some of the methods set, the response stream gets decompressed automatically; otherwise, no decompression is used.
+            </remarks>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.Proxy">
+      <summary>
+            Not supported. Please use HttpRequestCreator.Proxy property instead.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequest.ClientCertificates">
+      <summary>
+            Gets or sets a collection of client certificates for the request.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.HttpRequestCreator">
+      <summary>
+            Implements an interface for creating HTTP requests.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpRequestCreator.SetSocketFactory(Rebex.Net.ISocketFactory)">
+      <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+      <param name="factory">Socket factory.</param>
+    </member>
+    <member name="M:Rebex.Net.HttpRequestCreator.#ctor">
+      <summary>
+            Creates an instance of HTTP request creator.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpRequestCreator.Register">
+      <summary>
+            Registers this creator with WebRequest to handle HTTP and HTTPS requests (replacing System.Net.HttpWebRequest).
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpRequestCreator.Create(System.Uri)">
+      <summary>
+            Create a HTTP request targeting specific URI.
+            </summary>
+      <param name="uri">URI of the request.</param>
+      <returns>Request to target URI.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpRequestCreator.Create(System.String)">
+      <summary>
+            Create a HTTP request targeting specific URI.
+            </summary>
+      <param name="uriString">URI of the request.</param>
+      <returns>Request to target URI.</returns>
+    </member>
+    <member name="E:Rebex.Net.HttpRequestCreator.ValidatingCertificate">
+      <summary>
+            Occurs when a server certificate needs to be validated.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequestCreator.Settings">
+      <summary>
+            Gets TLS/SSL settings.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequestCreator.LogWriter">
+      <summary>
+            Gets or sets the log writer used by this object.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpRequestCreator.Proxy">
+      <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+      <value>The <see cref="P:Rebex.Net.HttpRequestCreator.Proxy" /> to use to access a remote server.</value>
+      <remarks>
+            The <see cref="P:Rebex.Net.Proxy.LogWriter" /> object set on this proxy instance is ignored when creating HTTP requests,
+            the <see cref="P:Rebex.Net.HttpRequestCreator.LogWriter" /> object is used instead.
+            </remarks>
+    </member>
+    <member name="T:Rebex.Net.HttpResponse">
+      <summary>
+            This class represents HTTP and HTTPS responses.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpResponse.GetResponseStream">
+      <summary>
+            Returns a stream that contains data of the response.
+            </summary>
+      <returns>Stream containing response data, like html page, SOAP response and so on.</returns>
+    </member>
+    <member name="M:Rebex.Net.HttpResponse.Close">
+      <summary>
+            Closes the response stream returned by <see cref="M:Rebex.Net.HttpResponse.GetResponseStream" /> method.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.ContentLength">
+      <summary>
+            Gets a value of HTTP Content-Length header of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.ContentType">
+      <summary>
+            Gets a value of HTTP Content-Type header of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.Headers">
+      <summary>
+            Gets a collection of HTTP header of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.Cipher">
+      <summary>
+            Gets information about the TLS/SSL cipher (if TLS/SSL is in use).
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.ProtocolVersion">
+      <summary>
+            Gets HTTP protocol version of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.ResponseUri">
+      <summary>
+            Gets a uri that responsed to the request.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.Server">
+      <summary>
+            Gets a value of HTTP Server header of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.StatusCode">
+      <summary>
+            Gets a status code of the response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.StatusDescription">
+      <summary>
+            Gets a status code description.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.CharacterSet">
+      <summary>
+            Gets a character set that is used in response Content-Type HTTP header.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.ContentEncoding">
+      <summary>
+            Gets a value of HTTP Content-Encoding header of this response.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpResponse.Method">
+      <summary>
+            Gets a HTTP method that a request used when received this response.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.HttpSettings">
+      <summary>
+            Specifies client-side TLS/SSL settings.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.HttpSettings.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.HttpSettings" /> class.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.HttpSettings.HttpSessionCacheEnabled">
+      <summary>
+            Gets or sets a value indicating whether the HTTP session cache is enabled (default is true).
+            </summary>
+      <remarks>HTTP session cache is used for keep-alive connections.</remarks>
+      <value>True when cache is enabled; false when disabled.</value>
+    </member>
+    <member name="P:Rebex.Net.HttpSettings.SslSessionCacheEnabled">
+      <summary>
+            Gets or sets a value indicating whether the TLS/SSL session cache is enabled (default is true).
+            </summary>
+      <value>True when cache is enabled; false when disabled.</value>
+    </member>
+    <member name="T:Rebex.Net.WebClient">
+      <summary>
+            Provides simple methods to upload and download data from HTTP/HTTPS servers.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.WebClient.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.WebClient" /> class.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.WebClient.#ctor(Rebex.Net.HttpRequestCreator)">
+      <summary>
+            Initializes a new instance of the <see cref="T:Rebex.Net.WebClient" /> class with specified HTTP request creator.
+            This enables sharing keep-alive connections between instances of <see cref="T:Rebex.Net.WebClient" /> and <see cref="T:System.Net.WebRequest" />.
+            However please note that <see cref="P:Rebex.Net.WebClient.Settings" />, <see cref="P:Rebex.Net.WebClient.LogWriter" /> and <see cref="E:Rebex.Net.WebClient.ValidatingCertificate" /> properties
+            are shared between all instances as well. This means that changing such property affects behavior of all instances as well.
+            </summary>
+    </member>
+    <member name="M:Rebex.Net.WebClient.SetSocketFactory(Rebex.Net.ISocketFactory)">
+      <summary>
+            Sets the socket factory to be used to create communication sockets.
+            </summary>
+      <param name="factory">Socket factory.</param>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenRead(System.String)">
+      <summary>
+            Opens a stream that contains data retrieved from provided URI. 
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <returns>Opened stream with data retrieved from provided URI.</returns>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenRead(System.Uri)">
+      <summary>
+            Opens a stream that contains data retrieved from provided URI. 
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <returns>Opened stream with data retrieved from provided URI.</returns>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadData(System.String)">
+      <summary>
+            Downloads data from provided URI.
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <returns>Byte array that contains data retrieved from provided URI.</returns>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadData(System.Uri)">
+      <summary>
+            Downloads data from provided URI.
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <returns>Byte array that contains data retrieved from provided URI.</returns>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadString(System.String)">
+      <summary>
+            Downloads a resource from provided URI as a string.
+            </summary>
+      <param name="uri">Uri to retrieve resource from.</param>
+      <returns>String containing a resource.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadString(System.Uri)">
+      <summary>
+            Downloads a resource from provided URI as a string.
+            </summary>
+      <param name="uri">Uri to retrieve resource from.</param>
+      <returns>String containing a resource.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadFile(System.String,System.String)">
+      <summary>
+            Downloads data from provided URI and save them to the file.
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <param name="filePath">Path to a file where to store retrieved data.</param>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.DownloadFile(System.Uri,System.String)">
+      <summary>
+            Downloads data from provided URI and save them to the file.
+            </summary>
+      <param name="uri">URI to retrieve data from.</param>
+      <param name="filePath">Path to a file where to store retrieved data.</param>
+      <remarks>HTTP method GET is used to retrieve the data.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenWrite(System.String)">
+      <summary>
+            Opens a stream that is used to send data to provided URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <returns>Opened stream.</returns>
+      <remarks>HTTP method POST is used.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenWrite(System.Uri)">
+      <summary>
+            Opens a stream that is used to send data to  provided URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <returns>Opened stream.</returns>
+      <remarks>HTTP method POST is used.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenWrite(System.String,System.String)">
+      <summary>
+            Opens a stream that is used to send data to provided URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data from the stream.</param>
+      <returns>Opened stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.OpenWrite(System.Uri,System.String)">
+      <summary>
+            Opens a stream that is used to send data to provided URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data from the stream.</param>
+      <returns>Opened stream.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadData(System.String,System.Byte[])">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="data">Data to send to provided URI.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadData(System.Uri,System.Byte[])">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="data">Data to send to provided URI.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used.</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadData(System.String,System.String,System.Byte[])">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="data">Data to send to provided URI.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadData(System.Uri,System.String,System.Byte[])">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="data">Data to send to provided URI.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadString(System.String,System.String)">
+      <summary>
+            Uploads a string to provided URI as a new resource.
+            </summary>
+      <param name="uri">Uri to send resource to.</param>
+      <param name="data">String containing new resource.</param>
+      <returns>Response of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadString(System.Uri,System.String)">
+      <summary>
+            Uploads a string to provided URI as a new resource.
+            </summary>
+      <param name="uri">Uri to send resource to.</param>
+      <param name="data">String containing new resource.</param>
+      <returns>Response of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadString(System.String,System.String,System.String)">
+      <summary>
+            Uploads a string to provided URI as a new resource.
+            </summary>
+      <param name="uri">Uri to send resource to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="data">String containing new resource.</param>
+      <returns>Response of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadString(System.Uri,System.String,System.String)">
+      <summary>
+            Uploads a string to provided URI as a new resource.
+            </summary>
+      <param name="uri">Uri to send resource to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="data">String containing new resource.</param>
+      <returns>Response of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadFile(System.String,System.String)">
+      <summary>
+            Uploads a file to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="filePath">Path to a source file.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadFile(System.Uri,System.String)">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="filePath">Path to a source file.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadFile(System.String,System.String,System.String)">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="filePath">Path to a source file.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadFile(System.Uri,System.String,System.String)">
+      <summary>
+            Uploads a data to provided URI and returns a response data of the upload operation.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="filePath">Path to a source file.</param>
+      <returns>Response data of the upload operation.</returns>
+      <remarks>HTTP method POST is used when method is set to null (Nothing in VB).</remarks>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadValues(System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Uploads a name/value collection to a specified URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="values">Name/value collection to send.</param>
+      <returns>Response data of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadValues(System.Uri,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Uploads a name/value collection to a specified URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="values">Name/value collection to send.</param>
+      <returns>Response data of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadValues(System.String,System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Uploads a name/value collection to a specified URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="values">Name/value collection to send.</param>
+      <returns>Response data of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.UploadValues(System.Uri,System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Uploads a name/value collection to a specified URI.
+            </summary>
+      <param name="uri">Uri to send data to.</param>
+      <param name="method">HTTP method to use when sending the data.</param>
+      <param name="values">Name/value collection to send.</param>
+      <returns>Response data of the upload operation.</returns>
+    </member>
+    <member name="M:Rebex.Net.WebClient.Dispose">
+      <summary>
+            Disposes the WebClient object.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.WebClient.LogWriter">
+      <summary>
+            Gets or sets the <see cref="T:Rebex.ILogWriter">LogWriter</see> used by this object.
+            </summary>
+      <value>Log writer.</value>
+    </member>
+    <member name="P:Rebex.Net.WebClient.Proxy">
+      <summary>
+            Gets or sets the network proxy to use to access a remote server.
+            </summary>
+      <value>The <see cref="P:Rebex.Net.WebClient.Proxy" /> to use to access a remote server.</value>
+    </member>
+    <member name="P:Rebex.Net.WebClient.BaseAddress">
+      <summary>
+            Gets or sets the base address to simplify multiple requests to one server.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.WebClient.Headers">
+      <summary>
+            Get or sets a collection of HTTP headers to send with a request.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.WebClient.Credentials">
+      <summary>
+            Get or sets network credentials to identify a user.
+            </summary>
+      <remarks>Only object derived from <see cref="T:System.Net.NetworkCredential" /> class is valid value.</remarks>
+    </member>
+    <member name="P:Rebex.Net.WebClient.Settings">
+      <summary>
+            Gets TLS/SSL settings.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.WebClient.Encoding">
+      <summary>
+            Gets or sets the encoding to be used for string upload and download.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.WebClient.ValidatingCertificate">
+      <summary>
+            Occurs when a server certificate needs to be validated.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.WebClient.UploadProgressChanged">
+      <summary>
+            Occurs when upload progress has changed.
+            </summary>
+    </member>
+    <member name="E:Rebex.Net.WebClient.DownloadProgressChanged">
+      <summary>
+            Occurs when download progress has changed.
+            </summary>
+    </member>
+    <member name="T:Rebex.Net.WebClientProgressChangedEventArgs">
+      <summary>
+            Provides data for the <see cref="E:Rebex.Net.WebClient.DownloadProgressChanged" /> event.
+            </summary>
+    </member>
+    <member name="P:Rebex.Net.WebClientProgressChangedEventArgs.BytesTransferred">
+      <summary>
+            Gets the total number of bytes transferred during the current transfer.
+            </summary>
+      <value>The number of bytes transferred.</value>
+    </member>
+    <member name="P:Rebex.Net.WebClientProgressChangedEventArgs.BytesTotal">
+      <summary>
+            Gets the total number of bytes to be transferred (or <code>null</code> if not available).
+            </summary>
+      <value>Total number of bytes to be transferred.</value>
+      <remarks>Value of <code>null</code> indicates that this information is not available.</remarks>
+    </member>
+  </members>
+</doc>

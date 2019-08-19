@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.DownloadManager</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.DownloadManager.CrossDownloadManager">
+            <summary>
+            Cross platform DownloadManager implemenations
+            </summary>
+        </member>
+        <member name="P:Plugin.DownloadManager.CrossDownloadManager.Current">
+            <summary>
+            The platform-implementation
+            </summary>
+        </member>
+        <member name="M:Plugin.DownloadManager.DownloadFileImplementation.#ctor(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            Initializing a new object to add it to the download-queue
+        </member>
+        <member name="M:Plugin.DownloadManager.DownloadFileImplementation.#ctor(Android.Database.ICursor)">
+            Reinitializing an object after the app restarted
+        </member>
+        <member name="T:Plugin.DownloadManager.DownloadManagerImplementation">
+            <summary>
+            The android implementation of the download manager.
+            </summary>
+        </member>
+        <member name="M:Plugin.DownloadManager.DownloadManagerImplementation.UpdateFileProperties(Android.Database.ICursor,Plugin.DownloadManager.DownloadFileImplementation)">
+            Update the properties for a file by it's cursor.
+            This method should be called in an interval and on reinitialization.
+        </member>
+    </members>
+</doc>
