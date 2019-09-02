@@ -48,7 +48,7 @@
 				android:inputType="textPersonName"
 				tools:layout_editor_absoluteX="8dp"
 				tools:layout_editor_absoluteY="60dp" />
-				<TextView
+			<TextView
 				android:text="FTP Login (if not Default)"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:layout_width="match_parent"
@@ -65,12 +65,12 @@
 			<EditText
 				android:id="@+id/FTPUsername"
 				android:layout_width="match_parent"
-				android:layout_height="37.0dp"
+				android:layout_height="48.5dp"
 				android:ems="10"
 				android:inputType="textPersonName"
 				tools:layout_editor_absoluteX="8dp"
 				tools:layout_editor_absoluteY="60dp" />
-						<TextView
+			<TextView
 				android:id="@+id/txtLabel77"
 				android:layout_width="match_parent"
 				android:layout_height="33dp"
@@ -120,6 +120,27 @@
 				android:textSize="14sp"
 				tools:layout_editor_absoluteX="16dp"
 				tools:layout_editor_absoluteY="43dp" />
+			<TextView
+				android:text="or Manually Input the Path"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/textView15" />
+			<EditText
+				android:id="@+id/manpath"
+				android:layout_width="match_parent"
+				android:layout_height="50.5dp"
+				android:ems="10"
+				android:inputType="textPersonName"
+				tools:layout_editor_absoluteX="8dp"
+				tools:layout_editor_absoluteY="60dp"
+				android:layout_marginTop="0.5dp"
+				android:layout_marginBottom="15.5dp" />
+			<Button
+				android:text="Set Manual Path"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/set" />
 			<ImageView
 				android:id="@+id/PKGIcon"
 				android:layout_width="match_parent"
@@ -142,16 +163,16 @@
 				android:textSize="18sp"
 				tools:layout_editor_absoluteX="16dp"
 				tools:layout_editor_absoluteY="337dp" />
-      <Button
-        android:id="@+id/SendPayloadBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:onClick="Send"
-        android:text="Install"
-        android:textColor="#FFF"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="371dp" />
+			<Button
+				android:id="@+id/SendPayloadBtn"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/colorPrimaryDark"
+				android:onClick="Send"
+				android:text="Install"
+				android:textColor="#FFF"
+				tools:layout_editor_absoluteX="8dp"
+				tools:layout_editor_absoluteY="371dp" />
 			<TextView
 				android:id="@+id/InjectingLbl"
 				android:layout_width="match_parent"
