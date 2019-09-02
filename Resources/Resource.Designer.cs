@@ -2177,14 +2177,14 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080084
 			public const int IPAddressTextBox = 2131230852;
 			
-			// aapt resource value: 0x7f080092
-			public const int InjectingLbl = 2131230866;
+			// aapt resource value: 0x7f080095
+			public const int InjectingLbl = 2131230869;
 			
 			// aapt resource value: 0x7f080032
 			public const int META = 2131230770;
 			
-			// aapt resource value: 0x7f08008e
-			public const int PKGIcon = 2131230862;
+			// aapt resource value: 0x7f080091
+			public const int PKGIcon = 2131230865;
 			
 			// aapt resource value: 0x7f080033
 			public const int SHIFT = 2131230771;
@@ -2192,17 +2192,17 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080034
 			public const int SYM = 2131230772;
 			
-			// aapt resource value: 0x7f0800a8
-			public const int SelectPackageUI = 2131230888;
+			// aapt resource value: 0x7f0800ab
+			public const int SelectPackageUI = 2131230891;
 			
-			// aapt resource value: 0x7f0800a9
-			public const int SelectPluginUI = 2131230889;
+			// aapt resource value: 0x7f0800ac
+			public const int SelectPluginUI = 2131230892;
 			
-			// aapt resource value: 0x7f080091
-			public const int SendPayloadBtn = 2131230865;
+			// aapt resource value: 0x7f080094
+			public const int SendPayloadBtn = 2131230868;
 			
-			// aapt resource value: 0x7f080098
-			public const int action0 = 2131230872;
+			// aapt resource value: 0x7f08009b
+			public const int action0 = 2131230875;
 			
 			// aapt resource value: 0x7f080072
 			public const int action_bar = 2131230834;
@@ -2225,17 +2225,17 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080050
 			public const int action_bar_title = 2131230800;
 			
-			// aapt resource value: 0x7f080095
-			public const int action_container = 2131230869;
+			// aapt resource value: 0x7f080098
+			public const int action_container = 2131230872;
 			
 			// aapt resource value: 0x7f080073
 			public const int action_context_bar = 2131230835;
 			
-			// aapt resource value: 0x7f08009c
-			public const int action_divider = 2131230876;
+			// aapt resource value: 0x7f08009f
+			public const int action_divider = 2131230879;
 			
-			// aapt resource value: 0x7f080096
-			public const int action_image = 2131230870;
+			// aapt resource value: 0x7f080099
+			public const int action_image = 2131230873;
 			
 			// aapt resource value: 0x7f080003
 			public const int action_menu_divider = 2131230723;
@@ -2252,11 +2252,11 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080052
 			public const int action_mode_close_button = 2131230802;
 			
-			// aapt resource value: 0x7f080097
-			public const int action_text = 2131230871;
+			// aapt resource value: 0x7f08009a
+			public const int action_text = 2131230874;
 			
-			// aapt resource value: 0x7f0800a5
-			public const int actions = 2131230885;
+			// aapt resource value: 0x7f0800a8
+			public const int actions = 2131230888;
 			
 			// aapt resource value: 0x7f080053
 			public const int activity_chooser_view_content = 2131230803;
@@ -2288,8 +2288,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080059
 			public const int buttonPanel = 2131230809;
 			
-			// aapt resource value: 0x7f080099
-			public const int cancel_action = 2131230873;
+			// aapt resource value: 0x7f08009c
+			public const int cancel_action = 2131230876;
 			
 			// aapt resource value: 0x7f080048
 			public const int chains = 2131230792;
@@ -2297,8 +2297,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080069
 			public const int checkbox = 2131230825;
 			
-			// aapt resource value: 0x7f0800a1
-			public const int chronometer = 2131230881;
+			// aapt resource value: 0x7f0800a4
+			public const int chronometer = 2131230884;
 			
 			// aapt resource value: 0x7f080036
 			public const int collapseActionView = 2131230774;
@@ -2333,8 +2333,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f08002d
 			public const int end = 2131230765;
 			
-			// aapt resource value: 0x7f0800a7
-			public const int end_padder = 2131230887;
+			// aapt resource value: 0x7f0800aa
+			public const int end_padder = 2131230890;
 			
 			// aapt resource value: 0x7f080054
 			public const int expand_activities_button = 2131230804;
@@ -2360,8 +2360,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080058
 			public const int icon = 2131230808;
 			
-			// aapt resource value: 0x7f0800a6
-			public const int icon_group = 2131230886;
+			// aapt resource value: 0x7f0800a9
+			public const int icon_group = 2131230889;
 			
 			// aapt resource value: 0x7f080037
 			public const int ifRoom = 2131230775;
@@ -2369,8 +2369,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080055
 			public const int image = 2131230805;
 			
-			// aapt resource value: 0x7f0800a2
-			public const int info = 2131230882;
+			// aapt resource value: 0x7f0800a5
+			public const int info = 2131230885;
 			
 			// aapt resource value: 0x7f080040
 			public const int invisible = 2131230784;
@@ -2396,11 +2396,14 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080057
 			public const int list_item = 2131230807;
 			
-			// aapt resource value: 0x7f08009b
-			public const int media_actions = 2131230875;
+			// aapt resource value: 0x7f08008f
+			public const int manpath = 2131230863;
 			
-			// aapt resource value: 0x7f0800aa
-			public const int message = 2131230890;
+			// aapt resource value: 0x7f08009e
+			public const int media_actions = 2131230878;
+			
+			// aapt resource value: 0x7f0800ad
+			public const int message = 2131230893;
 			
 			// aapt resource value: 0x7f08002e
 			public const int middle = 2131230766;
@@ -2417,14 +2420,14 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f08001b
 			public const int normal = 2131230747;
 			
-			// aapt resource value: 0x7f0800a4
-			public const int notification_background = 2131230884;
+			// aapt resource value: 0x7f0800a7
+			public const int notification_background = 2131230887;
 			
-			// aapt resource value: 0x7f08009e
-			public const int notification_main_column = 2131230878;
+			// aapt resource value: 0x7f0800a1
+			public const int notification_main_column = 2131230881;
 			
-			// aapt resource value: 0x7f08009d
-			public const int notification_main_column_container = 2131230877;
+			// aapt resource value: 0x7f0800a0
+			public const int notification_main_column_container = 2131230880;
 			
 			// aapt resource value: 0x7f080045
 			public const int packed = 2131230789;
@@ -2441,8 +2444,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080042
 			public const int percent = 2131230786;
 			
-			// aapt resource value: 0x7f080094
-			public const int progressBar1 = 2131230868;
+			// aapt resource value: 0x7f080097
+			public const int progressBar1 = 2131230871;
 			
 			// aapt resource value: 0x7f080006
 			public const int progress_circular = 2131230726;
@@ -2456,11 +2459,11 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f08003d
 			public const int right = 2131230781;
 			
-			// aapt resource value: 0x7f0800a3
-			public const int right_icon = 2131230883;
+			// aapt resource value: 0x7f0800a6
+			public const int right_icon = 2131230886;
 			
-			// aapt resource value: 0x7f08009f
-			public const int right_side = 2131230879;
+			// aapt resource value: 0x7f0800a2
+			public const int right_side = 2131230882;
 			
 			// aapt resource value: 0x7f08000c
 			public const int save_image_matrix = 2131230732;
@@ -2519,6 +2522,9 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080080
 			public const int select_dialog_listview = 2131230848;
 			
+			// aapt resource value: 0x7f080090
+			public const int set = 2131230864;
+			
 			// aapt resource value: 0x7f08006a
 			public const int shortcut = 2131230826;
 			
@@ -2558,8 +2564,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f08003e
 			public const int start = 2131230782;
 			
-			// aapt resource value: 0x7f08009a
-			public const int status_bar_latest_event_content = 2131230874;
+			// aapt resource value: 0x7f08009d
+			public const int status_bar_latest_event_content = 2131230877;
 			
 			// aapt resource value: 0x7f08006c
 			public const int submenuarrow = 2131230828;
@@ -2591,20 +2597,23 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f08008d
 			public const int textView12 = 2131230861;
 			
-			// aapt resource value: 0x7f080093
-			public const int textView13 = 2131230867;
+			// aapt resource value: 0x7f080096
+			public const int textView13 = 2131230870;
 			
 			// aapt resource value: 0x7f080085
 			public const int textView14 = 2131230853;
 			
+			// aapt resource value: 0x7f08008e
+			public const int textView15 = 2131230862;
+			
 			// aapt resource value: 0x7f08008b
 			public const int textView6 = 2131230859;
 			
-			// aapt resource value: 0x7f080090
-			public const int textView7 = 2131230864;
+			// aapt resource value: 0x7f080093
+			public const int textView7 = 2131230867;
 			
-			// aapt resource value: 0x7f0800a0
-			public const int time = 2131230880;
+			// aapt resource value: 0x7f0800a3
+			public const int time = 2131230883;
 			
 			// aapt resource value: 0x7f080019
 			public const int title = 2131230745;
@@ -2648,8 +2657,8 @@ namespace Store_Remote_Tool_Android
 			// aapt resource value: 0x7f080088
 			public const int txtLabel77 = 2131230856;
 			
-			// aapt resource value: 0x7f08008f
-			public const int txtPKGInfo = 2131230863;
+			// aapt resource value: 0x7f080092
+			public const int txtPKGInfo = 2131230866;
 			
 			// aapt resource value: 0x7f08002a
 			public const int uniform = 2131230762;

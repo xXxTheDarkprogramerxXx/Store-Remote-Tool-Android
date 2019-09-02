@@ -25,7 +25,9 @@ using SupportActionBar = Android.Support.V7.App.ActionBar;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Net;
 using System.Xml;
+using System.Xml.Schema;
 using Android.Support.V4.App;
 using Android;
 using Android.Content.PM;
@@ -36,6 +38,12 @@ using Plugin.FilePicker;
 using Bitmap = Android.Graphics.Bitmap;
 using Android.Database;
 using Android.Provider;
+using FluentFTP;
+using Android.Net;
+using Android.Support.CustomTabs;
+using Uri = Android.Net.Uri;
+using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Store_Remote_Tool_Android
 {
@@ -76,6 +84,7 @@ namespace Store_Remote_Tool_Android
 
 
         Button LoadPkg;
+        Button set;
         Button SendPayloadBtn;
         TextView InjectingLbl;
         TextView textView13;
@@ -94,165 +103,240 @@ namespace Store_Remote_Tool_Android
         TextView txtLabel66;
         TextView txtLabel77;
         EditText IPAddressTextBox;
+        EditText manpath;
         Button SelectPackageUI;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        private string finished;
+    Android.App.ProgressDialog progress;
+
+    protected override void OnCreate(Bundle savedInstanceState)
+    {
+        _context = this;
+        //first check if there are permsions to access files ext
+        bool checks = true;
+
+
+        #region << Check For Permisions >>
+
+        // Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) || ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessWifiState) || Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this, Manifest.Permission.Internet)
+
+        if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
+                Manifest.Permission.Internet) != (int) Permission.Granted)
         {
-            _context = this;
-            //first check if there are permsions to access files ext
-            bool checks = true;
 
-            #region << Check For Permisions >>
-
-            // Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) || ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessWifiState) || Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this, Manifest.Permission.Internet)
-
-            if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
-                    Manifest.Permission.Internet) != (int)Permission.Granted)
+            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.Internet))
             {
 
-                if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.Internet))
-                {
 
 
-
-                    ActivityCompat.RequestPermissions(this,
-                        new String[] { Manifest.Permission.Internet, Manifest.Permission.Internet }, 1);
-                    //  })).Show();
-                }
-
-                while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.Internet) !=
-                       (int)Permission.Granted)
-                {
-                    Thread.Sleep(100);
-                }
+                ActivityCompat.RequestPermissions(this,
+                    new String[] {Manifest.Permission.Internet, Manifest.Permission.Internet}, 1);
+                //  })).Show();
             }
 
+            while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.Internet) !=
+                   (int) Permission.Granted)
+            {
+                Thread.Sleep(100);
+            }
+        }
 
-            if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
-                    Manifest.Permission.AccessWifiState) != (int)Permission.Granted)
+
+        if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
+                Manifest.Permission.AccessWifiState) != (int) Permission.Granted)
+        {
+
+            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessWifiState))
             {
 
-                if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessWifiState))
-                {
 
 
-
-                    ActivityCompat.RequestPermissions(this,
-                        new String[] { Manifest.Permission.AccessWifiState, Manifest.Permission.AccessWifiState }, 1);
-                    //  })).Show();
-                }
-
-                while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessWifiState) !=
-                       (int)Permission.Granted)
-                {
-                    Thread.Sleep(100);
-                }
+                ActivityCompat.RequestPermissions(this,
+                    new String[] {Manifest.Permission.AccessWifiState, Manifest.Permission.AccessWifiState}, 1);
+                //  })).Show();
             }
 
-            if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
-                    Manifest.Permission.AccessNetworkState) != (int)Permission.Granted)
+            while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessWifiState) !=
+                   (int) Permission.Granted)
+            {
+                Thread.Sleep(100);
+            }
+        }
+
+        if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
+                Manifest.Permission.AccessNetworkState) != (int) Permission.Granted)
+        {
+
+            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessNetworkState))
             {
 
-                if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessNetworkState))
-                {
 
 
-
-                    ActivityCompat.RequestPermissions(this,
-                        new String[] { Manifest.Permission.AccessNetworkState, Manifest.Permission.AccessNetworkState },
-                        1);
-                    //  })).Show();
-                }
-
-                while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessNetworkState) !=
-                       (int)Permission.Granted)
-                {
-                    Thread.Sleep(100);
-                }
+                ActivityCompat.RequestPermissions(this,
+                    new String[] {Manifest.Permission.AccessNetworkState, Manifest.Permission.AccessNetworkState},
+                    1);
+                //  })).Show();
             }
 
-            if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
-                    Manifest.Permission.ReadExternalStorage) !=
-                (int)Permission.Granted)
+            while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.AccessNetworkState) !=
+                   (int) Permission.Granted)
             {
-                // Camera permission has not been granted
-                RequestReadWirtePermission();
-                while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) !=
-                       (int)Permission.Granted)
-                {
-                    Thread.Sleep(100);
-                }
+                Thread.Sleep(100);
             }
+        }
 
-            #endregion << Check For Permisions  >>
+        if (Android.Support.V4.Content.ContextCompat.CheckSelfPermission(this,
+                Manifest.Permission.ReadExternalStorage) !=
+            (int) Permission.Granted)
+        {
+            // Camera permission has not been granted
+            RequestReadWirtePermission();
+            while (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage) !=
+                   (int) Permission.Granted)
+            {
+                Thread.Sleep(100);
+            }
+        }
 
-            base.OnCreate(savedInstanceState);
+        #endregion << Check For Permisions  >>
+
+        base.OnCreate(savedInstanceState);
 
 
 
 
 
 
-            //request the app to be full screen 
+        //request the app to be full screen 
 
-            RequestWindowFeature(WindowFeatures.NoTitle);
-            this.Window.ClearFlags(Android.Views.WindowManagerFlags.Fullscreen); //to hide
+        RequestWindowFeature(WindowFeatures.NoTitle);
+        this.Window.ClearFlags(Android.Views.WindowManagerFlags.Fullscreen); //to hide
 
-            Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
- 
-            SetContentView(Resource.Layout.installer);
+        Rebex.Licensing.Key = "==AnKxIZnJ2NXyRRk/MrXLh5vsLbImP/JhMGERReY23qIk==";
 
-            refreshui();
-            retrieveset();
+        SetContentView(Resource.Layout.installer);
 
-            LoadPkg.Click += async delegate
+        refreshui();
+        retrieveset();
+
+
+
+
+        LoadPkg.Click += async delegate
             {
                 try
                 {
- 
-         
 
 
-                    String[] types = new String[] { ".pkg" };
+
+                               String[] types = new String[] { ".pkg" };
                     FileData fileData = await CrossFilePicker.Current.PickFile(types);
                     if (fileData == null)
                         return; // user canceled file picking
                                 //com.android.externalstorage.documents
 
-                    if (fileData.FilePath.Contains("com.android.providers.downloads.documents"))
+
+
+                    System.Console.WriteLine("File name " + fileData.FileName);
+
+                     new Thread(new ThreadStart(delegate
                     {
-                        PKGLocation = "/storage/emulated/0/Download/" + fileData.FileName;
-                    }
-                    else
-                    {
-                        PKGLocation = fileData.FilePath;
-                    }
+                        RunOnUiThread(() =>
+                        {
+                            progress = new ProgressDialog(this);
+                            progress.Indeterminate = true;
+                            progress.SetProgressStyle(Android.App.ProgressDialogStyle.Spinner);
+                            progress.SetMessage("Loading... Getting Path...");
+                            progress.SetCancelable(false);
+                            progress.Show();
+                        });
+
+                        FindFileByName(fileData.FileName);
+
+                        System.Console.WriteLine("Found File, Path= " + PKGLocation);
+
+                        RunOnUiThread(() =>
+                        {
+                            progress.Hide();
+                            try
+                            {
+                                var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
+                                ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                                pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Icon));
+                                TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                                lblPackageInfo.Text =
+                                    pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                    pkgfile.Param.TitleID;
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Invaild Package! or Path\n\n Location: " + PKGLocation);
+                                // MessageBox.Show("Exception choosing file: " + ex.ToString() + "    " + PKGLocation);
+                            }
+
+
+                        });
+
+                      
+
+                    })).Start();
+
+
+                    
+                
 
 
 
-                    /* if (fileData.FilePath.Contains("com.android.externalstorage.documents"))
-                     {
-                         PKGLocation = "/storage/emulated/" + fileData.FileName;
-                     }*/
 
 
-                    var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
-                    ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
-                    pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Icon));
-                    TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
-                    lblPackageInfo.Text = pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
-                                          pkgfile.Param.TitleID; //display whatever info youd like here
-
-                    // System.Console.WriteLine("File name chosen: " + fileName);
-                    //System.Console.WriteLine("File data: " + contents);
 
                 }
+           
                 catch (Exception ex)
                 {
                     MessageBox.Show("Invaild Package! or Path\n\n Location: " + PKGLocation);
                     // MessageBox.Show("Exception choosing file: " + ex.ToString() + "    " + PKGLocation);
                 }
             };
+
+            set.Click += async delegate
+            {
+                try
+                {
+
+
+
+
+                        PKGLocation = manpath.Text;
+
+                       
+                            var pkgfile = PS4_Tools.PKG.SceneRelated.Read_PKG(PKGLocation);
+                            ImageView pbPkg = FindViewById<ImageView>(Resource.Id.PKGIcon);
+                            pbPkg.SetImageBitmap(BytesToBitmap(pkgfile.Icon));
+                            TextView lblPackageInfo = FindViewById<TextView>(Resource.Id.txtPKGInfo);
+                            lblPackageInfo.Text =
+                                pkgfile.PS4_Title + "\n" + pkgfile.PKG_Type.ToString() + "\n" +
+                                pkgfile.Param.TitleID;
+
+
+
+
+
+
+
+
+
+
+
+                        }
+
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Invaild Package! or Path\n\n Location: " + PKGLocation);
+                            // MessageBox.Show("Exception choosing file: " + ex.ToString() + "    " + PKGLocation);
+                        }
+                };
+
 
 
 
@@ -371,6 +455,161 @@ namespace Store_Remote_Tool_Android
 
         }
 
+        int FindFileByName(string sss)
+        {
+           
+            string folder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+
+           // RunOnUiThread(() => MessageBox.Show("[Debug LOG] ExternalStorageDirectory is " + folder));
+
+            try
+            {
+
+                String[] files = Directory.GetFiles(folder, sss, SearchOption.AllDirectories);
+                foreach (String filez in files)
+                {
+                    PKGLocation = filez;
+
+                    if (filez == null)
+                    {
+                        string card = SDPath();
+
+                        String[] morefiles = Directory.GetFiles(card, sss, SearchOption.AllDirectories);
+                        foreach (String cardfile in morefiles)
+                        {
+
+                            PKGLocation = card;
+                           // RunOnUiThread(() => MessageBox.Show("[Debug LOG] SDCard is " + card));
+                        }
+                    }
+                }
+
+
+                System.Console.WriteLine("File " + PKGLocation);
+               
+
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e.ToString());
+            }
+
+          
+
+            return 0;
+        }
+
+        private String SDPath()
+        {
+            String sdcardpath = "";
+
+            //Datas
+            if (new Java.IO.File("/data/sdext4/").Exists() && new Java.IO.File("/data/sdext4/").CanRead())
+            {
+                sdcardpath = "/data/sdext4/";
+            }
+            if (new Java.IO.File("/data/sdext3/").Exists() && new Java.IO.File("/data/sdext3/").CanRead())
+            {
+                sdcardpath = "/data/sdext3/";
+            }
+            if (new Java.IO.File("/data/sdext2/").Exists() && new Java.IO.File("/data/sdext2/").CanRead())
+            {
+                sdcardpath = "/data/sdext2/";
+            }
+            if (new Java.IO.File("/data/sdext1/").Exists() && new Java.IO.File("/data/sdext1/").CanRead())
+            {
+                sdcardpath = "/data/sdext1/";
+            }
+            if (new Java.IO.File("/data/sdext/").Exists() && new Java.IO.File("/data/sdext/").CanRead())
+            {
+                sdcardpath = "/data/sdext/";
+            }
+
+            //MNTS
+
+            if (new Java.IO.File("mnt/sdcard/external_sd/").Exists() && new Java.IO.File("mnt/sdcard/external_sd/").CanRead())
+            {
+                sdcardpath = "mnt/sdcard/external_sd/";
+            }
+            if (new Java.IO.File("mnt/extsdcard/").Exists() && new Java.IO.File("mnt/extsdcard/").CanRead())
+            {
+                sdcardpath = "mnt/extsdcard/";
+            }
+            if (new Java.IO.File("mnt/external_sd/").Exists() && new Java.IO.File("mnt/external_sd/").CanRead())
+            {
+                sdcardpath = "mnt/external_sd/";
+            }
+            if (new Java.IO.File("mnt/emmc/").Exists() && new Java.IO.File("mnt/emmc/").CanRead())
+            {
+                sdcardpath = "mnt/emmc/";
+            }
+            if (new Java.IO.File("mnt/sdcard0/").Exists() && new Java.IO.File("mnt/sdcard0/").CanRead())
+            {
+                sdcardpath = "mnt/sdcard0/";
+            }
+            if (new Java.IO.File("mnt/sdcard1/").Exists() && new Java.IO.File("mnt/sdcard1/").CanRead())
+            {
+                sdcardpath = "mnt/sdcard1/";
+            }
+            if (new Java.IO.File("mnt/sdcard/").Exists() && new Java.IO.File("mnt/sdcard/").CanRead())
+            {
+                sdcardpath = "mnt/sdcard/";
+            }
+
+            //Storages
+            if (new Java.IO.File("/storage/removable/sdcard1/").Exists() && new Java.IO.File("/storage/removable/sdcard1/").CanRead())
+            {
+                sdcardpath = "/storage/removable/sdcard1/";
+            }
+            if (new Java.IO.File("/storage/external_SD/").Exists() && new Java.IO.File("/storage/external_SD/").CanRead())
+            {
+                sdcardpath = "/storage/external_SD/";
+            }
+            if (new Java.IO.File("/storage/ext_sd/").Exists() && new Java.IO.File("/storage/ext_sd/").CanRead())
+            {
+                sdcardpath = "/storage/ext_sd/";
+            }
+            if (new Java.IO.File("/storage/sdcard1/").Exists() && new Java.IO.File("/storage/sdcard1/").CanRead())
+            {
+                sdcardpath = "/storage/sdcard1/";
+            }
+            if (new Java.IO.File("/storage/sdcard0/").Exists() && new Java.IO.File("/storage/sdcard0/").CanRead())
+            {
+                sdcardpath = "/storage/sdcard0/";
+            }
+            if (new Java.IO.File("/storage/sdcard/").Exists() && new Java.IO.File("/storage/sdcard/").CanRead())
+            {
+                sdcardpath = "/storage/sdcard/";
+            }
+            if (new Java.IO.File("/storage/extSdCard/").Exists() && new Java.IO.File("/storage/extSdCard/").CanRead())
+            {
+                sdcardpath = "/storage/extSdCard/";
+            }
+
+
+            //("SDFinder", "Path: " + sdcardpath);
+            return sdcardpath;
+        }
+
+        private string GetRealPathFromURI(Android.Net.Uri contentURI)
+        {
+            ICursor cursor = ContentResolver.Query(contentURI, null, null, null, null);
+            cursor.MoveToFirst();
+            string documentId = cursor.GetString(0);
+            documentId = documentId.Split(':')[1];
+            cursor.Close();
+
+            cursor = ContentResolver.Query(
+                Android.Provider.MediaStore.Images.Media.ExternalContentUri,
+                null, MediaStore.Images.Media.InterfaceConsts.Id + " = ? ", new[] { documentId }, null);
+            cursor.MoveToFirst();
+            string path = cursor.GetString(cursor.GetColumnIndex(MediaStore.Images.Media.InterfaceConsts.Data));
+            cursor.Close();
+
+            return path;
+        }
+
+
         // Function called from OnCreate
         protected void retrieveset()
         {
@@ -389,6 +628,74 @@ namespace Store_Remote_Tool_Android
 
         }
 
+        void wtfisthepath(FileData fileData)
+        {
+
+
+            // var exstor = global::Android.OS.Environment.ExternalStorageDirectory;
+            //System.Console.WriteLine(exstor.AbsolutePath);
+            string folder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+            var extstor = GetBaseFolderPath(true);
+            Java.IO.File mmm = new Java.IO.File(fileData.FilePath);
+            System.Console.WriteLine("folder " + folder);
+
+            if (fileData.FilePath.Contains("com.android.externalstorage.documents"))
+            {
+                PKGLocation = "/storage/emulated/0/Documents/" + fileData.FileName;
+            }
+            else if (fileData.FilePath.Contains("com.android.providers.downloads.documents"))
+            {
+                PKGLocation = "/storage/emulated/0/Download/" + fileData.FileName;
+                System.Console.WriteLine("f " + fileData.FileName);
+
+               
+            }
+            else
+            {
+                PKGLocation = fileData.FilePath;
+            }
+
+            if (Android.OS.Environment.InvokeIsExternalStorageRemovable(mmm))
+            {
+                System.Console.WriteLine("File is on SD Card");
+            }
+            else if (!Android.OS.Environment.InvokeIsExternalStorageRemovable(mmm))
+            {
+                System.Console.WriteLine("File is NOT on SD Card");
+            }
+        }
+
+
+
+
+
+        public static string GetBaseFolderPath(bool getSDPath = false)
+        {
+            string baseFolderPath = "";
+
+            try
+            {
+                Context context = Application.Context;
+                Java.IO.File[] dirs = context.GetExternalFilesDirs(null);
+
+                foreach (Java.IO.File folder in dirs)
+                {
+                    bool IsRemovable = Android.OS.Environment.InvokeIsExternalStorageRemovable(folder);
+                    bool IsEmulated = Android.OS.Environment.InvokeIsExternalStorageEmulated(folder);
+
+                    if (getSDPath ? IsRemovable && !IsEmulated : !IsRemovable && IsEmulated)
+                        baseFolderPath = folder.Path;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine("GetBaseFolderPath caused the follwing exception: {0}", ex);
+            }
+
+            return baseFolderPath;
+        }
+
         protected void refreshui()
         {
             #region << Define UI >>
@@ -398,6 +705,10 @@ namespace Store_Remote_Tool_Android
             txtLabel66 = FindViewById<TextView>(Resource.Id.txtLabel66);
             txtLabel77 = FindViewById<TextView>(Resource.Id.txtLabel77);
 
+            manpath = FindViewById<EditText>(Resource.Id.manpath);
+
+
+            set = FindViewById<Button>(Resource.Id.set);
 
 
             textView13 = FindViewById<TextView>(Resource.Id.textView13);
@@ -608,30 +919,7 @@ namespace Store_Remote_Tool_Android
             //  SetProgressValue(0);
         }
 
-        private string GetRealPathFromURI(Android.Net.Uri uri)
-        {
-            string doc_id = "";
-            using (var c1 = ContentResolver.Query(uri, null, null, null, null))
-            {
-                c1.MoveToFirst();
-                string document_id = c1.GetString(0);
-                doc_id = document_id.Substring(document_id.LastIndexOf(":") + 1);
-            }
-
-            string path = null;
-
-            // The projection contains the columns we want to return in our query.
-            string selection = Android.Provider.MediaStore.Images.Media.InterfaceConsts.Id + " =? ";
-            using (var cursor = ContentResolver.Query(Android.Provider.MediaStore.Images.Media.ExternalContentUri, null, selection, new string[] { doc_id }, null))
-            {
-                if (cursor == null) return path;
-                var columnIndex = cursor.GetColumnIndexOrThrow(Android.Provider.MediaStore.Images.Media.InterfaceConsts.Data);
-                cursor.MoveToFirst();
-                path = cursor.GetString(columnIndex);
-            }
-            return path;
-        }
-
+       
         /// <summary>
         /// show transfer status: files, bytes, time, speed
         /// </summary>
