@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+using System;
 using System.Threading;
-using System.Data;
-using System.IO;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -13,26 +7,13 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.Graphics;
-using Android.Text;
 using Android.Support.V7.App;
-using Android.Support.V7.Widget;
 using Android.Util;
-using Android.Content.Res;
-using SupportToolbar = Android.Support.V7.Widget.Toolbar;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using SupportActionBar = Android.Support.V7.App.ActionBar;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Xml;
 using Android.Support.V4.App;
 using Android;
 using Android.Content.PM;
 using Rebex.Net;
 using Rebex.IO;
-using Plugin.FilePicker.Abstractions;
-using Plugin.FilePicker;
 using Bitmap = Android.Graphics.Bitmap;
 using Android.Database;
 using Android.Provider;
@@ -214,6 +195,7 @@ namespace Store_Remote_Tool_Android
                             // TextView IPAddressTextBox = FindViewById<TextView>(Resource.Id.IPAddressTextBox);
                             if (IPAddressTextBox.Text == "")
                             {
+                                RunOnUiThread(() => { MessageBox.Show("Enter an IP Address"); });
                                 return;
                             }
 
@@ -264,9 +246,22 @@ namespace Store_Remote_Tool_Android
                                 clients.DownloadFile("https://psarchive.darksoftware.xyz/PayloadPlugin.prx", path);
                             }
 
-                           
 
-                            client.PutFile(path, @"/user/app/PayloadPlugin.prx");
+
+                            if (!client.DirectoryExists(@"/user/app/"))
+                            {
+                                client.CreateDirectory(@"/user/app/");
+                            }
+
+                            if (client.FileExists(@"/user/app/PayloadPlugin.prx"))
+                            {
+                                client.Delete(@"/user/app/PayloadPlugin.prx", TraversalMode.NonRecursive);
+                            }
+
+                            client.ChangeDirectory(@"/user/app/");
+
+
+                            client.PutFile(path, @"PayloadPlugin.prx");
 
                             SetTex("Plugin Installed Successfully");
                         }
