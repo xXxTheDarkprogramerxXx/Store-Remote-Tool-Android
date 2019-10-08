@@ -1,5 +1,5 @@
 Images, layout descriptions, binary blobs and string dictionaries can be included 
-in your application as resource files.  Various Android APIs are designed to 
+in your application as resource Java.IO.Files.  Various Android APIs are designed to 
 operate on the resource IDs instead of dealing with images, strings or binary blobs 
 directly.
 
@@ -18,7 +18,7 @@ Resources/
         strings.xml
 
 In order to get the build system to recognize Android resources, set the build action to
-"AndroidResource".  The native Android APIs do not operate directly with filenames, but 
+"AndroidResource".  The native Android APIs do not operate directly with Java.IO.Filenames, but 
 instead operate on resource IDs.  When you compile an Android application that uses resources, 
 the build system will package the resources for distribution and generate a class called "R" 
 (this is an Android convention) that contains the tokens for each one of the resources 
@@ -39,6 +39,6 @@ public class R {
     }
 }
 
-You would then use R.drawable.icon to reference the drawable/icon.png file, or R.layout.main 
-to reference the layout/main.axml file, or R.strings.first_string to reference the first 
-string in the dictionary file values/strings.xml.
+You would then use R.drawable.icon to reference the drawable/icon.png Java.IO.File, or R.layout.main 
+to reference the layout/main.axml Java.IO.File, or R.strings.first_string to reference the first 
+string in the dictionary Java.IO.File values/strings.xml.
